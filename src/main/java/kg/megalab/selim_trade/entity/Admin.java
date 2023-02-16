@@ -2,6 +2,7 @@ package kg.megalab.selim_trade.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "admins")
+@Data
 public class Admin {
     @Id
     @GeneratedValue(generator = "admin_id_generator", strategy = GenerationType.SEQUENCE)
@@ -32,4 +34,7 @@ public class Admin {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
     private List<Advantage> advantageList;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
+    private List<News> newsList;
 }
