@@ -1,5 +1,5 @@
 package kg.megalab.selim_trade.entity;
 
-public enum Role {
+public enum ERole {
     ADMIN, SUPERADMIN
 }

@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,10 +26,10 @@ public class Admin {
     @UpdateTimestamp
     private LocalDate updated_date;
 
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = ERole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "admin_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated
-    private Set<Role> roles;
+    @Enumerated(EnumType.STRING)
+    private Set<ERole> roles;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
     private List<Advantage> advantageList;
