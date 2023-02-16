@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,4 +29,7 @@ public class Admin {
     @CollectionTable(name = "admin_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated
     private Set<Role> roles;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
+    private List<Advantage> advantageList;
 }
