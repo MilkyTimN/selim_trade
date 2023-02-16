@@ -36,5 +36,5 @@ public class Admin {
     private List<Advantage> advantageList;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
-    private List<News> newsList;
+    private Set<News> newsSet;
 }
