@@ -5,9 +5,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
 import java.security.Key;
 import java.util.Date;
@@ -25,6 +29,9 @@ public class JwtService {
 
     @Value("${jwt_refresh_token_expiration_in_hours}")
     private long refresh_token_expiration_hours;
+
+    @Value("${jwt_refresh_cookie_name}")
+    private String jwt_refresh_cookie_name;
 
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
@@ -78,5 +85,29 @@ public class JwtService {
 
     public String extractUsername(String jwt) {
         return extractClaim(jwt, Claims::getSubject);
+    }
+
+    public ResponseCookie generateCookie(String name, String value, String path) {
+        return ResponseCookie.from(name, value).path(path).maxAge(24 * 60 * 60).httpOnly(true).build();
+    }
+
+    public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
+        return generateCookie(jwt_refresh_cookie_name, refreshToken, "/api/auth/refreshtoken");
+    }
+
+    private String getCookieValueByName(HttpServletRequest request, String name) {
+        Cookie cookie = WebUtils.getCookie(request, name);
+        if(cookie != null) {
+            return cookie.getValue();
+        }
+        return null;
+    }
+
+    public String getRefreshTokenFromCookies(HttpServletRequest request) {
+        return getCookieValueByName(request, jwt_refresh_cookie_name);
+    }
+
+    public ResponseCookie getCleanRefreshJwtCookie() {
+        return ResponseCookie.from(jwt_refresh_cookie_name, "").path("/api/auth/refreshtoken").build();
     }
 }

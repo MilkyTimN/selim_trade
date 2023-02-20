@@ -40,7 +40,13 @@ public class RestApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({BadRequestException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    void badRequest() {
+    public ErrorMessage badRequest(Exception exception, WebRequest request) {
+        return new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                exception.getMessage(),
+                request.getDescription(false)
+        );
     }
 
     @ExceptionHandler({RequestTimeoutException.class})
