@@ -1,7 +1,9 @@
 package kg.megalab.selim_trade.controller;
 
-import kg.megalab.selim_trade.dto.AuthenticateResponse;
+import kg.megalab.selim_trade.dto.LoginRequest;
+import kg.megalab.selim_trade.dto.LoginResponse;
 import kg.megalab.selim_trade.dto.RegisterRequest;
+import kg.megalab.selim_trade.dto.RegisterResponse;
 import kg.megalab.selim_trade.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
     @PostMapping("/register")
-    public AuthenticateResponse register(@RequestBody RegisterRequest registerRequest) {
+    public RegisterResponse register(@RequestBody RegisterRequest registerRequest) {
         return authService.register(registerRequest);
+    }
+
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest loginRequest) {
+        return authService.login(loginRequest);
     }
 }

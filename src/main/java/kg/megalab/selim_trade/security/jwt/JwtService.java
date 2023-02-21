@@ -20,11 +20,9 @@ public class JwtService {
     @Value("${jwtSecret}")
     private String jwtSecret;
 
-    @Value("${jwt_access_token_expiration_in_minutes")
+    @Value("${jwt_access_token_expiration_in_minutes}")
     private long jwt_access_token_expiration_in_minutes;
 
-    @Value("${jwt_refresh_token_expiration_in_hours}")
-    private long jwt_refresh_token_expiration_in_hours;
 
     public String generateToken(
             Map<String, Object> extraClaims,
@@ -33,7 +31,8 @@ public class JwtService {
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis() + 1000 * 60 * jwt_access_token_expiration_in_minutes))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * jwt_access_token_expiration_in_minutes))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -63,6 +62,19 @@ public class JwtService {
                 .build()
                 .parseClaimsJws(jwt)
                 .getBody();
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 
 }
