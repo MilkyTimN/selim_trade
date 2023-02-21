@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Integer> {
     Boolean existsByAdmin(Admin admin);
+    Optional<RefreshToken> findByAdmin(Admin admin);
     Optional<RefreshToken> findByToken(String token);
 
-    void deleteByAdmin(Admin admin);
 }

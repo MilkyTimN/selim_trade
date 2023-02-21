@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Data
@@ -25,5 +26,5 @@ public class RefreshToken {
     @Column(nullable = false, unique = true)
     private String token;
     @Column(nullable = false)
-    private Instant expiryDate;
+    private Date expiryDate;
 }

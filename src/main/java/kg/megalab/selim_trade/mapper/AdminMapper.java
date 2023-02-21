@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.mapper;
 
+import kg.megalab.selim_trade.dto.LoginResponse;
 import kg.megalab.selim_trade.dto.RegisterRequest;
 import kg.megalab.selim_trade.entity.Admin;
 import org.mapstruct.Mapper;
@@ -11,5 +12,9 @@ public interface AdminMapper {
     AdminMapper INSTANCE = Mappers.getMapper(AdminMapper.class);
     @Mapping(target = "password",ignore = true)
     Admin toModel(RegisterRequest dto);
+
+
+
+    LoginResponse.AdminInfo toLoginResponseAdminDto(Admin admin);
 
 }

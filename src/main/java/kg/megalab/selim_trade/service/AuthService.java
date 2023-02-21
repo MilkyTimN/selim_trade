@@ -1,8 +1,11 @@
 package kg.megalab.selim_trade.service;
 
-import kg.megalab.selim_trade.dto.AuthenticateResponse;
-import kg.megalab.selim_trade.dto.RegisterRequest;
+import kg.megalab.selim_trade.dto.*;
 
 public interface AuthService {
-    AuthenticateResponse register(RegisterRequest registerRequest);
+    RegisterResponse register(RegisterRequest registerRequest);
+
+    LoginResponse login(LoginRequest loginRequest);
+
+    LoginResponse refreshAccessToken(RefreshAccessTokenRequest refreshToken);
 }
