@@ -1,9 +1,6 @@
 package kg.megalab.selim_trade.controller;
 
-import kg.megalab.selim_trade.dto.LoginRequest;
-import kg.megalab.selim_trade.dto.LoginResponse;
-import kg.megalab.selim_trade.dto.RegisterRequest;
-import kg.megalab.selim_trade.dto.RegisterResponse;
+import kg.megalab.selim_trade.dto.*;
 import kg.megalab.selim_trade.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,5 +21,10 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest) {
         return authService.login(loginRequest);
+    }
+
+    @PostMapping("/refresh-token")
+    public LoginResponse refreshAccessToken(@RequestBody RefreshAccessTokenRequest refreshToken) {
+        return authService.refreshAccessToken(refreshToken);
     }
 }

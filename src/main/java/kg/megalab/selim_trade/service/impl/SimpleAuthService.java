@@ -1,15 +1,15 @@
 package kg.megalab.selim_trade.service.impl;
 
-import kg.megalab.selim_trade.dto.LoginRequest;
-import kg.megalab.selim_trade.dto.LoginResponse;
-import kg.megalab.selim_trade.dto.RegisterRequest;
-import kg.megalab.selim_trade.dto.RegisterResponse;
+import kg.megalab.selim_trade.dto.*;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.ERole;
+import kg.megalab.selim_trade.entity.RefreshToken;
 import kg.megalab.selim_trade.exceptions.BadRequestException;
+import kg.megalab.selim_trade.exceptions.NotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.AdminMapper;
 import kg.megalab.selim_trade.repository.AdminRepository;
+import kg.megalab.selim_trade.repository.RefreshTokenRepository;
 import kg.megalab.selim_trade.security.jwt.JwtService;
 import kg.megalab.selim_trade.security.jwt.RefreshTokenService;
 import kg.megalab.selim_trade.service.AuthService;
@@ -30,10 +30,11 @@ public class SimpleAuthService implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) {
-        if(adminRepository.existsByUsername(registerRequest.password())) {
+        if(adminRepository.existsByUsername(registerRequest.username())) {
             throw new BadRequestException("Username is already taken!");
         }
 
@@ -58,5 +59,12 @@ public class SimpleAuthService implements AuthService {
         String refreshToken = refreshTokenService.generateRefreshToken(admin);
         return new LoginResponse(jwt, refreshToken,adminMapper.toLoginResponseAdminDto(admin));
     }
+
+    @Override
+    public LoginResponse refreshAccessToken(RefreshAccessTokenRequest request) {
+        return refreshTokenService.generateAccessToken(request.refreshToken());
+    }
+
+
 
 }
