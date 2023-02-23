@@ -10,4 +10,5 @@ public class SelimTradeApplication {
 		SpringApplication.run(SelimTradeApplication.class, args);
 	}
 
+
 }
