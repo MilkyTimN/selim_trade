@@ -2,6 +2,7 @@ package kg.megalab.selim_trade.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "pictures")
 @Data
+@NoArgsConstructor
 public class Picture {
     @Id
     @GeneratedValue(generator = "picture_id_generator", strategy = GenerationType.SEQUENCE)
@@ -22,4 +24,7 @@ public class Picture {
     @UpdateTimestamp
     private LocalDate updated_date;
 
+    public Picture(String url) {
+        this.url = url;
+    }
 }

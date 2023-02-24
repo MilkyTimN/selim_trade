@@ -5,7 +5,7 @@ import kg.megalab.selim_trade.dto.OrderResponse;
 import kg.megalab.selim_trade.entity.Order;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface OrderMapper {
 
     Order toModel(OrderRequest dto);
