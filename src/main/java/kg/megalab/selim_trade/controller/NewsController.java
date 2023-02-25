@@ -11,10 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/news")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class NewsController {
 
     private final NewsService newsService;
@@ -29,9 +33,17 @@ public class NewsController {
         return ResponseEntity.ok(newsService.getAllNewses(pageable));
     }
 
+//    @PostMapping("/")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public NewOrUpdateNewsResponse createNews(@RequestBody NewOrUpdateNewsRequest request, @AuthenticationPrincipal UserDetails adminDetails) {
+//        return newsService.createNews(request,adminDetails);
+//    }
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public NewOrUpdateNewsResponse createNews(@RequestBody NewOrUpdateNewsRequest request, @AuthenticationPrincipal UserDetails adminDetails) {
-        return newsService.createNews(request,adminDetails);
+    public NewOrUpdateNewsResponse createNews(@RequestParam("image") MultipartFile image,
+                                              @RequestParam("title") String title,
+                                              @RequestParam("description") String description,
+                                              @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
+        return newsService.createNews(image, title, description, adminDetails);
     }
 }

@@ -20,6 +20,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -58,11 +63,19 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public NewOrUpdateNewsResponse createNews(NewOrUpdateNewsRequest request, UserDetails adminDetails) {
-        News news = newsMapper.toModel(request);
+    public NewOrUpdateNewsResponse createNews(MultipartFile image, String title, String description, UserDetails adminDetails) throws IOException {
+        News news = new News();
 
-        if(request.image() == null || request.image().isEmpty()) {
+        if(image == null || image.isEmpty()) {
             news.setPicture(defaultPicture);
+        } else {
+            String resultFileName = UUID.randomUUID().toString()+"."+image.getOriginalFilename();
+            String resultUrl = image_folder + "/" + resultFileName;
+            image.transferTo(new File(resultUrl));
+            Picture picture = new Picture();
+            picture.setUrl(resultUrl);
+            pictureRepository.save(picture);
+            news.setPicture(picture);
         }
         news.setAdmin(adminRepository.findByUsername(adminDetails.getUsername())
                 .orElseThrow(UserNotFoundException::new));

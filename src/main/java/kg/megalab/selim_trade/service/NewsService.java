@@ -7,6 +7,9 @@ import kg.megalab.selim_trade.repository.projections.NewsListProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface NewsService {
 
@@ -14,5 +17,5 @@ public interface NewsService {
 
     Page<NewsListProjection> getAllNewses(Pageable pageable);
 
-    NewOrUpdateNewsResponse createNews(NewOrUpdateNewsRequest request, UserDetails adminDetails);
+    NewOrUpdateNewsResponse createNews(MultipartFile image, String title, String description, UserDetails adminDetails) throws IOException;
 }
