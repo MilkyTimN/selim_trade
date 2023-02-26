@@ -2,6 +2,7 @@ package kg.megalab.selim_trade.service;
 
 import kg.megalab.selim_trade.dto.NewOrUpdateNewsRequest;
 import kg.megalab.selim_trade.dto.NewOrUpdateNewsResponse;
+import kg.megalab.selim_trade.entity.News;
 import kg.megalab.selim_trade.repository.projections.NewsItemProjection;
 import kg.megalab.selim_trade.repository.projections.NewsListProjection;
 import org.springframework.data.domain.Page;
@@ -13,9 +14,13 @@ import java.io.IOException;
 
 public interface NewsService {
 
-    NewsItemProjection getNewsById(int id);
+    News getNewsById(int id);
 
-    Page<NewsListProjection> getAllNewses(Pageable pageable);
+    String getFileOriginalName(String url);
+
+    Page<News> getAllNewses(Pageable pageable);
 
     NewOrUpdateNewsResponse createNews(MultipartFile image, String title, String description, UserDetails adminDetails) throws IOException;
+
+    NewOrUpdateNewsResponse updateNews(int id, MultipartFile image, String title, String description, UserDetails adminDetails);
 }

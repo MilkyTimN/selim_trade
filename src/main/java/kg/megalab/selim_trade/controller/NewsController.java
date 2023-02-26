@@ -36,11 +36,22 @@ public class NewsController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public NewOrUpdateNewsResponse createNews(@RequestParam("image") MultipartFile image,
+    public NewOrUpdateNewsResponse createNews(@RequestParam(value = "image", required = false) MultipartFile image,
                                               @RequestParam("title") String title,
                                               @RequestParam("description") String description,
                                               @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
         return newsService.createNews(image, title, description, adminDetails);
 
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public NewOrUpdateNewsResponse updateNews(@PathVariable("id") int id,
+                                              @RequestParam("image") MultipartFile image,
+                                              @RequestParam("title") String title,
+                                              @RequestParam("description") String description,
+                                              @AuthenticationPrincipal UserDetails adminDetails)
+            throws IOException {
+        return newsService.updateNews(id, image, title, description, adminDetails);
     }
 }
