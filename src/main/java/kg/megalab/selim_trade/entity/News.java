@@ -7,7 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 
-@Entity
+@Entity(name = "news")
 @Data
 public class News {
     @Id
@@ -26,7 +26,7 @@ public class News {
     private LocalDate createdDate;
     @UpdateTimestamp
     private LocalDate updatedDate;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "admin_id", referencedColumnName = "id")
     private Admin admin;
 
