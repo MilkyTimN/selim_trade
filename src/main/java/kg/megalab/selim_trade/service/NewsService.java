@@ -23,4 +23,6 @@ public interface NewsService {
     NewOrUpdateNewsResponse createNews(MultipartFile image, String title, String description, UserDetails adminDetails) throws IOException;
 
     NewOrUpdateNewsResponse updateNews(int id, MultipartFile image, String title, String description, UserDetails adminDetails);
+
+    void deleteNews(int id) throws IOException;
 }

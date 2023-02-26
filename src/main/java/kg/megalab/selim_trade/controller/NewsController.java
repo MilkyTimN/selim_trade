@@ -54,4 +54,10 @@ public class NewsController {
             throws IOException {
         return newsService.updateNews(id, image, title, description, adminDetails);
     }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteNews(@PathVariable("id") int id) throws IOException {
+        newsService.deleteNews(id);
+    }
 }

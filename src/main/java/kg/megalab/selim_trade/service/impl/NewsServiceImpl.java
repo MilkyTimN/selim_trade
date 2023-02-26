@@ -104,4 +104,12 @@ public class NewsServiceImpl implements NewsService {
             return newsMapper.toNewOrUpdatedResponseDto(newsRepository.save(news));
         }).orElseThrow(() -> new NotFoundException("News not found!"));
     }
+
+    @Override
+    public void deleteNews(int id) throws IOException {
+        News news = newsRepository.findNewsById(id)
+                .orElseThrow(() -> new NotFoundException("News is not found!"));
+        Files.delete(Path.of(news.getPhotoUrl()));
+        newsRepository.deleteById(id);
+    }
 }
