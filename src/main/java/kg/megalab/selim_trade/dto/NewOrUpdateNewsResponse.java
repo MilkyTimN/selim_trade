@@ -3,6 +3,7 @@ package kg.megalab.selim_trade.dto;
 import lombok.Builder;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Builder
 public record NewOrUpdateNewsResponse(
@@ -12,6 +13,11 @@ public record NewOrUpdateNewsResponse(
         String description,
         LocalDate created_date,
         LocalDate updated_date,
-        LoginResponse.AdminInfo admin
+        AdminInfo admin
 ) {
+    public record AdminInfo(
+            String username,
+            Set<String> roles
+    ) {
+    }
 }

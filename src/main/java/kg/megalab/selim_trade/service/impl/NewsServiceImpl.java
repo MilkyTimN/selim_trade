@@ -1,6 +1,7 @@
 package kg.megalab.selim_trade.service.impl;
 
 import kg.megalab.selim_trade.dto.NewOrUpdateNewsResponse;
+import kg.megalab.selim_trade.dto.NewsResponse;
 import kg.megalab.selim_trade.entity.News;
 import kg.megalab.selim_trade.exceptions.NotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
@@ -50,8 +51,8 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public Page<News> getAllNewses(Pageable pageable) {
-        return newsRepository.findAll(pageable);
+    public Page<NewsResponse> getAllNewses(Pageable pageable) {
+        return newsRepository.findAll(pageable).map(newsMapper::toNewsResponse);
     }
 
 
