@@ -18,12 +18,12 @@ public class ProductController {
     private final ProductService service;
 
     @GetMapping("/get")
-    ResponseEntity<?>getProductById(@RequestParam int id){
+    ResponseEntity<?> getProductById(@RequestParam int id) {
         return ResponseEntity.ok(service.getProductById(id));
     }
 
     @GetMapping("/get/all")
-    ResponseEntity<?>getAllProducts(@PageableDefault Pageable pageable){
+    ResponseEntity<?> getAllProducts(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(service.getAll(pageable));
     }
 }

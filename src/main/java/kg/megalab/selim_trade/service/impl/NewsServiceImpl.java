@@ -3,17 +3,18 @@ package kg.megalab.selim_trade.service.impl;
 import kg.megalab.selim_trade.dto.NewOrUpdateNewsResponse;
 import kg.megalab.selim_trade.dto.NewsResponse;
 import kg.megalab.selim_trade.entity.News;
-import kg.megalab.selim_trade.exceptions.NotFoundException;
+import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.NewsMapper;
-import kg.megalab.selim_trade.repository.AdminRepository;
 import kg.megalab.selim_trade.repository.NewsRepository;
-import kg.megalab.selim_trade.repository.projections.NewsListProjection;
+import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
@@ -31,7 +31,7 @@ public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
     private final NewsMapper newsMapper;
-    private final AdminRepository adminRepository;
+    private final AuthService authService;
 
     @Value("${file.upload-dir}")
     private String image_folder;
@@ -39,10 +39,10 @@ public class NewsServiceImpl implements NewsService {
     private String defaultPhoto;
 
 
-
     @Override
-    public News getNewsById(int id) {
-        return newsRepository.findNewsById(id).orElseThrow(() -> new NotFoundException("not found"));
+    public NewsResponse getNewsById(int id) {
+        return newsRepository.findById(id).map(newsMapper::toNewsResponse)
+                .orElseThrow(() -> new ResourceNotFoundException("The news not found!"));
     }
 
     @Override
@@ -51,10 +51,10 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public Page<NewsResponse> getAllNewses(Pageable pageable) {
-        return newsRepository.findAll(pageable).map(newsMapper::toNewsResponse);
+    public Page<NewsResponse> getAllNews(int pageNo, int pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return newsRepository.findAll(paging).map(newsMapper::toNewsResponse);
     }
-
 
 
     @Override
@@ -71,7 +71,7 @@ public class NewsServiceImpl implements NewsService {
         }
         news.setTitle(title);
         news.setDescription(description);
-        news.setAdmin(adminRepository.findByUsername(adminDetails.getUsername())
+        news.setAdmin(authService.findAdminByUsername(adminDetails.getUsername())
                 .orElseThrow(UserNotFoundException::new));
 
 
@@ -80,8 +80,8 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public NewOrUpdateNewsResponse updateNews(int id, MultipartFile image, String title, String description, UserDetails adminDetails) {
-        return newsRepository.findNewsById(id).map(news -> {
-            if(!news.getPhotoUrl().equals(getFileOriginalName(image.getOriginalFilename()))) {
+        return newsRepository.findById(id).map(news -> {
+            if (!news.getPhotoUrl().equals(getFileOriginalName(image.getOriginalFilename()))) {
                 try {
                     Files.deleteIfExists(Path.of(news.getPhotoUrl()));
                 } catch (IOException e) {
@@ -98,18 +98,18 @@ public class NewsServiceImpl implements NewsService {
             news.setPhotoUrl(resultUrl);
             news.setTitle(title);
             news.setDescription(description);
-            news.setAdmin(adminRepository.findByUsername(adminDetails.getUsername())
+            news.setAdmin(authService.findAdminByUsername(adminDetails.getUsername())
                     .orElseThrow(UserNotFoundException::new));
 
 
             return newsMapper.toNewOrUpdatedResponseDto(newsRepository.save(news));
-        }).orElseThrow(() -> new NotFoundException("News not found!"));
+        }).orElseThrow(() -> new ResourceNotFoundException("News not found!"));
     }
 
     @Override
     public void deleteNews(int id) throws IOException {
-        News news = newsRepository.findNewsById(id)
-                .orElseThrow(() -> new NotFoundException("News is not found!"));
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("News is not found!"));
         Files.delete(Path.of(news.getPhotoUrl()));
         newsRepository.deleteById(id);
     }

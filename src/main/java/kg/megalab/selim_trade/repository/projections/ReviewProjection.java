@@ -9,16 +9,19 @@ import kg.megalab.selim_trade.entity.Review;
 
 public interface ReviewProjection {
     int getId();
+
     String getName();
+
     String getText();
-//    Picture getPicture();
+
+    //    Picture getPicture();
     Product getProduct();
 
     interface Picture {
         String getUrl();
     }
 
-    interface Product{
+    interface Product {
         String getName();
     }
 }

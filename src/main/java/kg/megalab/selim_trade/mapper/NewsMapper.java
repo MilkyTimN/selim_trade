@@ -3,7 +3,6 @@ package kg.megalab.selim_trade.mapper;
 import kg.megalab.selim_trade.dto.NewOrUpdateNewsRequest;
 import kg.megalab.selim_trade.dto.NewOrUpdateNewsResponse;
 import kg.megalab.selim_trade.dto.NewsResponse;
-import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.News;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,9 +13,9 @@ public interface NewsMapper {
     NewsMapper INSTANCE = Mappers.getMapper(NewsMapper.class);
 
     News toModel(NewOrUpdateNewsRequest dto);
-    @Mapping(target="url", source = "photoUrl")
+
+    @Mapping(target = "url", source = "photoUrl")
     NewOrUpdateNewsResponse toNewOrUpdatedResponseDto(News news);
 
     NewsResponse toNewsResponse(News news);
-//    NewsResponse.AdminInfo toAdminInfo(Admin admin);
 }

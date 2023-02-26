@@ -15,7 +15,7 @@ public class News {
     @SequenceGenerator(name = "news_id_generator", sequenceName = "news_se", allocationSize = 1)
     private int id;
 
-//    @OneToOne(cascade = CascadeType.MERGE)
+    //    @OneToOne(cascade = CascadeType.MERGE)
 //    @JoinColumn(name = "tb_pictures_id", referencedColumnName = "id")
 //    private Picture picture;
     private String photoUrl;

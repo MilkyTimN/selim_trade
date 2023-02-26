@@ -3,7 +3,6 @@ package kg.megalab.selim_trade.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
@@ -18,7 +17,7 @@ public class Product {
     @GeneratedValue(generator = "product_id_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "product_id_generator", sequenceName = "product_seq", allocationSize = 1)
     private int id;
-//    @OneToOne(cascade = CascadeType.ALL)
+    //    @OneToOne(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "tb_pictures_id", referencedColumnName = "id")
 //    private Picture picture;
     private String photoUrl;

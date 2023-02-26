@@ -17,7 +17,7 @@ public class OrderController {
     private final OrderService service;
 
     @PostMapping("/get")
-    ResponseEntity<?> getOrder(@RequestBody OrderRequest dto){
+    ResponseEntity<?> getOrder(@RequestBody OrderRequest dto) {
         return ResponseEntity.ok(service.saveOrder(dto));
     }
 }

@@ -1,7 +1,7 @@
 package kg.megalab.selim_trade.configuration;
 
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
-import kg.megalab.selim_trade.repository.AdminRepository;
+import kg.megalab.selim_trade.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @RequiredArgsConstructor
 public class MyAppConfig {
-    private final AdminRepository adminRepository;
+    private final AuthService authService;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> adminRepository.findByUsername(username)
+        return username -> authService.findAdminByUsername(username)
                 .orElseThrow(UserNotFoundException::new);
     }
 
@@ -39,7 +39,7 @@ public class MyAppConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-        throws Exception {
+            throws Exception {
         return config.getAuthenticationManager();
     }
 }

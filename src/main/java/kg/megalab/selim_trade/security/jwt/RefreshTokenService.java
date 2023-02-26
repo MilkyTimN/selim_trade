@@ -4,16 +4,14 @@ import kg.megalab.selim_trade.dto.LoginResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.RefreshToken;
 import kg.megalab.selim_trade.exceptions.BadRequestException;
-import kg.megalab.selim_trade.exceptions.NotFoundException;
+import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.mapper.AdminMapper;
 import kg.megalab.selim_trade.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Ref;
 import java.util.Date;
 import java.util.UUID;
 
@@ -52,9 +50,9 @@ public class RefreshTokenService {
 
     public LoginResponse generateAccessToken(String refreshTokenInRequest) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(refreshTokenInRequest)
-                .orElseThrow(() -> new NotFoundException("Refresh token not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Refresh token not found!"));
         Admin admin = refreshToken.getAdmin();
-        if(isRefreshTokenExpired(refreshToken)) {
+        if (isRefreshTokenExpired(refreshToken)) {
             throw new BadRequestException("Refresh token is expired. Please sign in again.");
         }
         refreshTokenRepository.delete(refreshToken);

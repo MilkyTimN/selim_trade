@@ -16,7 +16,7 @@ public class RestApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler({
-            NotFoundException.class,
+            ResourceNotFoundException.class,
             UserNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorMessage notFoundException(Exception exception, WebRequest request) {

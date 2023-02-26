@@ -17,7 +17,7 @@ public class Work {
     @GeneratedValue(generator = "work_id_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "work_id_generator", sequenceName = "work_seq", allocationSize = 1)
     private int id;
-//    @OneToOne(cascade = CascadeType.ALL)
+    //    @OneToOne(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "tb_pictures_id", referencedColumnName = "id")
 //    private Picture picture;
     private String photoUrl;

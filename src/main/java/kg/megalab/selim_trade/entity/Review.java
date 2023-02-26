@@ -16,7 +16,7 @@ public class Review {
     @GeneratedValue(generator = "review_id_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "review_id_generator", sequenceName = "review_seq", allocationSize = 1)
     private int id;
-//    @OneToOne(cascade = CascadeType.ALL)
+    //    @OneToOne(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "tb_pictures_id", referencedColumnName = "id")
 //    private Picture picture;
     private String photoUrl;
