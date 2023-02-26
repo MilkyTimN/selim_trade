@@ -11,7 +11,7 @@ public interface ProductItemProjection {
 
     interface GateTypes{
         int getId();
-        PictureProjection getPicture();
+//        PictureProjection getPicture();
         String getName();
     }
 

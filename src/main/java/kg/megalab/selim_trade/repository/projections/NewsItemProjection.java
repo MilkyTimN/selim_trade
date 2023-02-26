@@ -9,7 +9,7 @@ import kg.megalab.selim_trade.entity.News;
 public interface NewsItemProjection {
 
     int getId();
-    PictureProjection getPicture();
+//    PictureProjection getPicture();
     String getTitle();
     String getDescription();
 

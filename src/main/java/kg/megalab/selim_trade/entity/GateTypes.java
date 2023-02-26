@@ -17,9 +17,10 @@ public class GateTypes {
     @GeneratedValue(generator = "gate_type_id_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "gate_type_id_generator", sequenceName = "gate_type_seq", allocationSize = 1)
     private int id;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tb_pictures_id", referencedColumnName = "id")
-    private Picture picture;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "tb_pictures_id", referencedColumnName = "id")
+//    private Picture picture;
+    private String photoUrl;
     private String name;
     @CreationTimestamp
     private LocalDate created_date;

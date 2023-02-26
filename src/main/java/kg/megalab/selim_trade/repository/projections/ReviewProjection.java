@@ -11,7 +11,7 @@ public interface ReviewProjection {
     int getId();
     String getName();
     String getText();
-    Picture getPicture();
+//    Picture getPicture();
     Product getProduct();
 
     interface Picture {

@@ -24,20 +24,16 @@ public class NewsController {
     private final NewsService newsService;
 
     @GetMapping("/get")
-    ResponseEntity<?> getNewsById(@RequestParam int id){
+    ResponseEntity<?> getNewsById(@RequestParam int id) {
         return ResponseEntity.ok(newsService.getNewsById(id));
     }
 
     @GetMapping("/get/all")
-    ResponseEntity<?> getAllNewses(@PageableDefault Pageable pageable){
+    ResponseEntity<?> getAllNewses(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(newsService.getAllNewses(pageable));
     }
 
-//    @PostMapping("/")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public NewOrUpdateNewsResponse createNews(@RequestBody NewOrUpdateNewsRequest request, @AuthenticationPrincipal UserDetails adminDetails) {
-//        return newsService.createNews(request,adminDetails);
-//    }
+
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public NewOrUpdateNewsResponse createNews(@RequestParam("image") MultipartFile image,
@@ -45,5 +41,6 @@ public class NewsController {
                                               @RequestParam("description") String description,
                                               @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
         return newsService.createNews(image, title, description, adminDetails);
+
     }
 }

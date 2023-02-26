@@ -12,6 +12,6 @@ public interface NewsMapper {
     NewsMapper INSTANCE = Mappers.getMapper(NewsMapper.class);
 
     News toModel(NewOrUpdateNewsRequest dto);
-    @Mapping(target="url", source = "picture.url")
+    @Mapping(target="url", source = "photoUrl")
     NewOrUpdateNewsResponse toNewOrUpdatedResponseDto(News news);
 }
