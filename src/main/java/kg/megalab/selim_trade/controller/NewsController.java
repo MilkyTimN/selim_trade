@@ -1,7 +1,6 @@
 package kg.megalab.selim_trade.controller;
 
 import kg.megalab.selim_trade.dto.NewOrUpdateNewsResponse;
-import kg.megalab.selim_trade.dto.NewsResponse;
 import kg.megalab.selim_trade.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/news")
@@ -22,15 +22,15 @@ public class NewsController {
     private final NewsService newsService;
 
     @GetMapping("/get/{id}")
-    public NewsResponse getNewsById(@PathVariable("id") int id) {
+    public NewOrUpdateNewsResponse getNewsById(@PathVariable("id") int id) {
         return newsService.getNewsById(id);
     }
 
     @GetMapping("/get/all")
-    public Page<NewsResponse> getAllNewses(
+    public Page<NewOrUpdateNewsResponse> getAllNewses(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "3") int pageSize,
-            @RequestParam(defaultValue = "updated_date") String sortBy
+            @RequestParam(defaultValue = "updatedDate") String sortBy
     ) {
 
         return newsService.getAllNews(pageNo, pageSize, sortBy);

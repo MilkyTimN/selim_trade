@@ -23,9 +23,9 @@ public class News {
     @Column(columnDefinition = "TEXT")
     private String description;
     @CreationTimestamp
-    private LocalDate created_date;
+    private LocalDate createdDate;
     @UpdateTimestamp
-    private LocalDate updated_date;
+    private LocalDate updatedDate;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "admin_id", referencedColumnName = "id")
     private Admin admin;

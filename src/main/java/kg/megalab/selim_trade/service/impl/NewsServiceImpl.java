@@ -1,7 +1,6 @@
 package kg.megalab.selim_trade.service.impl;
 
 import kg.megalab.selim_trade.dto.NewOrUpdateNewsResponse;
-import kg.megalab.selim_trade.dto.NewsResponse;
 import kg.megalab.selim_trade.entity.News;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
@@ -40,8 +39,8 @@ public class NewsServiceImpl implements NewsService {
 
 
     @Override
-    public NewsResponse getNewsById(int id) {
-        return newsRepository.findById(id).map(newsMapper::toNewsResponse)
+    public NewOrUpdateNewsResponse getNewsById(int id) {
+        return newsRepository.findById(id).map(newsMapper::toNewOrUpdatedResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("The news not found!"));
     }
 
@@ -51,9 +50,9 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public Page<NewsResponse> getAllNews(int pageNo, int pageSize, String sortBy) {
+    public Page<NewOrUpdateNewsResponse> getAllNews(int pageNo, int pageSize, String sortBy) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        return newsRepository.findAll(paging).map(newsMapper::toNewsResponse);
+        return newsRepository.findAll(paging).map(newsMapper::toNewOrUpdatedResponse);
     }
 
 
@@ -75,7 +74,7 @@ public class NewsServiceImpl implements NewsService {
                 .orElseThrow(UserNotFoundException::new));
 
 
-        return newsMapper.toNewOrUpdatedResponseDto(newsRepository.save(news));
+        return newsMapper.toNewOrUpdatedResponse(newsRepository.save(news));
     }
 
     @Override
@@ -102,7 +101,7 @@ public class NewsServiceImpl implements NewsService {
                     .orElseThrow(UserNotFoundException::new));
 
 
-            return newsMapper.toNewOrUpdatedResponseDto(newsRepository.save(news));
+            return newsMapper.toNewOrUpdatedResponse(newsRepository.save(news));
         }).orElseThrow(() -> new ResourceNotFoundException("News not found!"));
     }
 
