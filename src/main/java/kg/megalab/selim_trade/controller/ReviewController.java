@@ -21,7 +21,7 @@ public class ReviewController {
     }
 
     @GetMapping("/get")
-    ResponseEntity<?> getReviews(@PageableDefault Pageable pageable){
+    ResponseEntity<?> getReviews(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(reviewService.getReviews(pageable));
     }
 }

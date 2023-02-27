@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
     private final AuthService authService;
+
     @PostMapping("/register")
     public RegisterResponse register(@RequestBody RegisterRequest registerRequest) {
         return authService.register(registerRequest);

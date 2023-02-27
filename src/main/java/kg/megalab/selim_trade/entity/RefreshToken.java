@@ -1,11 +1,8 @@
 package kg.megalab.selim_trade.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.Instant;
 import java.util.Date;
 
 @Entity

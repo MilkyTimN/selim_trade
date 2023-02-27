@@ -3,8 +3,6 @@ package kg.megalab.selim_trade.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
@@ -17,9 +15,10 @@ public class GateTypes {
     @GeneratedValue(generator = "gate_type_id_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "gate_type_id_generator", sequenceName = "gate_type_seq", allocationSize = 1)
     private int id;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tb_pictures_id", referencedColumnName = "id")
-    private Picture picture;
+    //    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "tb_pictures_id", referencedColumnName = "id")
+//    private Picture picture;
+    private String photoUrl;
     private String name;
     @CreationTimestamp
     private LocalDate created_date;
@@ -31,8 +30,8 @@ public class GateTypes {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "gate_admin_updates",
-    joinColumns = @JoinColumn(name = "gate_id"),
-    inverseJoinColumns = @JoinColumn(name = "admin_id"))
+            joinColumns = @JoinColumn(name = "gate_id"),
+            inverseJoinColumns = @JoinColumn(name = "admin_id"))
     private List<Admin> updatedBy;
 
 
