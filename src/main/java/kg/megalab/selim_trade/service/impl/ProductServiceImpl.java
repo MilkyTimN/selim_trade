@@ -1,6 +1,6 @@
 package kg.megalab.selim_trade.service.impl;
 
-import kg.megalab.selim_trade.exceptions.NotFoundException;
+import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.repository.ProductRepository;
 import kg.megalab.selim_trade.repository.projections.ProductItemProjection;
 import kg.megalab.selim_trade.repository.projections.ProductListProjection;
@@ -18,7 +18,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductItemProjection getProductById(Integer id) {
-        return repository.findProductById(id).orElseThrow(() -> new NotFoundException("not found"));
+        return repository.findProductById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
     }
 
     @Override

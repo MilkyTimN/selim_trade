@@ -7,7 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 
-@Entity
+@Entity(name = "news")
 @Data
 public class News {
     @Id
@@ -15,17 +15,18 @@ public class News {
     @SequenceGenerator(name = "news_id_generator", sequenceName = "news_se", allocationSize = 1)
     private int id;
 
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "tb_pictures_id", referencedColumnName = "id")
-    private Picture picture;
+    //    @OneToOne(cascade = CascadeType.MERGE)
+//    @JoinColumn(name = "tb_pictures_id", referencedColumnName = "id")
+//    private Picture picture;
+    private String photoUrl;
     private String title;
     @Column(columnDefinition = "TEXT")
     private String description;
     @CreationTimestamp
-    private LocalDate created_date;
+    private LocalDate createdDate;
     @UpdateTimestamp
-    private LocalDate updated_date;
-    @ManyToOne(cascade = CascadeType.ALL)
+    private LocalDate updatedDate;
+    @ManyToOne
     @JoinColumn(name = "admin_id", referencedColumnName = "id")
     private Admin admin;
 

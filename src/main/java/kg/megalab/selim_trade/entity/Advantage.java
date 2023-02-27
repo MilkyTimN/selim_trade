@@ -24,7 +24,7 @@ public class Advantage {
     private LocalDate updated_date;
 
     @ManyToOne(fetch = FetchType.LAZY,
-    cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL)
     @JoinColumn(name = "admin_id")
     private Admin admin;
 

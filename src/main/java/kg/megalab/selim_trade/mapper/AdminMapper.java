@@ -10,9 +10,9 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface AdminMapper {
     AdminMapper INSTANCE = Mappers.getMapper(AdminMapper.class);
-    @Mapping(target = "password",ignore = true)
-    Admin toModel(RegisterRequest dto);
 
+    @Mapping(target = "password", ignore = true)
+    Admin toModel(RegisterRequest dto);
 
 
     LoginResponse.AdminInfo toLoginResponseAdminDto(Admin admin);

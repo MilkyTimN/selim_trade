@@ -4,20 +4,27 @@ import java.util.Set;
 
 public interface ProductItemProjection {
     int getId();
+
     String getName();
+
     String getDescription();
+
     Set<GateTypes> getTypes();
+
     Set<Advantage> getAdvantages();
 
-    interface GateTypes{
+    interface GateTypes {
         int getId();
-        PictureProjection getPicture();
+
+        //        PictureProjection getPicture();
         String getName();
     }
 
     interface Advantage {
         int getId();
+
         String getTitle();
+
         String getDescription();
     }
 }

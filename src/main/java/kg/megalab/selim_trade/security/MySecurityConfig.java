@@ -31,6 +31,7 @@ public class MySecurityConfig {
     public SecurityFilterChain mySecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .cors().and()
                 .authorizeHttpRequests()
                 .requestMatchers(AUTH_WHITELIST)
                 .permitAll()
