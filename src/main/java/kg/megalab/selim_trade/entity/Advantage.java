@@ -23,8 +23,7 @@ public class Advantage {
     @UpdateTimestamp
     private LocalDate updated_date;
 
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id")
     private Admin admin;
 

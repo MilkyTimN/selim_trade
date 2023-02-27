@@ -23,7 +23,7 @@ public class Review {
     private String name;
     @Column(columnDefinition = "TEXT")
     private String text;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchased_product_id", referencedColumnName = "id")
     private Product product;
     @CreationTimestamp

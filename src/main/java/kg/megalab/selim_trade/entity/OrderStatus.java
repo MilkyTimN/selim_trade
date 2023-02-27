@@ -17,7 +17,7 @@ public class OrderStatus {
     private int id;
     @Enumerated(EnumType.STRING)
     private EStatus status;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
     @CreationTimestamp
