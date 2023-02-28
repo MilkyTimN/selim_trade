@@ -7,32 +7,34 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
-public class GateTypes {
+public class OrderInProgress {
     @Id
-    @GeneratedValue(generator = "gate_type_id_generator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "gate_type_id_generator", sequenceName = "gate_type_seq", allocationSize = 1)
+    @GeneratedValue(generator = "order_in_progress_id_generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "order_in_progress_id_generator", sequenceName = "order_progress_seq", allocationSize = 1)
     private int id;
-    private String backgroundUrl;
+    @Enumerated(EnumType.STRING)
+    private EStatus status;
+
+    @OneToOne
+    private Gate gate;
     private String name;
-    @OneToMany
-    private Set<Gate> gateSet;
+    private String phoneNumber;
+
     @CreationTimestamp
     private LocalDate created_date;
     @UpdateTimestamp
     private LocalDate updated_date;
+
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private Admin createdBy;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "gate_admin_updates",
-            joinColumns = @JoinColumn(name = "gate_type_id"),
+    @JoinTable(name = "product_admin_update",
+            joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "admin_id"))
     private List<Admin> updatedBy;
-
-
 }

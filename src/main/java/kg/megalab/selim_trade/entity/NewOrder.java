@@ -6,7 +6,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "orders")
-public class Order {
+public class NewOrder {
     @Id
     @GeneratedValue(generator = "orders_id_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "orders_id_generator", sequenceName = "orders_seq", allocationSize = 1)
