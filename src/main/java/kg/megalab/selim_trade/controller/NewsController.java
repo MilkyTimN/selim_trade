@@ -29,7 +29,7 @@ public class NewsController {
     public Page<NewOrUpdateNewsResponse> getAllNewses(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "3") int pageSize,
-            @RequestParam(defaultValue = "updatedDate") String sortBy
+            @RequestParam(defaultValue = "id") String sortBy
     ) {
 
         return newsService.getAllNews(pageNo, pageSize, sortBy);

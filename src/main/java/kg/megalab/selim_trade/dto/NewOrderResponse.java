@@ -1,6 +1,6 @@
 package kg.megalab.selim_trade.dto;
 
-public record OrderResponse(
+public record NewOrderResponse(
         int id,
         String name,
         String phoneNumber,

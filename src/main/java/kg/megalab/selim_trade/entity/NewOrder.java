@@ -2,10 +2,12 @@ package kg.megalab.selim_trade.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
-@Table(name = "orders")
+@Getter
+@Setter
 public class NewOrder {
     @Id
     @GeneratedValue(generator = "orders_id_generator", strategy = GenerationType.SEQUENCE)
