@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/new-order")
 @RequiredArgsConstructor
 public class NewOrderController {
 
@@ -34,5 +34,10 @@ public class NewOrderController {
             @RequestParam(defaultValue = "id") String sortBy
     ) {
         return newOrderService.getAllNewOrders(pageNo, pageSize, sortBy);
+    }
+
+    @GetMapping("/{id}")
+    public NewOrderResponse getNewOrderById(@PathVariable("id") int id) {
+        return newOrderService.getNewOrderById(id);
     }
 }

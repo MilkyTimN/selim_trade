@@ -12,4 +12,6 @@ public interface NewOrderService {
     void deleteNewOrder(int id);
 
     Page<NewOrderResponse> getAllNewOrders(int pageNo, int pageSize, String sortBy);
+
+    NewOrderResponse getNewOrderById(int id);
 }
