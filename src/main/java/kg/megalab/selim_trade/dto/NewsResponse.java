@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.time.LocalDate;
 
 @Builder
-public record NewOrUpdateNewsResponse(
+public record NewsResponse(
         int id,
         String photoUrl,
         String title,

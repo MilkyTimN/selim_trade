@@ -1,0 +1,20 @@
+package kg.megalab.selim_trade.service;
+
+import kg.megalab.selim_trade.dto.GateResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+
+public interface GateService {
+    GateResponse createGate(String name, MultipartFile image, UserDetails adminDetails) throws IOException;
+
+    GateResponse updateGate(int id, String name, MultipartFile image, UserDetails adminDetails) throws IOException;
+
+    Page<GateResponse> getAllGates(int pageNo, int pageSize, String sortBy);
+
+    GateResponse getGateById(int id);
+
+    void deleteGateById(int id) throws IOException;
+}

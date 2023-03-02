@@ -9,13 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/new-order")
+@RequestMapping("/api/v1/new-order")
 @RequiredArgsConstructor
 public class NewOrderController {
 
     private final NewOrderService newOrderService;
 
-    @PostMapping("/save")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public NewOrderResponse saveNewOrder(@RequestBody NewOrderRequest dto) {
         return newOrderService.saveOrder(dto);
@@ -27,7 +27,7 @@ public class NewOrderController {
         newOrderService.deleteNewOrder(id);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public Page<NewOrderResponse> getAllNewOrders(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "3") int pageSize,

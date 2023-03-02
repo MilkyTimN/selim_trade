@@ -29,7 +29,7 @@ public class GateTypes {
     private Admin createdBy;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "gate_admin_updates",
+    @JoinTable(name = "gate_type_admin_updates",
             joinColumns = @JoinColumn(name = "gate_type_id"),
             inverseJoinColumns = @JoinColumn(name = "admin_id"))
     private List<Admin> updatedBy;

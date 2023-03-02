@@ -2,7 +2,6 @@ package kg.megalab.selim_trade.repository;
 
 import kg.megalab.selim_trade.entity.NewOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
