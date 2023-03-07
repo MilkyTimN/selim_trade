@@ -12,6 +12,10 @@ import kg.megalab.selim_trade.service.GateService;
 import kg.megalab.selim_trade.service.GateTypesService;
 import kg.megalab.selim_trade.service.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,5 +59,11 @@ public class GateTypesServiceImpl implements GateTypesService {
         ).orElseThrow(UserNotFoundException::new));
 
         return gateTypesMapper.toDto(gateTypesRepository.save(gateType));
+    }
+
+    @Override
+    public Page<GateTypesResponse> getAll(int pageNo, int pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return gateTypesRepository.findAll(paging).map(gateTypesMapper::toDto);
     }
 }

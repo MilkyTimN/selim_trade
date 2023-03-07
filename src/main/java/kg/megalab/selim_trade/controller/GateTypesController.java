@@ -33,5 +33,10 @@ public class GateTypesController {
     }
 
     @GetMapping
-    public Page<GateTypesResponse> getAllGateTypes()
+    public Page<GateTypesResponse> getAllGateTypes(
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "3") int pageSize,
+            @RequestParam(defaultValue = "id") String sortBy) {
+        return gateTypesService.getAll(pageNo, pageSize, sortBy);
+    }
 }
