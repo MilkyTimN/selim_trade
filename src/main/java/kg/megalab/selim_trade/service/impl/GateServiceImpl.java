@@ -9,6 +9,7 @@ import kg.megalab.selim_trade.mapper.GateMapper;
 import kg.megalab.selim_trade.repository.GateRepository;
 import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.GateService;
+import kg.megalab.selim_trade.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,14 +34,14 @@ public class GateServiceImpl implements GateService {
     private final GateRepository gateRepository;
     private final AuthService authService;
     private final GateMapper gateMapper;
-    @Value("${file.upload-dir}")
-    private String image_folder;
+    private final ImageService imageService;
+
 
     @Override
     public GateResponse createGate(String name, MultipartFile image, UserDetails adminDetails) throws IOException {
         Gate gate = new Gate();
 
-        String resultUrl = savePhotoToFileSystem(image);
+        String resultUrl = imageService.saveImageToFileSystem(image);
 
         gate.setPhotoUrl(resultUrl);
         gate.setCreatedBy(authService.findAdminByUsername(adminDetails.getUsername())
@@ -49,12 +51,7 @@ public class GateServiceImpl implements GateService {
         return gateMapper.toDto(gateRepository.save(gate));
     }
 
-    private String savePhotoToFileSystem(MultipartFile image) throws IOException {
-        String resultFileName = UUID.randomUUID() + "." + image.getOriginalFilename();
-        String resultUrl = image_folder + "/" + resultFileName;
-        image.transferTo(new File(resultUrl));
-        return resultUrl;
-    }
+
 
     @Override
     public GateResponse updateGate(
@@ -71,7 +68,7 @@ public class GateServiceImpl implements GateService {
                 .orElseThrow(UserNotFoundException::new));
 
         //saving new photo to file system
-        String resultUrl = savePhotoToFileSystem(image);
+        String resultUrl = imageService.saveImageToFileSystem(image);
 
         updatingGate.setPhotoUrl(resultUrl);
         updatingGate.setName(name);
@@ -99,5 +96,11 @@ public class GateServiceImpl implements GateService {
         Files.deleteIfExists(Path.of(gate.getPhotoUrl()));
 
         gateRepository.deleteById(id);
+    }
+
+    @Override
+    public Gate findGateById(int id) {
+        return gateRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Gate not found!"));
     }
 }

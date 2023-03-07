@@ -25,8 +25,8 @@ public class Product {
     @Column(columnDefinition = "TEXT")
     private String description;
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gate_type_id")
-    private Set<GateTypes> gateTypes;
+    @JoinColumn(name = "product_id")
+    private Set<GateType> gateTypes;
     @OneToMany(fetch = FetchType.LAZY)
     private Set<Advantage> advantages;
     @CreationTimestamp

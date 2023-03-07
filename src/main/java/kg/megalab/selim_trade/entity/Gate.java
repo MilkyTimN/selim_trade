@@ -29,6 +29,10 @@ public class Gate {
     @JoinColumn(name = "creator_id")
     private Admin createdBy;
 
+    @ManyToOne
+//    @JoinColumn(name="gate_type_id")
+    GateType gateType;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "gate_admin_updates",
             joinColumns = @JoinColumn(name = "gate_id"),

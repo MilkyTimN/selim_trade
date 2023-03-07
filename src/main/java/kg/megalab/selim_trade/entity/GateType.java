@@ -6,20 +6,23 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Data
-public class GateTypes {
+@Table(name = "gt_type")
+public class GateType {
     @Id
     @GeneratedValue(generator = "gate_type_id_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "gate_type_id_generator", sequenceName = "gate_type_seq", allocationSize = 1)
     private int id;
     private String backgroundUrl;
     private String name;
-    @OneToMany
-    private Set<Gate> gateSet;
+    @OneToMany(mappedBy = "gateType", orphanRemoval = true, cascade = CascadeType.ALL)
+//    @JoinColumn(name="gate_type_id", referencedColumnName = "id")
+    private List<Gate> gateList = new ArrayList<>();
     @CreationTimestamp
     private LocalDate created_date;
     @UpdateTimestamp
@@ -30,7 +33,7 @@ public class GateTypes {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "gate_type_admin_updates",
-            joinColumns = @JoinColumn(name = "gate_type_id"),
+            joinColumns = @JoinColumn(name = "updated_gate_type_id"),
             inverseJoinColumns = @JoinColumn(name = "admin_id"))
     private List<Admin> updatedBy;
 

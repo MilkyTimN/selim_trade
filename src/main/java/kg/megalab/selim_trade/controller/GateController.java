@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.controller;
 
+import kg.megalab.selim_trade.dto.GateRequest;
 import kg.megalab.selim_trade.dto.GateResponse;
 import kg.megalab.selim_trade.service.GateService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v1/gate")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class GateController {
     private final GateService gateService;
 

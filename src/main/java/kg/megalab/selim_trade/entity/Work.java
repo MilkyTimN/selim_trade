@@ -18,9 +18,7 @@ public class Work {
     @SequenceGenerator(name = "work_id_generator", sequenceName = "work_seq", allocationSize = 1)
     private int id;
     private String photoUrl;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gate_type_id")
-    private Set<GateTypes> gateTypes;
+
     @CreationTimestamp
     private LocalDate created_date;
     @UpdateTimestamp
