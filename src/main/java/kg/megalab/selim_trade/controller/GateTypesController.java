@@ -29,11 +29,10 @@ public class GateTypesController {
             @RequestParam("image") MultipartFile image,
             @RequestParam("name") String name,
             @ModelAttribute("gateList") ArrayList<GateResponse> gateList,
-//            @ModelAttribute GateTypesRequest gateTypesRequest,
             @AuthenticationPrincipal UserDetails adminDetails
     ) throws IOException {
         return gateTypesService.createGateType(
                 image, name, gateList, adminDetails
-        );
+        )
     }
 }
