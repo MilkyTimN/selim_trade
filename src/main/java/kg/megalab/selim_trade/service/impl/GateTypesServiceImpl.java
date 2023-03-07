@@ -4,6 +4,7 @@ import kg.megalab.selim_trade.dto.GateResponse;
 import kg.megalab.selim_trade.dto.GateTypesResponse;
 import kg.megalab.selim_trade.entity.Gate;
 import kg.megalab.selim_trade.entity.GateType;
+import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.GateTypesMapper;
 import kg.megalab.selim_trade.repository.GateTypesRepository;
@@ -65,5 +66,11 @@ public class GateTypesServiceImpl implements GateTypesService {
     public Page<GateTypesResponse> getAll(int pageNo, int pageSize, String sortBy) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         return gateTypesRepository.findAll(paging).map(gateTypesMapper::toDto);
+    }
+
+    @Override
+    public GateTypesResponse findGateTypeById(int id) {
+        return gateTypesRepository.findById(id).map(gateTypesMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Gate type not found!"));
     }
 }

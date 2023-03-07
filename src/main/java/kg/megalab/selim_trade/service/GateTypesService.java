@@ -14,4 +14,6 @@ public interface GateTypesService {
     GateTypesResponse createGateType(MultipartFile image, String name, ArrayList<GateResponse> gateSet, UserDetails adminDetails) throws IOException;
 
     Page<GateTypesResponse> getAll(int pageNo, int pageSize, String sortBy);
+
+    GateTypesResponse findGateTypeById(int id);
 }

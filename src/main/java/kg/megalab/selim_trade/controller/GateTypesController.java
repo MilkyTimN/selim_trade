@@ -39,4 +39,9 @@ public class GateTypesController {
             @RequestParam(defaultValue = "id") String sortBy) {
         return gateTypesService.getAll(pageNo, pageSize, sortBy);
     }
+
+    @GetMapping("/{id}")
+    public GateTypesResponse getGateTypeById(@PathVariable("id") int id) {
+        return gateTypesService.findGateTypeById(id);
+    }
 }
