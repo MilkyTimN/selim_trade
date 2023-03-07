@@ -30,7 +30,6 @@ public class Gate {
     private Admin createdBy;
 
     @ManyToOne
-//    @JoinColumn(name="gate_type_id")
     GateType gateType;
 
     @ManyToMany(fetch = FetchType.LAZY)

@@ -1,8 +1,6 @@
 package kg.megalab.selim_trade.service.impl;
 
-import kg.megalab.selim_trade.dto.GateResponse;
 import kg.megalab.selim_trade.dto.GateTypesResponse;
-import kg.megalab.selim_trade.entity.Gate;
 import kg.megalab.selim_trade.entity.GateType;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
@@ -22,23 +20,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class GateTypesServiceImpl implements GateTypesService {
     private final GateTypesRepository gateTypesRepository;
     private final ImageService imageService;
-    private final GateService gateService;
     private final AuthService authService;
     private final GateTypesMapper gateTypesMapper;
 
     @Override
     public GateTypesResponse createGateType(
             MultipartFile image, String name,
-            ArrayList<GateResponse> gateSet,
             UserDetails adminDetails) throws IOException {
         //creating new gateType object
         GateType gateType = new GateType();
@@ -46,15 +39,10 @@ public class GateTypesServiceImpl implements GateTypesService {
         //saving image to the file system
         String resultUrl = imageService.saveImageToFileSystem(image);
 
-        //creating set of gates
-        List<Gate> gates = gateSet.stream()
-                .map(gate -> gateService.findGateById(gate.id()))
-                .collect(Collectors.toList());
 
         //setting attributes
         gateType.setBackgroundUrl(resultUrl);
         gateType.setName(name);
-        gateType.setGateList(gates);
         gateType.setCreatedBy(authService.findAdminByUsername(
                 adminDetails.getUsername()
         ).orElseThrow(UserNotFoundException::new));
@@ -69,8 +57,24 @@ public class GateTypesServiceImpl implements GateTypesService {
     }
 
     @Override
-    public GateTypesResponse findGateTypeById(int id) {
+    public GateTypesResponse getGateTypeResponseById(int id) {
         return gateTypesRepository.findById(id).map(gateTypesMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Gate type not found!"));
+    }
+
+    @Override
+    public GateType getGateTypeById(int id) {
+        return gateTypesRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Gate type not found!"));
+    }
+
+    @Override
+    public GateType saveAndFlush(GateType gateType) {
+        return gateTypesRepository.saveAndFlush(gateType);
+    }
+
+    @Override
+    public GateType save(GateType gateType) {
+        return gateTypesRepository.save(gateType);
     }
 }

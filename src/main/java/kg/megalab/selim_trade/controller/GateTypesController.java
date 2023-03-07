@@ -1,9 +1,10 @@
 package kg.megalab.selim_trade.controller;
 
-import kg.megalab.selim_trade.dto.GateResponse;
 import kg.megalab.selim_trade.dto.GateTypesResponse;
 import kg.megalab.selim_trade.service.GateTypesService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/v1/gate-types")
@@ -19,16 +19,19 @@ import java.util.ArrayList;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class GateTypesController {
     private final GateTypesService gateTypesService;
+    private static Logger logger = LoggerFactory.getLogger(GateTypesController.class);
 
     @PostMapping
     public GateTypesResponse createGateType(
             @RequestParam("image") MultipartFile image,
             @RequestParam("name") String name,
-            @ModelAttribute("gateList") ArrayList<GateResponse> gateList,
             @AuthenticationPrincipal UserDetails adminDetails
     ) throws IOException {
+
+//        logger.info(String.valueOf(gateList));
+
         return gateTypesService.createGateType(
-                image, name, gateList, adminDetails
+                image, name, adminDetails
         );
     }
 
@@ -42,6 +45,6 @@ public class GateTypesController {
 
     @GetMapping("/{id}")
     public GateTypesResponse getGateTypeById(@PathVariable("id") int id) {
-        return gateTypesService.findGateTypeById(id);
+        return gateTypesService.getGateTypeResponseById(id);
     }
 }

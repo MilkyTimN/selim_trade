@@ -1,6 +1,7 @@
 package kg.megalab.selim_trade.controller;
 
 import kg.megalab.selim_trade.dto.GateResponse;
+import kg.megalab.selim_trade.dto.GateTypesResponse;
 import kg.megalab.selim_trade.service.GateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,14 +20,16 @@ import java.io.IOException;
 public class GateController {
     private final GateService gateService;
 
-    @PostMapping
+    @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public GateResponse createGate(
+            @PathVariable("id") int gateTypeId,
             @RequestParam("name") String name,
             @RequestParam(value = "image") MultipartFile image,
             @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
-        return gateService.createGate(name, image, adminDetails);
+        return gateService.createGate(gateTypeId, name, image, adminDetails);
     }
+
 
     @PutMapping("/{id}")
     public GateResponse updateGate(

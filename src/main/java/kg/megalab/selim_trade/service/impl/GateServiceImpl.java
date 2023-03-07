@@ -3,12 +3,14 @@ package kg.megalab.selim_trade.service.impl;
 import kg.megalab.selim_trade.dto.GateResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.Gate;
+import kg.megalab.selim_trade.entity.GateType;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.GateMapper;
 import kg.megalab.selim_trade.repository.GateRepository;
 import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.GateService;
+import kg.megalab.selim_trade.service.GateTypesService;
 import kg.megalab.selim_trade.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +34,11 @@ public class GateServiceImpl implements GateService {
     private final AuthService authService;
     private final GateMapper gateMapper;
     private final ImageService imageService;
+    private final GateTypesService gateTypesService;
 
 
     @Override
-    public GateResponse createGate(String name, MultipartFile image, UserDetails adminDetails) throws IOException {
+    public GateResponse createGate(int gateTypeId, String name, MultipartFile image, UserDetails adminDetails) throws IOException {
         Gate gate = new Gate();
 
         String resultUrl = imageService.saveImageToFileSystem(image);
@@ -43,6 +47,14 @@ public class GateServiceImpl implements GateService {
         gate.setCreatedBy(authService.findAdminByUsername(adminDetails.getUsername())
                 .orElseThrow(UserNotFoundException::new));
         gate.setName(name);
+        gate.setGateType(
+                gateTypesService.getGateTypeById(gateTypeId)
+        );
+
+        //gatetype entity
+//        GateType gateType = gateTypesService.getGateTypeById(gateTypeId);
+//        gateType.getGateList().add(gate);
+//        gateTypesService.save(gateType);
 
         return gateMapper.toDto(gateRepository.save(gate));
     }
@@ -94,8 +106,7 @@ public class GateServiceImpl implements GateService {
     }
 
     @Override
-    public Gate findGateById(int id) {
-        return gateRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Gate not found!"));
+    public Optional<Gate> findGateById(int id) {
+        return gateRepository.findById(id);
     }
 }

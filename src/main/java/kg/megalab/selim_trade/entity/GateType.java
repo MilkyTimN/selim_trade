@@ -19,8 +19,8 @@ public class GateType {
     private int id;
     private String backgroundUrl;
     private String name;
-    @OneToMany(mappedBy = "gateType", orphanRemoval = true, cascade = CascadeType.ALL)
-//    @JoinColumn(name="gate_type_id", referencedColumnName = "id")
+    @OneToMany
+    @JoinColumn(name="gate_type_id", referencedColumnName = "id")
     private List<Gate> gateList = new ArrayList<>();
     @CreationTimestamp
     private LocalDate created_date;
