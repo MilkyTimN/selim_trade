@@ -13,6 +13,7 @@ import java.util.UUID;
 public class ImageServiceImpl implements ImageService {
     @Value("${file.upload-dir}")
     private String image_folder;
+
     @Override
     public String saveImageToFileSystem(MultipartFile image) throws IOException {
         String resultFileName = UUID.randomUUID() + "." + image.getOriginalFilename();

@@ -1,6 +1,5 @@
 package kg.megalab.selim_trade.controller;
 
-import kg.megalab.selim_trade.dto.GateRequest;
 import kg.megalab.selim_trade.dto.GateResponse;
 import kg.megalab.selim_trade.service.GateService;
 import lombok.RequiredArgsConstructor;

@@ -11,7 +11,6 @@ import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.GateService;
 import kg.megalab.selim_trade.service.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,13 +19,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +46,6 @@ public class GateServiceImpl implements GateService {
 
         return gateMapper.toDto(gateRepository.save(gate));
     }
-
 
 
     @Override
