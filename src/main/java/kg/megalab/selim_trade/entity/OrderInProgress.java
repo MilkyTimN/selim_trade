@@ -38,8 +38,8 @@ public class OrderInProgress {
     private Admin createdBy;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "product_admin_update",
-            joinColumns = @JoinColumn(name = "product_id"),
+    @JoinTable(name = "order_in_progress_admin_updates",
+            joinColumns = @JoinColumn(name = "order_in_progress_id"),
             inverseJoinColumns = @JoinColumn(name = "admin_id"))
     private List<Admin> updatedBy;
 }
