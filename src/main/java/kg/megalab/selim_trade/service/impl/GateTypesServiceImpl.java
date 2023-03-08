@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Service
 @RequiredArgsConstructor
@@ -76,5 +78,28 @@ public class GateTypesServiceImpl implements GateTypesService {
     @Override
     public GateType save(GateType gateType) {
         return gateTypesRepository.save(gateType);
+    }
+
+    @Override
+    public GateTypesResponse updateGateTypeById(int id, MultipartFile image, String name, UserDetails adminDetails) throws IOException {
+        GateType updatingGateType = gateTypesRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Gate type not found!"));
+
+        // deleting previous photo from filesystem
+        Files.deleteIfExists(Path.of(updatingGateType.getBackgroundUrl()));
+
+        //adding admin to updatedby list
+        updatingGateType.getUpdatedBy().add(
+                authService.findAdminByUsername(adminDetails.getUsername())
+                        .orElseThrow(UserNotFoundException::new)
+        );
+
+        //saving new photo to the filesystem
+        String resultUrl = imageService.saveImageToFileSystem(image);
+
+        updatingGateType.setBackgroundUrl(resultUrl);
+        updatingGateType.setName(name);
+
+        return gateTypesMapper.toDto(gateTypesRepository.save(updatingGateType));
     }
 }

@@ -47,4 +47,13 @@ public class GateTypesController {
     public GateTypesResponse getGateTypeById(@PathVariable("id") int id) {
         return gateTypesService.getGateTypeResponseById(id);
     }
+
+    @PutMapping("/{id}")
+    public GateTypesResponse updateGateTypeById(
+            @PathVariable("id") int id,
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("name") String name,
+            @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
+        return gateTypesService.updateGateTypeById(id,image,name,adminDetails);
+    }
 }

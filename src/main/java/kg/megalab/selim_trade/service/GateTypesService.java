@@ -19,4 +19,6 @@ public interface GateTypesService {
     GateType saveAndFlush(GateType gateType);
 
     GateType save(GateType gateType);
+
+    GateTypesResponse updateGateTypeById(int id, MultipartFile image, String name, UserDetails adminDetails) throws IOException;
 }
