@@ -11,10 +11,7 @@ import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.OrderInProgressMapper;
 import kg.megalab.selim_trade.repository.OrderInProgressRepository;
-import kg.megalab.selim_trade.service.AuthService;
-import kg.megalab.selim_trade.service.GateService;
-import kg.megalab.selim_trade.service.GateTypesService;
-import kg.megalab.selim_trade.service.OrderInProgressService;
+import kg.megalab.selim_trade.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,9 +31,11 @@ public class OrderInProgressImpl implements OrderInProgressService {
     private final AuthService authService;
     private final GateTypesService gateTypesService;
     private final GateService gateService;
+    private final NewOrderService newOrderService;
 
     @Override
     public OrderInProgressResponse createOrderInProgress(
+            int id,
             NewOrderInProgressRequest orderRequest,
             UserDetails adminDetails) {
         OrderInProgress orderInProgress = new OrderInProgress();
@@ -47,8 +46,8 @@ public class OrderInProgressImpl implements OrderInProgressService {
         );
 
         orderInProgress.setStatus(EStatus.IN_PROGRESS);
-        orderInProgress.setName(orderInProgress.getName());
-        orderInProgress.setPhoneNumber(orderInProgress.getPhoneNumber());
+        orderInProgress.setName(orderRequest.name());
+        orderInProgress.setPhoneNumber(orderRequest.phoneNumber());
 
 
         GateType gateType = gateTypesService.getGateTypeById(orderRequest.gateTypeId());
@@ -56,6 +55,9 @@ public class OrderInProgressImpl implements OrderInProgressService {
 
         orderInProgress.setGate(gate);
         orderInProgress.setGateType(gateType);
+
+        //deleting order from new orders table
+        newOrderService.deleteNewOrder(id);
 
         return orderInProgressMapper.toDto(orderInProgressRepository.save(orderInProgress));
 

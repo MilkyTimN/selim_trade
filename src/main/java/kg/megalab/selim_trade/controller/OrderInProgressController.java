@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.*;
 public class OrderInProgressController {
     private final OrderInProgressService orderInProgressService;
 
-    @PostMapping
+    @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderInProgressResponse createOrderInProgress(
+            @PathVariable("id") int id,
             @RequestBody NewOrderInProgressRequest orderRequest,
             @AuthenticationPrincipal UserDetails adminDetails
             ) {
-        return orderInProgressService.createOrderInProgress(orderRequest, adminDetails);
+        return orderInProgressService.createOrderInProgress(id,orderRequest, adminDetails);
     }
 
     @GetMapping
