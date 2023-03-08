@@ -7,9 +7,11 @@ import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.GateTypesMapper;
 import kg.megalab.selim_trade.repository.GateTypesRepository;
 import kg.megalab.selim_trade.service.AuthService;
+import kg.megalab.selim_trade.service.GateService;
 import kg.megalab.selim_trade.service.GateTypesService;
 import kg.megalab.selim_trade.service.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,7 @@ public class GateTypesServiceImpl implements GateTypesService {
     private final ImageService imageService;
     private final AuthService authService;
     private final GateTypesMapper gateTypesMapper;
+
 
     @Override
     public GateTypesResponse createGateType(
@@ -110,6 +113,15 @@ public class GateTypesServiceImpl implements GateTypesService {
 
         //delete previous photo from the filesystem
         Files.deleteIfExists(Path.of(gateType.getBackgroundUrl()));
+        gateType.getGateList().forEach(
+                gate -> {
+                    try {
+                        Files.deleteIfExists(Path.of(gate.getPhotoUrl()));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
 
         gateTypesRepository.deleteById(id);
     }

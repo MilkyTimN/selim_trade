@@ -5,6 +5,7 @@ import java.util.List;
 public record GateTypesResponse(
         int id,
         String backgroundUrl,
+        String name,
         List<GateResponse> gateList,
         String created_date,
         String updated_date,

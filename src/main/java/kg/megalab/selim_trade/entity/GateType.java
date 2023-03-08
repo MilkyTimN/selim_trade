@@ -19,7 +19,7 @@ public class GateType {
     private int id;
     private String backgroundUrl;
     private String name;
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     @JoinColumn(name="gate_type_id", referencedColumnName = "id")
     private List<Gate> gateList = new ArrayList<>();
     @CreationTimestamp

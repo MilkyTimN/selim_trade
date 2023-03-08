@@ -13,6 +13,7 @@ import kg.megalab.selim_trade.service.GateService;
 import kg.megalab.selim_trade.service.GateTypesService;
 import kg.megalab.selim_trade.service.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,7 @@ public class GateServiceImpl implements GateService {
     private final AuthService authService;
     private final GateMapper gateMapper;
     private final ImageService imageService;
+
     private final GateTypesService gateTypesService;
 
 
