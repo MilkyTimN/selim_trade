@@ -7,7 +7,6 @@ import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.GateTypesMapper;
 import kg.megalab.selim_trade.repository.GateTypesRepository;
 import kg.megalab.selim_trade.service.AuthService;
-import kg.megalab.selim_trade.service.GateService;
 import kg.megalab.selim_trade.service.GateTypesService;
 import kg.megalab.selim_trade.service.ImageService;
 import lombok.RequiredArgsConstructor;

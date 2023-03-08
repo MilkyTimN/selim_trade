@@ -60,7 +60,7 @@ public class GateTypesController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteGateTypeById(@PathVariable("id") int id) {
+    public void deleteGateTypeById(@PathVariable("id") int id) throws IOException {
         gateTypesService.deleteGateTypeById(id);
     }
 }
