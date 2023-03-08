@@ -6,6 +6,7 @@ import kg.megalab.selim_trade.entity.EStatus;
 import kg.megalab.selim_trade.entity.Gate;
 import kg.megalab.selim_trade.entity.GateType;
 import kg.megalab.selim_trade.entity.OrderInProgress;
+import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.OrderInProgressMapper;
 import kg.megalab.selim_trade.repository.OrderInProgressRepository;
@@ -60,5 +61,11 @@ public class OrderInProgressImpl implements OrderInProgressService {
     public Page<OrderInProgressResponse> getAllOrdersInProgress(int pageNo, int pageSize, String sortBy) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         return orderInProgressRepository.findAll(paging).map(orderInProgressMapper::toDto);
+    }
+
+    @Override
+    public OrderInProgressResponse getOrderInProgressById(int id) {
+        return orderInProgressRepository.findById(id).map(orderInProgressMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found!"));
     }
 }

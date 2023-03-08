@@ -33,4 +33,9 @@ public class OrderInProgressController {
     ) {
         return orderInProgressService.getAllOrdersInProgress(pageNo, pageSize, sortBy);
     }
+
+    @GetMapping("/{id}")
+    public OrderInProgressResponse getOrderInProgressById(@PathVariable("id") int id) {
+        return orderInProgressService.getOrderInProgressById(id);
+    }
 }

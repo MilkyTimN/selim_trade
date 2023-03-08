@@ -9,4 +9,6 @@ public interface OrderInProgressService {
     OrderInProgressResponse createOrderInProgress(NewOrderInProgressRequest orderRequest, UserDetails adminDetails);
 
     Page<OrderInProgressResponse> getAllOrdersInProgress(int pageNo, int pageSize, String sortBy);
+
+    OrderInProgressResponse getOrderInProgressById(int id);
 }
