@@ -21,4 +21,6 @@ public interface GateTypesService {
     GateType save(GateType gateType);
 
     GateTypesResponse updateGateTypeById(int id, MultipartFile image, String name, UserDetails adminDetails) throws IOException;
+
+    void deleteGateTypeById(int id) throws IOException;
 }

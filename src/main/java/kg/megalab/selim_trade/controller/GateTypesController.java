@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -55,5 +56,11 @@ public class GateTypesController {
             @RequestParam("name") String name,
             @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
         return gateTypesService.updateGateTypeById(id,image,name,adminDetails);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteGateTypeById(@PathVariable("id") int id) {
+        gateTypesService.deleteGateTypeById(id);
     }
 }

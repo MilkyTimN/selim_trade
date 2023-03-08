@@ -102,4 +102,16 @@ public class GateTypesServiceImpl implements GateTypesService {
 
         return gateTypesMapper.toDto(gateTypesRepository.save(updatingGateType));
     }
+
+    @Override
+    public void deleteGateTypeById(int id) throws IOException {
+        //finding gateType
+        GateType gateType = gateTypesRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Gate type not found!"));
+
+        //delete previous photo from the filesystem
+        Files.deleteIfExists(Path.of(gateType.getBackgroundUrl()));
+
+        gateTypesRepository.deleteById(id);
+    }
 }
