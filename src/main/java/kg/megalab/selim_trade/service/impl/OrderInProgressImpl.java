@@ -14,6 +14,10 @@ import kg.megalab.selim_trade.service.GateService;
 import kg.megalab.selim_trade.service.GateTypesService;
 import kg.megalab.selim_trade.service.OrderInProgressService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -50,5 +54,11 @@ public class OrderInProgressImpl implements OrderInProgressService {
 
         return orderInProgressMapper.toDto(orderInProgressRepository.save(orderInProgress));
 
+    }
+
+    @Override
+    public Page<OrderInProgressResponse> getAllOrdersInProgress(int pageNo, int pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return orderInProgressRepository.findAll(paging).map(orderInProgressMapper::toDto);
     }
 }
