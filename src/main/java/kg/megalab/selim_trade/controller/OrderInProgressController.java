@@ -2,6 +2,7 @@ package kg.megalab.selim_trade.controller;
 
 import kg.megalab.selim_trade.dto.NewOrderInProgressRequest;
 import kg.megalab.selim_trade.dto.OrderInProgressResponse;
+import kg.megalab.selim_trade.dto.UpdateOrderInProgressRequest;
 import kg.megalab.selim_trade.service.OrderInProgressService;
 import org.springframework.data.domain.Page;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,13 @@ public class OrderInProgressController {
     @GetMapping("/{id}")
     public OrderInProgressResponse getOrderInProgressById(@PathVariable("id") int id) {
         return orderInProgressService.getOrderInProgressById(id);
+    }
+
+    @PutMapping("/{id}")
+    public OrderInProgressResponse updateOrderInProgressById(
+            @PathVariable("id") int id,
+            @RequestBody UpdateOrderInProgressRequest updateOrderInProgressRequest,
+            @AuthenticationPrincipal UserDetails adminDetails) {
+        return orderInProgressService.updateOrderInProgressById(id, updateOrderInProgressRequest, adminDetails);
     }
 }
