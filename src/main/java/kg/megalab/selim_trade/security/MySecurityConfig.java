@@ -35,8 +35,8 @@ public class MySecurityConfig {
         http
                 .csrf().disable()
                 .cors().and()
-                .exceptionHandling().authenticationEntryPoint(authEntryPoint)
-                .and()
+//                .exceptionHandling().authenticationEntryPoint(authEntryPoint)
+//                .and()
                 .authorizeHttpRequests()
                 .requestMatchers(AUTH_WHITELIST)
                 .permitAll()
@@ -47,7 +47,8 @@ public class MySecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint(authEntryPoint);
 
         return http.build();
     }

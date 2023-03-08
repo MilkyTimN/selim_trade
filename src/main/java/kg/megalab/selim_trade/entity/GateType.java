@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,9 +24,9 @@ public class GateType {
     @JoinColumn(name="gate_type_id", referencedColumnName = "id")
     private List<Gate> gateList = new ArrayList<>();
     @CreationTimestamp
-    private LocalDate created_date;
+    private Date created_date;
     @UpdateTimestamp
-    private LocalDate updated_date;
+    private Date updated_date;
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private Admin createdBy;

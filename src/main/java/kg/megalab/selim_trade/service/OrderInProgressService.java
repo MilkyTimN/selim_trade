@@ -14,4 +14,6 @@ public interface OrderInProgressService {
     OrderInProgressResponse getOrderInProgressById(int id);
 
     OrderInProgressResponse updateOrderInProgressById(int id, UpdateOrderInProgressRequest updateOrderInProgressRequest, UserDetails adminDetails);
+
+    void deleteById(int id);
 }

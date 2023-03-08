@@ -47,6 +47,17 @@ public class RestApiExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
+//    @ExceptionHandler({NoSuchMethodError.class})
+//    @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
+//    public ErrorMessage noSuchMethod(Exception e, WebRequest request) {
+//        return new ErrorMessage(
+//                HttpStatus.I_AM_A_TEAPOT.value(),
+//                new Date(),
+//                e.getMessage(),
+//                request.getDescription(false)
+//        );
+//    }
+
 //    @ExceptionHandler(ExpiredJwtException.class)
 //    @ResponseStatus(HttpStatus.UNAUTHORIZED)
 //    public ErrorMessage unauthorizedRequest(Excep   tion e, WebRequest request) {

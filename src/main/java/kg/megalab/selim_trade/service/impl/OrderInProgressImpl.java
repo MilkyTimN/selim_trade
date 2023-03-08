@@ -100,4 +100,9 @@ public class OrderInProgressImpl implements OrderInProgressService {
 
         return orderInProgressMapper.toDto(orderInProgressRepository.save(updatingOrderInProgress));
     }
+
+    @Override
+    public void deleteById(int id) {
+        orderInProgressRepository.deleteById(id);
+    }
 }

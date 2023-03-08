@@ -48,4 +48,10 @@ public class OrderInProgressController {
             @AuthenticationPrincipal UserDetails adminDetails) {
         return orderInProgressService.updateOrderInProgressById(id, updateOrderInProgressRequest, adminDetails);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOrderInProgressById(@PathVariable("id") int id) {
+        orderInProgressService.deleteById(id);
+    }
 }

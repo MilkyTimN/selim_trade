@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -19,9 +20,9 @@ public class Work {
     private String photoUrl;
 
     @CreationTimestamp
-    private LocalDate created_date;
+    private Date created_date;
     @UpdateTimestamp
-    private LocalDate updated_date;
+    private Date updated_date;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
