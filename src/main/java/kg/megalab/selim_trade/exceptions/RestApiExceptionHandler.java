@@ -2,6 +2,7 @@ package kg.megalab.selim_trade.exceptions;
 
 import kg.megalab.selim_trade.dto.ErrorMessage;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -11,7 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Date;
 
 
-@RestControllerAdvice
+@ControllerAdvice
 public class RestApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 
@@ -28,10 +29,7 @@ public class RestApiExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-    @ExceptionHandler({UnauthorizedException.class})
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    void unauthorized() {
-    }
+
 
     @ExceptionHandler({ForbiddenException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -48,6 +46,17 @@ public class RestApiExceptionHandler extends ResponseEntityExceptionHandler {
                 request.getDescription(false)
         );
     }
+
+//    @ExceptionHandler(ExpiredJwtException.class)
+//    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+//    public ErrorMessage unauthorizedRequest(Excep   tion e, WebRequest request) {
+//        return new ErrorMessage(
+//                HttpStatus.UNAUTHORIZED.value(),
+//                new Date(),
+//                e.getMessage(),
+//                request.getDescription(false)
+//        );
+//    }
 
     @ExceptionHandler({RequestTimeoutException.class})
     @ResponseStatus(HttpStatus.REQUEST_TIMEOUT)

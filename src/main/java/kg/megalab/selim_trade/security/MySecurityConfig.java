@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.security;
 
+import kg.megalab.selim_trade.security.jwt.AuthEntryPoint;
 import kg.megalab.selim_trade.security.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -26,12 +28,15 @@ public class MySecurityConfig {
 
     private final AuthenticationProvider authenticationProvider;
     private final JwtFilter jwtFilter;
+    private final AuthEntryPoint authEntryPoint;
 
     @Bean
     public SecurityFilterChain mySecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .cors().and()
+                .exceptionHandling().authenticationEntryPoint(authEntryPoint)
+                .and()
                 .authorizeHttpRequests()
                 .requestMatchers(AUTH_WHITELIST)
                 .permitAll()

@@ -32,13 +32,26 @@ public class JwtFilter extends OncePerRequestFilter {
         final String jwt;
         final String username;
 
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         jwt = authHeader.substring(7);
+
         username = jwtService.extractUsername(jwt);
+//        } catch (ExpiredJwtException e) {
+//            ErrorMessage errorMessage = new ErrorMessage(
+//                    HttpStatus.UNAUTHORIZED.value(),
+//                    new Date(),
+//                    "Access token is expired!",
+//                    request.getContextPath()
+//            );
+//            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//            response.getWriter().write(convertObjectToJson(errorMessage));
+//        }
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             if (jwtService.isTokenValid(jwt, userDetails)) {
@@ -56,5 +69,9 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+
+
     }
+
+
 }
