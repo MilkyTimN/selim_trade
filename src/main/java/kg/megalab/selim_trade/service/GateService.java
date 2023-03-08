@@ -20,5 +20,5 @@ public interface GateService {
 
     void deleteGateById(int id) throws IOException;
 
-    Optional<Gate> findGateById(int id);
+    Gate findGateById(int id);
 }

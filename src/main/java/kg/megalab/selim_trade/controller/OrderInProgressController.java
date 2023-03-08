@@ -1,9 +1,13 @@
 package kg.megalab.selim_trade.controller;
 
+import kg.megalab.selim_trade.dto.NewOrderInProgressRequest;
+import kg.megalab.selim_trade.dto.OrderInProgressResponse;
 import kg.megalab.selim_trade.service.OrderInProgressService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -11,7 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderInProgressController {
     private final OrderInProgressService orderInProgressService;
 
-    /*@PostMapping("/save")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public */
+    public OrderInProgressResponse createOrderInProgress(
+            @RequestBody NewOrderInProgressRequest orderRequest,
+            @AuthenticationPrincipal UserDetails adminDetails
+            ) {
+        return orderInProgressService.createOrderInProgress(orderRequest, adminDetails);
+    }
 }

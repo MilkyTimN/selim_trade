@@ -108,7 +108,7 @@ public class GateServiceImpl implements GateService {
     }
 
     @Override
-    public Optional<Gate> findGateById(int id) {
-        return gateRepository.findById(id);
+    public Gate findGateById(int id) {
+        return gateRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Gate not found!"));
     }
 }

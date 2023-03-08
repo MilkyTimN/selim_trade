@@ -20,8 +20,11 @@ public class OrderInProgress {
     @Enumerated(EnumType.STRING)
     private EStatus status;
 
-    @OneToOne
+    @ManyToOne
+    private GateType gateType;
+    @ManyToOne
     private Gate gate;
+
     private String name;
     private String phoneNumber;
 
