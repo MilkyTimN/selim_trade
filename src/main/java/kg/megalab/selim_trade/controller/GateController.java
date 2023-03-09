@@ -40,6 +40,8 @@ public class GateController {
         return gateService.updateGate(id, name, image, adminDetails);
     }
 
+
+
     @GetMapping
     public Page<GateResponse> getAllGates(
             @RequestParam(defaultValue = "0") int pageNo,

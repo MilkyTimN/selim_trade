@@ -25,8 +25,8 @@ public class Review {
     @Column(columnDefinition = "TEXT")
     private String text;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchased_product_id", referencedColumnName = "id")
-    private Product product;
+    @JoinColumn(name = "purchased_gate_id", referencedColumnName = "id")
+    private Gate gate;
     @CreationTimestamp
     private Date created_date;
     @UpdateTimestamp

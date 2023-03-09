@@ -22,6 +22,9 @@ public class GateType {
     private String name;
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name="gate_type_id", referencedColumnName = "id")
+    List<Advantage> advantages = new ArrayList<>();
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name="gate_type_id", referencedColumnName = "id")
     private List<Gate> gateList = new ArrayList<>();
     @CreationTimestamp
     private Date created_date;
