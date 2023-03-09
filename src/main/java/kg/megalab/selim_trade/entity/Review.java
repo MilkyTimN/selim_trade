@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,9 +25,10 @@ public class Review {
     private String name;
     @Column(columnDefinition = "TEXT")
     private String text;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchased_gate_id", referencedColumnName = "id")
-    private Gate gate;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "purchased_gate_id", referencedColumnName = "id")
+//    private Gate gate;
+    private String gate;
     @CreationTimestamp
     private Date created_date;
     @UpdateTimestamp
@@ -40,5 +42,5 @@ public class Review {
     @JoinTable(name = "review_admin_update",
             joinColumns = @JoinColumn(name = "review_id"),
             inverseJoinColumns = @JoinColumn(name = "admin_id"))
-    private List<Admin> updatedBy;
+    private List<Admin> updatedBy = new ArrayList<>();
 }
