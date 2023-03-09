@@ -13,4 +13,6 @@ public interface AdvantageService {
     Page<AdvantageResponse> getAllAdvantages(int pageNo, int pageSize, String sortBy);
 
     AdvantageResponse getAdvantageById(int id);
+
+    void deleteAdvantageById(int id);
 }

@@ -84,4 +84,9 @@ public class AdvantageServiceImpl implements AdvantageService {
         return advantageRepository.findById(id).map(advantageMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Advantage not found!"));
     }
+
+    @Override
+    public void deleteAdvantageById(int id) {
+        advantageRepository.deleteById(id);
+    }
 }

@@ -46,4 +46,10 @@ public class AdvantageController {
     public AdvantageResponse getAdvantageById(@PathVariable("id") int id) {
         return advantageService.getAdvantageById(id);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAdvantageById(@PathVariable("id") int id) {
+        advantageService.deleteAdvantageById(id);
+    }
 }
