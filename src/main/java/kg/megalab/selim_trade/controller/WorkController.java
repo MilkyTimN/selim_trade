@@ -18,7 +18,7 @@ public class WorkController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public WorkResponse createWork(@RequestBody MultipartFile image) throws IOException {
+    public WorkResponse createWork(@RequestParam("image") MultipartFile image) throws IOException {
         return workService.createWork(image);
     }
 

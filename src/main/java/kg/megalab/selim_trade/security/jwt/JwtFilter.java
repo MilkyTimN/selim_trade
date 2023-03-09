@@ -1,6 +1,8 @@
 package kg.megalab.selim_trade.security.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -65,8 +67,15 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
             }
         } catch (ExpiredJwtException e) {
-            logger.error("Access token is expired!");
+            logger.error("JWT is expired: {}", e.getMessage());
+        } catch (MalformedJwtException e){
+            logger.error("Malformed JWT: {}", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            logger.error("JWT token is unsupported: {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            logger.error("JWT claims string is empty: {}", e.getMessage());
         }
+
         filterChain.doFilter(request, response);
     }
 

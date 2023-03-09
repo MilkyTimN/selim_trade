@@ -23,7 +23,7 @@ import java.util.Date;
 @RestController
 @RequiredArgsConstructor
 public class WorkServiceImpl implements WorkService {
-    private final WorkService workService;
+
     private final ImageService imageService;
     private final WorkMapper workMapper;
     private final WorkRepository workRepository;
