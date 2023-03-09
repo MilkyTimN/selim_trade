@@ -9,6 +9,10 @@ import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.ImageService;
 import kg.megalab.selim_trade.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,5 +48,11 @@ public class ReviewServiceImpl implements ReviewService {
         );
 
         return reviewMapper.toDto(reviewRepository.save(review));
+    }
+
+    @Override
+    public Page<ReviewResponse> getAllReviews(int pageNo, int pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return reviewRepository.findAll(paging).map(reviewMapper::toDto);
     }
 }
