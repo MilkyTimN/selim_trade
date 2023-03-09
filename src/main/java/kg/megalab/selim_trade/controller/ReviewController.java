@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ReviewResponse createReview(
             @RequestParam MultipartFile image,
             @RequestParam String name,
@@ -39,6 +41,11 @@ public class ReviewController {
             @RequestParam(defaultValue = "id") String sortBy
     ) {
         return reviewService.getAllReviews(pageNo, pageSize, sortBy);
+    }
+
+    @GetMapping("/{id}")
+    public ReviewResponse getReviewById(@PathVariable("id") int id) {
+        return reviewService.getReviewById(id);
     }
 
 }

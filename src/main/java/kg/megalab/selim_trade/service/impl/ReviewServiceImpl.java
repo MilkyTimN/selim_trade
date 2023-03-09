@@ -2,6 +2,7 @@ package kg.megalab.selim_trade.service.impl;
 
 import kg.megalab.selim_trade.dto.ReviewResponse;
 import kg.megalab.selim_trade.entity.Review;
+import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.ReviewMapper;
 import kg.megalab.selim_trade.repository.ReviewRepository;
@@ -54,5 +55,12 @@ public class ReviewServiceImpl implements ReviewService {
     public Page<ReviewResponse> getAllReviews(int pageNo, int pageSize, String sortBy) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         return reviewRepository.findAll(paging).map(reviewMapper::toDto);
+    }
+
+    @Override
+    public ReviewResponse getReviewById(int id) {
+        return reviewMapper.toDto(
+                reviewRepository.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Review not found!")));
     }
 }
