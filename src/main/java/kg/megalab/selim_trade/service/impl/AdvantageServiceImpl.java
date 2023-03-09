@@ -13,6 +13,10 @@ import kg.megalab.selim_trade.service.AdvantageService;
 import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.GateTypesService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -67,5 +71,11 @@ public class AdvantageServiceImpl implements AdvantageService {
         updatedAdvantage.setUpdated_date(new Date());
 
         return advantageMapper.toDto(advantageRepository.save(updatedAdvantage));
+    }
+
+    @Override
+    public Page<AdvantageResponse> getAllAdvantages(int pageNo, int pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return advantageRepository.findAll(paging).map(advantageMapper::toDto);
     }
 }

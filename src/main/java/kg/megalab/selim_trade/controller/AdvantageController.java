@@ -4,6 +4,7 @@ import kg.megalab.selim_trade.dto.AdvantageRequest;
 import kg.megalab.selim_trade.dto.AdvantageResponse;
 import kg.megalab.selim_trade.service.AdvantageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,5 +31,14 @@ public class AdvantageController {
             @RequestBody AdvantageRequest request,
             @AuthenticationPrincipal UserDetails adminDetails) {
         return advantageService.updateAdvantageById(id, request, adminDetails);
+    }
+
+    @GetMapping
+    public Page<AdvantageResponse> getAllAdvantages(
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+        return advantageService.getAllAdvantages(pageNo, pageSize, sortBy);
     }
 }
