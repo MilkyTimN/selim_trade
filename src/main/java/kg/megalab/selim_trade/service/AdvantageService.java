@@ -6,4 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface AdvantageService {
     AdvantageResponse createAdvantage(int gateTypeId, AdvantageRequest advantageRequest, UserDetails adminDetails);
+
+    AdvantageResponse updateAdvantageById(int id, AdvantageRequest request, UserDetails adminDetails);
 }

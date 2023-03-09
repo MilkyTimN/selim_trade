@@ -5,6 +5,7 @@ import kg.megalab.selim_trade.dto.AdvantageResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.Advantage;
 import kg.megalab.selim_trade.entity.GateType;
+import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.AdvantageMapper;
 import kg.megalab.selim_trade.repository.AdvantageRepository;
@@ -47,5 +48,24 @@ public class AdvantageServiceImpl implements AdvantageService {
 
         return advantageMapper.toDto(advantageRepository.save(advantage));
 
+    }
+
+    @Override
+    public AdvantageResponse updateAdvantageById(int id, AdvantageRequest request, UserDetails adminDetails) {
+
+        Advantage updatedAdvantage = advantageRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Advantage not found!"));
+
+        updatedAdvantage.setTitle(request.title());
+        updatedAdvantage.setDescription(request.description());
+
+        updatedAdvantage.getUpdatedBy().add(
+                authService.findAdminByUsername(adminDetails.getUsername())
+                        .orElseThrow(UserNotFoundException::new)
+        );
+
+        updatedAdvantage.setUpdated_date(new Date());
+
+        return advantageMapper.toDto(advantageRepository.save(updatedAdvantage));
     }
 }

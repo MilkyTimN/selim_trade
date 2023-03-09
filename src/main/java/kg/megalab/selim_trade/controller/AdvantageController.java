@@ -23,4 +23,12 @@ public class AdvantageController {
             @AuthenticationPrincipal UserDetails adminDetails) {
         return advantageService.createAdvantage(gateTypeId, advantageRequest, adminDetails);
     }
+
+    @PutMapping("/{id}")
+    public AdvantageResponse updateAdvantageById(
+            @PathVariable("id") int id,
+            @RequestBody AdvantageRequest request,
+            @AuthenticationPrincipal UserDetails adminDetails) {
+        return advantageService.updateAdvantageById(id, request, adminDetails);
+    }
 }
