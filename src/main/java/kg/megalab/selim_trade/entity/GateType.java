@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "gt_type")
+@Table
 public class GateType {
     @Id
     @GeneratedValue(generator = "gate_type_id_generator", strategy = GenerationType.SEQUENCE)
@@ -22,7 +22,7 @@ public class GateType {
     private String name;
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name="gate_type_id", referencedColumnName = "id")
-    List<Advantage> advantages = new ArrayList<>();
+    List<Advantage> advantageList = new ArrayList<>();
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name="gate_type_id", referencedColumnName = "id")
     private List<Gate> gateList = new ArrayList<>();

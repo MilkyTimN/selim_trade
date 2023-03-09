@@ -37,8 +37,8 @@ public class Admin implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<ERole> roles;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
-    private List<Advantage> advantageList;
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
+//    private List<Advantage> advantageList;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
     private Set<News> newsSet;

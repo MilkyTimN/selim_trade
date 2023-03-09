@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class JwtService {
 
     @Value("${jwt_access_token_expiration_in_minutes}")
     private long jwt_access_token_expiration_in_minutes;
+    private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
 
 
     public String generateToken(
@@ -42,7 +45,10 @@ public class JwtService {
     }
 
     public String extractUsername(String jwt) {
+
         return extractClaim(jwt, Claims::getSubject);
+
+
     }
 
     private Key getSigningKey() {
