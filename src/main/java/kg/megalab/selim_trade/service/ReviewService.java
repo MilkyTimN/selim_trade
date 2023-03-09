@@ -14,4 +14,6 @@ public interface ReviewService {
     Page<ReviewResponse> getAllReviews(int pageNo, int pageSize, String sortBy);
 
     ReviewResponse getReviewById(int id);
+
+    ReviewResponse updateReview(int id, MultipartFile image, String name, String text, String gate, UserDetails adminDetails) throws IOException;
 }

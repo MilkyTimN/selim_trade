@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Date;
 
 @Service
@@ -62,5 +64,29 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewMapper.toDto(
                 reviewRepository.findById(id)
                         .orElseThrow(() -> new ResourceNotFoundException("Review not found!")));
+    }
+
+    @Override
+    public ReviewResponse updateReview(int id, MultipartFile image, String name, String text, String gate, UserDetails adminDetails) throws IOException {
+        Review updatingReview = reviewRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
+
+        //Delete previous photo from file system
+        Files.deleteIfExists(Path.of(updatingReview.getPhotoUrl()));
+
+        String photoUrl = imageService.saveImageToFileSystem(image);
+
+        updatingReview.setPhotoUrl(photoUrl);
+        updatingReview.setName(name);
+        updatingReview.setText(text);
+        updatingReview.setGate(gate);
+        updatingReview.setUpdated_date(new Date());
+
+        updatingReview.getUpdatedBy().add(
+                authService.findAdminByUsername(adminDetails.getUsername())
+                        .orElseThrow(UserNotFoundException::new)
+        );
+
+        return reviewMapper.toDto(reviewRepository.save(updatingReview));
     }
 }

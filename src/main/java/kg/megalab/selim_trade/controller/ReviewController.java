@@ -48,4 +48,15 @@ public class ReviewController {
         return reviewService.getReviewById(id);
     }
 
+    @PutMapping("/{id}")
+    public ReviewResponse updateReview(
+            @PathVariable("id") int id,
+            @RequestParam MultipartFile image,
+            @RequestParam String name,
+            @RequestParam String text,
+            @RequestParam String gate,
+            @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
+        return reviewService.updateReview(id, image, name, text, gate, adminDetails);
+    }
+
 }
