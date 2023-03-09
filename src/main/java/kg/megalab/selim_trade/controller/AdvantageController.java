@@ -41,4 +41,9 @@ public class AdvantageController {
     ) {
         return advantageService.getAllAdvantages(pageNo, pageSize, sortBy);
     }
+
+    @GetMapping("/{id}")
+    public AdvantageResponse getAdvantageById(@PathVariable("id") int id) {
+        return advantageService.getAdvantageById(id);
+    }
 }

@@ -78,4 +78,10 @@ public class AdvantageServiceImpl implements AdvantageService {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         return advantageRepository.findAll(paging).map(advantageMapper::toDto);
     }
+
+    @Override
+    public AdvantageResponse getAdvantageById(int id) {
+        return advantageRepository.findById(id).map(advantageMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Advantage not found!"));
+    }
 }

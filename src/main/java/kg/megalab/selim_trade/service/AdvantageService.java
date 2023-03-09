@@ -11,4 +11,6 @@ public interface AdvantageService {
     AdvantageResponse updateAdvantageById(int id, AdvantageRequest request, UserDetails adminDetails);
 
     Page<AdvantageResponse> getAllAdvantages(int pageNo, int pageSize, String sortBy);
+
+    AdvantageResponse getAdvantageById(int id);
 }
