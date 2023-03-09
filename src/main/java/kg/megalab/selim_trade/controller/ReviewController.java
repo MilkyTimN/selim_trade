@@ -59,4 +59,10 @@ public class ReviewController {
         return reviewService.updateReview(id, image, name, text, gate, adminDetails);
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteReviewById(@PathVariable("id") int id) {
+        reviewService.deleteReviewById(id);
+    }
+
 }

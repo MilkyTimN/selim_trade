@@ -16,4 +16,6 @@ public interface ReviewService {
     ReviewResponse getReviewById(int id);
 
     ReviewResponse updateReview(int id, MultipartFile image, String name, String text, String gate, UserDetails adminDetails) throws IOException;
+
+    void deleteReviewById(int id) throws IOException;
 }

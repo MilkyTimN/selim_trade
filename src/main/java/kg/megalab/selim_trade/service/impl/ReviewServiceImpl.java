@@ -89,4 +89,15 @@ public class ReviewServiceImpl implements ReviewService {
 
         return reviewMapper.toDto(reviewRepository.save(updatingReview));
     }
+
+    @Override
+    public void deleteReviewById(int id) throws IOException {
+        Review deletingReview = reviewRepository.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
+
+        //deleting photo from file system
+        Files.deleteIfExists(Path.of(deletingReview.getPhotoUrl()));
+
+        reviewRepository.delete(deletingReview);
+    }
 }
