@@ -21,17 +21,5 @@ public class Work {
 
     @CreationTimestamp
     private Date created_date;
-    @UpdateTimestamp
-    private Date updated_date;
-
-    @ManyToOne
-    @JoinColumn(name = "creator_id")
-    private Admin createdBy;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "work_admin_update",
-            joinColumns = @JoinColumn(name = "work_id"),
-            inverseJoinColumns = @JoinColumn(name = "admin_id"))
-    private List<Admin> updatedBy;
 
 }
