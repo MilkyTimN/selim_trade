@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity(name = "news")
 @Data
@@ -23,9 +24,9 @@ public class News {
     @Column(columnDefinition = "TEXT")
     private String description;
     @CreationTimestamp
-    private LocalDate createdDate;
+    private Date createdDate;
     @UpdateTimestamp
-    private LocalDate updatedDate;
+    private Date updatedDate;
     @ManyToOne
     @JoinColumn(name = "admin_id", referencedColumnName = "id")
     private Admin admin;

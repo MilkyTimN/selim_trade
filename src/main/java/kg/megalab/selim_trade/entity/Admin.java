@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,17 +28,17 @@ public class Admin implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @CreationTimestamp
-    private LocalDate created_date;
+    private Date created_date;
     @UpdateTimestamp
-    private LocalDate updated_date;
+    private Date updated_date;
 
     @ElementCollection(targetClass = ERole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "admin_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<ERole> roles;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
-    private List<Advantage> advantageList;
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
+//    private List<Advantage> advantageList;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
     private Set<News> newsSet;
