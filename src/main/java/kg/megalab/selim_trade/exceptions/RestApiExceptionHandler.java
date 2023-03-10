@@ -28,15 +28,14 @@ public class RestApiExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-    @ExceptionHandler({UnauthorizedException.class})
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    void unauthorized() {
-    }
 
-    @ExceptionHandler({ForbiddenException.class})
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    void forbidden() {
-    }
+
+//    @ExceptionHandler({ForbiddenException.class})
+//    @ResponseStatus(HttpStatus.FORBIDDEN)
+//    void forbidden() {
+//    }
+
+
 
     @ExceptionHandler({BadRequestException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -49,10 +48,12 @@ public class RestApiExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-    @ExceptionHandler({RequestTimeoutException.class})
-    @ResponseStatus(HttpStatus.REQUEST_TIMEOUT)
-    void requestTimeout() {
-    }
+
+
+//    @ExceptionHandler({RequestTimeoutException.class})
+//    @ResponseStatus(HttpStatus.REQUEST_TIMEOUT)
+//    void requestTimeout() {
+//    }
 
 
 }

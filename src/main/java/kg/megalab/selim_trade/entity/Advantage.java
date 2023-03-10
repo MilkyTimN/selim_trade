@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "advantages")
@@ -19,13 +21,21 @@ public class Advantage {
     @Column(columnDefinition = "TEXT")
     private String description;
     @CreationTimestamp
-    private LocalDate created_date;
+    private Date created_date;
     @UpdateTimestamp
-    private LocalDate updated_date;
+    private Date updated_date;
 
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    @JoinColumn(name = "admin_id")
-    private Admin admin;
+    @ManyToOne
+    GateType gateType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator_id")
+    private Admin createdBy;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "advantage_admin_updates",
+            joinColumns = @JoinColumn(name = "advantage_id"),
+            inverseJoinColumns = @JoinColumn(name = "admin_id"))
+    private List<Admin> updatedBy;
 
 }

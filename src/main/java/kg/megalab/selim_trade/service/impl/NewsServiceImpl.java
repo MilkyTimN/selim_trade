@@ -1,6 +1,6 @@
 package kg.megalab.selim_trade.service.impl;
 
-import kg.megalab.selim_trade.dto.NewOrUpdateNewsResponse;
+import kg.megalab.selim_trade.dto.NewsResponse;
 import kg.megalab.selim_trade.entity.News;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
@@ -39,7 +39,7 @@ public class NewsServiceImpl implements NewsService {
 
 
     @Override
-    public NewOrUpdateNewsResponse getNewsById(int id) {
+    public NewsResponse getNewsById(int id) {
         return newsRepository.findById(id).map(newsMapper::toNewOrUpdatedResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("The news not found!"));
     }
@@ -50,14 +50,14 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public Page<NewOrUpdateNewsResponse> getAllNews(int pageNo, int pageSize, String sortBy) {
+    public Page<NewsResponse> getAllNews(int pageNo, int pageSize, String sortBy) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         return newsRepository.findAll(paging).map(newsMapper::toNewOrUpdatedResponse);
     }
 
 
     @Override
-    public NewOrUpdateNewsResponse createNews(MultipartFile image, String title, String description, UserDetails adminDetails) throws IOException {
+    public NewsResponse createNews(MultipartFile image, String title, String description, UserDetails adminDetails) throws IOException {
         News news = new News();
 
         if (image == null || image.isEmpty()) {
@@ -78,7 +78,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public NewOrUpdateNewsResponse updateNews(int id, MultipartFile image, String title, String description, UserDetails adminDetails) {
+    public NewsResponse updateNews(int id, MultipartFile image, String title, String description, UserDetails adminDetails) {
         return newsRepository.findById(id).map(news -> {
             if (!news.getPhotoUrl().equals(getFileOriginalName(image.getOriginalFilename()))) {
                 try {
@@ -109,7 +109,10 @@ public class NewsServiceImpl implements NewsService {
     public void deleteNews(int id) throws IOException {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("News is not found!"));
+
+        //deleting previous photo from file system
         Files.delete(Path.of(news.getPhotoUrl()));
+
         newsRepository.deleteById(id);
     }
 }
