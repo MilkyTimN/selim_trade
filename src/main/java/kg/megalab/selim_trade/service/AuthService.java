@@ -12,5 +12,5 @@ public interface AuthService {
 
     LoginResponse refreshAccessToken(RefreshAccessTokenRequest refreshToken);
 
-    Optional<Admin> findAdminByUsername(String username);
+    Admin findAdminByUsername(String username);
 }

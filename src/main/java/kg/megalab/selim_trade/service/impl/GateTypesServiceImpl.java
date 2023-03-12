@@ -49,7 +49,7 @@ public class GateTypesServiceImpl implements GateTypesService {
         gateType.setName(name);
         gateType.setCreatedBy(authService.findAdminByUsername(
                 adminDetails.getUsername()
-        ).orElseThrow(UserNotFoundException::new));
+        ));
 
         return gateTypesMapper.toDto(gateTypesRepository.save(gateType));
     }
@@ -93,7 +93,6 @@ public class GateTypesServiceImpl implements GateTypesService {
         //adding admin to updatedby list
         updatingGateType.getUpdatedBy().add(
                 authService.findAdminByUsername(adminDetails.getUsername())
-                        .orElseThrow(UserNotFoundException::new)
         );
 
         //saving new photo to the filesystem

@@ -40,8 +40,7 @@ public class AdvantageServiceImpl implements AdvantageService {
         advantage.setTitle(request.title());
         advantage.setDescription(request.description());
 
-        Admin admin = authService.findAdminByUsername(adminDetails.getUsername())
-                .orElseThrow(UserNotFoundException::new);
+        Admin admin = authService.findAdminByUsername(adminDetails.getUsername());
 
         advantage.setCreatedBy(admin);
 
@@ -65,7 +64,6 @@ public class AdvantageServiceImpl implements AdvantageService {
 
         updatedAdvantage.getUpdatedBy().add(
                 authService.findAdminByUsername(adminDetails.getUsername())
-                        .orElseThrow(UserNotFoundException::new)
         );
 
         updatedAdvantage.setUpdated_date(new Date());

@@ -50,8 +50,7 @@ public class AuthServiceImpl implements AuthService {
                         loginRequest.password()
                 )
         );
-        Admin admin = findAdminByUsername(loginRequest.username())
-                .orElseThrow(UserNotFoundException::new);
+        Admin admin = findAdminByUsername(loginRequest.username());
         String jwt = jwtService.generateToken(admin);
         String refreshToken = refreshTokenService.generateRefreshToken(admin);
         return new LoginResponse(jwt, refreshToken, adminMapper.toLoginResponseAdminDto(admin));
@@ -63,8 +62,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Optional<Admin> findAdminByUsername(String username) {
-        return adminRepository.findByUsername(username);
+    public Admin findAdminByUsername(String username) {
+
+        return adminRepository.findByUsername(username)
+                .orElseThrow(UserNotFoundException::new);
     }
 
 
