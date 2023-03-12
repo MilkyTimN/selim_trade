@@ -17,7 +17,7 @@ public interface NewsService {
 
     NewsResponse createNews(MultipartFile image, String title, String description, UserDetails adminDetails) throws IOException;
 
-    NewsResponse updateNews(int id, MultipartFile image, String title, String description, UserDetails adminDetails);
+    NewsResponse updateNews(int id, MultipartFile image, String title, String description, UserDetails adminDetails) throws IOException;
 
     void deleteNews(int id) throws IOException;
 }

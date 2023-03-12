@@ -38,7 +38,7 @@ public class NewsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public NewsResponse createNews(@RequestParam(value = "image", required = false) MultipartFile image,
+    public NewsResponse createNews(@RequestParam(value = "image") MultipartFile image,
                                    @RequestParam("title") String title,
                                    @RequestParam("description") String description,
                                    @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
