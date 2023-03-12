@@ -40,7 +40,7 @@ public class Admin implements UserDetails {
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
 //    private List<Advantage> advantageList;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
     private Set<News> newsSet;
 
     @Override
