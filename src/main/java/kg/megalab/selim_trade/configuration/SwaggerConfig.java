@@ -1,12 +1,15 @@
 package kg.megalab.selim_trade.configuration;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -27,10 +30,19 @@ import org.springframework.context.annotation.Configuration;
                 description = "Production"
         )
 )
-@SecurityScheme(
-        name = "Bearer Authentication",
-        type = SecuritySchemeType.HTTP,
-        bearerFormat = "JWT",
-        scheme = "Bearer"
-)
-public class SwaggerConfig {}
+public class SwaggerConfig {
+    @Bean
+    public OpenAPI customizeOpenAPI() {
+        final String securitySchemeName = "Bearer Token Authorization";
+        return new OpenAPI()
+                .addSecurityItem(new SecurityRequirement()
+                        .addList(securitySchemeName))
+                .components(new Components()
+                        .addSecuritySchemes(securitySchemeName, new SecurityScheme()
+                                .name(securitySchemeName)
+                                .type(SecurityScheme.Type.HTTP)
+                                .description("Write like this, without square brackets: [Bearer {put here your jwt}]")
+                                .scheme("bearer")
+                                .bearerFormat("JWT")));
+    }
+}

@@ -1,7 +1,7 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.GateResponse;
-import kg.megalab.selim_trade.dto.GateTypesResponse;
 import kg.megalab.selim_trade.service.GateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,7 +41,7 @@ public class GateController {
     }
 
 
-
+    @SecurityRequirements
     @GetMapping
     public Page<GateResponse> getAllGates(
             @RequestParam(defaultValue = "0") int pageNo,
