@@ -1,11 +1,13 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.NewOrderRequest;
 import kg.megalab.selim_trade.dto.NewOrderResponse;
 import kg.megalab.selim_trade.service.NewOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,6 +29,8 @@ public class NewOrderController {
         newOrderService.deleteNewOrder(id);
     }
 
+    @SecurityRequirements
+    @PreAuthorize("permitAll()")
     @GetMapping
     public Page<NewOrderResponse> getAllNewOrders(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -36,6 +40,8 @@ public class NewOrderController {
         return newOrderService.getAllNewOrders(pageNo, pageSize, sortBy);
     }
 
+    @SecurityRequirements
+    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public NewOrderResponse getNewOrderById(@PathVariable("id") int id) {
         return newOrderService.getNewOrderById(id);

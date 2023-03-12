@@ -1,10 +1,12 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.NewsResponse;
 import kg.megalab.selim_trade.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +22,15 @@ public class NewsController {
 
     private final NewsService newsService;
 
+    @SecurityRequirements
+    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public NewsResponse getNewsById(@PathVariable("id") int id) {
         return newsService.getNewsById(id);
     }
 
+    @SecurityRequirements
+    @PreAuthorize("permitAll()")
     @GetMapping
     public Page<NewsResponse> getAllNewses(
             @RequestParam(defaultValue = "0") int pageNo,

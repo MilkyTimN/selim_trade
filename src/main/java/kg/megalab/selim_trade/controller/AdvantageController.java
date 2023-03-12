@@ -1,11 +1,13 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.AdvantageRequest;
 import kg.megalab.selim_trade.dto.AdvantageResponse;
 import kg.megalab.selim_trade.service.AdvantageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +36,8 @@ public class AdvantageController {
     }
 
     @GetMapping
+    @SecurityRequirements
+    @PreAuthorize("permitAll()")
     public Page<AdvantageResponse> getAllAdvantages(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize,
@@ -43,6 +47,8 @@ public class AdvantageController {
     }
 
     @GetMapping("/{id}")
+    @SecurityRequirements
+    @PreAuthorize("permitAll()")
     public AdvantageResponse getAdvantageById(@PathVariable("id") int id) {
         return advantageService.getAdvantageById(id);
     }

@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.ReviewResponse;
 import kg.megalab.selim_trade.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +36,8 @@ public class ReviewController {
         return reviewService.createReview(image,name,text,gate,adminDetails);
     }
 
+    @SecurityRequirements
+    @PreAuthorize("permitAll()")
     @GetMapping
     public Page<ReviewResponse> getAllReviews(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -43,6 +47,8 @@ public class ReviewController {
         return reviewService.getAllReviews(pageNo, pageSize, sortBy);
     }
 
+    @SecurityRequirements
+    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public ReviewResponse getReviewById(@PathVariable("id") int id) {
         return reviewService.getReviewById(id);

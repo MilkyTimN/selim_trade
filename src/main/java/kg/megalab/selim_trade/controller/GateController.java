@@ -6,6 +6,7 @@ import kg.megalab.selim_trade.service.GateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,7 @@ public class GateController {
 
 
     @SecurityRequirements
+    @PreAuthorize("permitAll()")
     @GetMapping
     public Page<GateResponse> getAllGates(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -51,6 +53,8 @@ public class GateController {
         return gateService.getAllGates(pageNo, pageSize, sortBy);
     }
 
+    @SecurityRequirements
+    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public GateResponse getGateById(@PathVariable("id") int id) {
         return gateService.getGateById(id);
