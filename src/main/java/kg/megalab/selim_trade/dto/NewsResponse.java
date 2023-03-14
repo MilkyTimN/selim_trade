@@ -13,8 +13,8 @@ public record NewsResponse(
         String description,
         LocalDate createdDate,
         LocalDate updatedDate,
-        LoginResponse.AdminInfo createdBy,
-        List<LoginResponse.AdminInfo> updatedBy
+        AdminInfo createdBy,
+        List<AdminInfo> updatedBy
 ) {
 
 }

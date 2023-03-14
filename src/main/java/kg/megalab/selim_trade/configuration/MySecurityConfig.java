@@ -42,6 +42,7 @@ public class MySecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(AUTH_WHITELIST)
                 .permitAll()
+                .requestMatchers("/api/v1/admin/**").hasAuthority("SUPER_ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

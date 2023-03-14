@@ -53,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
         Admin admin = findAdminByUsername(loginRequest.username());
         String jwt = jwtService.generateToken(admin);
         String refreshToken = refreshTokenService.generateRefreshToken(admin);
-        return new LoginResponse(jwt, refreshToken, adminMapper.toLoginResponseAdminDto(admin));
+        return new LoginResponse(jwt, refreshToken, adminMapper.toDto(admin));
     }
 
     @Override
@@ -66,6 +66,42 @@ public class AuthServiceImpl implements AuthService {
 
         return adminRepository.findByUsername(username)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public AdminInfo updateAdminsUsernameAndPassword(LoginRequest usernameAndPassword, int id) {
+        Admin updatedAdmin = adminRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+
+        updatedAdmin.setUsername(usernameAndPassword.username());
+        updatedAdmin.setPassword(usernameAndPassword.password());
+
+        return adminMapper.toDto(adminRepository.save(updatedAdmin));
+    }
+
+    @Override
+    public AdminInfo makeSuperAdmin(int id) {
+        Admin admin = adminRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+
+        admin.getRoles().add(ERole.SUPER_ADMIN);
+        return adminMapper.toDto(adminRepository.save(admin));
+    }
+
+    @Override
+    public AdminInfo disableAdmin(int id) {
+        Admin admin = adminRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+        admin.setEnabled(false);
+        return adminMapper.toDto(adminRepository.save(admin));
+    }
+
+    @Override
+    public AdminInfo enableAdmin(int id) {
+        Admin admin = adminRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+        admin.setEnabled(true);
+        return adminMapper.toDto(adminRepository.save(admin));
     }
 
 

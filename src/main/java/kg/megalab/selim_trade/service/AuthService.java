@@ -13,4 +13,12 @@ public interface AuthService {
     LoginResponse refreshAccessToken(RefreshAccessTokenRequest refreshToken);
 
     Admin findAdminByUsername(String username);
+
+    AdminInfo updateAdminsUsernameAndPassword(LoginRequest usernameAndPassword, int id);
+
+    AdminInfo makeSuperAdmin(int id);
+
+    AdminInfo disableAdmin(int id);
+
+    AdminInfo enableAdmin(int id);
 }

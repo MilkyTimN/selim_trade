@@ -37,6 +37,8 @@ public class Admin implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<ERole> roles;
 
+    private boolean isEnabled;
+
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
 //    private List<Advantage> advantageList;
 
@@ -68,6 +70,6 @@ public class Admin implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 }

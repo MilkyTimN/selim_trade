@@ -10,8 +10,8 @@ public record GateTypesResponse(
         List<GateResponse> gateList,
         String created_date,
         String updated_date,
-        LoginResponse.AdminInfo createdBy,
-        List<LoginResponse.AdminInfo> updatedBy
+        AdminInfo createdBy,
+        List<AdminInfo> updatedBy
 
 ) {
 }

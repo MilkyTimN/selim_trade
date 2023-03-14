@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping("/register")
-    public RegisterResponse register(@RequestBody RegisterRequest registerRequest) {
-        return authService.register(registerRequest);
-    }
+
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest) {
