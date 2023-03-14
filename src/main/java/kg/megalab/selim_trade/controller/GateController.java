@@ -43,7 +43,6 @@ public class GateController {
 
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping
     public Page<GateResponse> getAllGates(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -54,7 +53,6 @@ public class GateController {
     }
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public GateResponse getGateById(@PathVariable("id") int id) {
         return gateService.getGateById(id);

@@ -22,7 +22,6 @@ import java.io.IOException;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class GateTypesController {
     private final GateTypesService gateTypesService;
-    private static Logger logger = LoggerFactory.getLogger(GateTypesController.class);
 
     @PostMapping
     public GateTypesResponse createGateType(
@@ -39,7 +38,6 @@ public class GateTypesController {
     }
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping
     public Page<GateTypesResponse> getAllGateTypes(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -49,7 +47,6 @@ public class GateTypesController {
     }
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public GateTypesResponse getGateTypeById(@PathVariable("id") int id) {
         return gateTypesService.getGateTypeResponseById(id);

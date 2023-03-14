@@ -23,14 +23,12 @@ public class NewsController {
     private final NewsService newsService;
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public NewsResponse getNewsById(@PathVariable("id") int id) {
         return newsService.getNewsById(id);
     }
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping
     public Page<NewsResponse> getAllNewses(
             @RequestParam(defaultValue = "0") int pageNo,

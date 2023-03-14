@@ -37,7 +37,6 @@ public class ReviewController {
     }
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping
     public Page<ReviewResponse> getAllReviews(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -48,7 +47,6 @@ public class ReviewController {
     }
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public ReviewResponse getReviewById(@PathVariable("id") int id) {
         return reviewService.getReviewById(id);

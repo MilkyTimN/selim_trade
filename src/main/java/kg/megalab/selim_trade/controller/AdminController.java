@@ -6,6 +6,8 @@ import kg.megalab.selim_trade.dto.RegisterRequest;
 import kg.megalab.selim_trade.dto.RegisterResponse;
 import kg.megalab.selim_trade.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/admin")
 public class AdminController {
     private final AuthService authService;
+
 
     @PostMapping("/register")
     public RegisterResponse register(@RequestBody RegisterRequest registerRequest) {
@@ -22,6 +25,15 @@ public class AdminController {
     @PutMapping("/{id}")
     public AdminInfo updateAdminsUsernameAndPassword(@RequestBody LoginRequest usernameAndPassword, @PathVariable("id") int id) {
         return authService.updateAdminsUsernameAndPassword(usernameAndPassword, id);
+    }
+
+    @GetMapping
+    public Page<AdminInfo> getAllAdminsList(
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "3") int pageSize,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+        return authService.getAllAdminsList(pageNo, pageSize, sortBy);
     }
 
     @GetMapping("/make-super-admin/{id}")

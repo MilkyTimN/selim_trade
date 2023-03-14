@@ -25,7 +25,6 @@ public class WorkController {
     }
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping
     public Page<WorkResponse> getAllWorks(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -36,7 +35,6 @@ public class WorkController {
     }
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public WorkResponse getWorkById(@PathVariable("id") int id) {
         return workService.getWorkById(id);

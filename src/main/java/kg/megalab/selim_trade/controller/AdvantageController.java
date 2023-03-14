@@ -37,7 +37,6 @@ public class AdvantageController {
 
     @GetMapping
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     public Page<AdvantageResponse> getAllAdvantages(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize,
@@ -48,7 +47,6 @@ public class AdvantageController {
 
     @GetMapping("/{id}")
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     public AdvantageResponse getAdvantageById(@PathVariable("id") int id) {
         return advantageService.getAdvantageById(id);
     }

@@ -59,7 +59,7 @@ public class RefreshTokenService {
         return new LoginResponse(
                 jwtService.generateToken(admin),
                 generateCompleteNewRefreshToken(admin).getToken(),
-                adminMapper.toLoginResponseAdminDto(admin));
+                adminMapper.toDto(admin));
     }
 
     public boolean isRefreshTokenExpired(RefreshToken refreshToken) {

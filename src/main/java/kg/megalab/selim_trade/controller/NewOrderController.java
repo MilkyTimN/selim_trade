@@ -29,8 +29,7 @@ public class NewOrderController {
         newOrderService.deleteNewOrder(id);
     }
 
-    @SecurityRequirements
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     @GetMapping
     public Page<NewOrderResponse> getAllNewOrders(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -41,7 +40,6 @@ public class NewOrderController {
     }
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public NewOrderResponse getNewOrderById(@PathVariable("id") int id) {
         return newOrderService.getNewOrderById(id);

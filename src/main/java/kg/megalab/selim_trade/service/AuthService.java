@@ -2,8 +2,7 @@ package kg.megalab.selim_trade.service;
 
 import kg.megalab.selim_trade.dto.*;
 import kg.megalab.selim_trade.entity.Admin;
-
-import java.util.Optional;
+import org.springframework.data.domain.Page;
 
 public interface AuthService {
     RegisterResponse register(RegisterRequest registerRequest);
@@ -21,4 +20,6 @@ public interface AuthService {
     AdminInfo disableAdmin(int id);
 
     AdminInfo enableAdmin(int id);
+
+    Page<AdminInfo> getAllAdminsList(int pageNo, int pageSize, String sortBy);
 }

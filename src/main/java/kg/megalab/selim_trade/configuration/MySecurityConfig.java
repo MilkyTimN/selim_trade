@@ -5,6 +5,7 @@ import kg.megalab.selim_trade.security.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -39,13 +40,12 @@ public class MySecurityConfig {
         http
                 .csrf().disable()
                 .cors().and()
-                .authorizeHttpRequests()
-                .requestMatchers(AUTH_WHITELIST)
-                .permitAll()
-                .requestMatchers("/api/v1/admin/**").hasAuthority("SUPER_ADMIN")
-                .anyRequest()
-                .authenticated()
-                .and()
+                .authorizeHttpRequests(authCustomizer -> authCustomizer
+                        .requestMatchers("/api/v1/admin/**").hasAuthority("SUPER_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

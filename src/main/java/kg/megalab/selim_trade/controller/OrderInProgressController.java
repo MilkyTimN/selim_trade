@@ -30,7 +30,6 @@ public class OrderInProgressController {
     }
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping
     public Page<OrderInProgressResponse> getAllOrdersInProgress(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -41,7 +40,6 @@ public class OrderInProgressController {
     }
 
     @SecurityRequirements
-    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public OrderInProgressResponse getOrderInProgressById(@PathVariable("id") int id) {
         return orderInProgressService.getOrderInProgressById(id);

@@ -4,7 +4,7 @@ import java.util.Set;
 
 public record AdminInfo(
         String username,
-        String isEnabled,
+        boolean active,
         Set<String> roles
 ) {
 }

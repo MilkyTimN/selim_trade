@@ -11,12 +11,15 @@ import kg.megalab.selim_trade.security.jwt.JwtService;
 import kg.megalab.selim_trade.security.jwt.RefreshTokenService;
 import kg.megalab.selim_trade.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -37,7 +40,8 @@ public class AuthServiceImpl implements AuthService {
 
         Admin newAdmin = adminMapper.toModel(registerRequest);
         newAdmin.setPassword(passwordEncoder.encode(registerRequest.password()));
-        newAdmin.setRoles(Set.of(ERole.ADMIN));
+        newAdmin.setRoles(Set.of(ERole.ADMIN, ERole.SUPER_ADMIN));
+        newAdmin.setActive(true);
         adminRepository.save(newAdmin);
         return new RegisterResponse(newAdmin.getUsername() + " is registered successfully!");
     }
@@ -92,7 +96,7 @@ public class AuthServiceImpl implements AuthService {
     public AdminInfo disableAdmin(int id) {
         Admin admin = adminRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
-        admin.setEnabled(false);
+        admin.setActive(false);
         return adminMapper.toDto(adminRepository.save(admin));
     }
 
@@ -100,8 +104,14 @@ public class AuthServiceImpl implements AuthService {
     public AdminInfo enableAdmin(int id) {
         Admin admin = adminRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
-        admin.setEnabled(true);
+        admin.setActive(true);
         return adminMapper.toDto(adminRepository.save(admin));
+    }
+
+    @Override
+    public Page<AdminInfo> getAllAdminsList(int pageNo, int pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return adminRepository.findAll(paging).map(adminMapper::toDto);
     }
 
 
