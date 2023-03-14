@@ -15,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info =@Info(
-                title = "User API",
-                version = "${api.version}",
+                title = "Selim API",
+                version = "1.0",
                 contact = @Contact(
                         name = "Bekzhan", email = "2020.prepartion@gmail.com"
                 ),
@@ -33,7 +33,7 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
     @Bean
     public OpenAPI customizeOpenAPI() {
-        final String securitySchemeName = "Bearer Token Authorization";
+        final String securitySchemeName = "Bearer_Token_Authorization";
         return new OpenAPI()
                 .addSecurityItem(new SecurityRequirement()
                         .addList(securitySchemeName))

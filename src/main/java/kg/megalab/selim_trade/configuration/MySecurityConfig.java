@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @EnableWebSecurity
 @Configuration
@@ -24,7 +26,8 @@ public class MySecurityConfig {
             "/swagger-ui.html",
             "/v3/api-docs/**",
             "/webjars/**",
-            "/api/v1/auth/**"
+            "/api/v1/auth/**",
+            "/api/v1/image/**"
     };
 
     private final AuthenticationProvider authenticationProvider;
