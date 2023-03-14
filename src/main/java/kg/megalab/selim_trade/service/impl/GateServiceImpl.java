@@ -3,7 +3,6 @@ package kg.megalab.selim_trade.service.impl;
 import kg.megalab.selim_trade.dto.GateResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.Gate;
-import kg.megalab.selim_trade.entity.GateType;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.GateMapper;
@@ -13,7 +12,6 @@ import kg.megalab.selim_trade.service.GateService;
 import kg.megalab.selim_trade.service.GateTypesService;
 import kg.megalab.selim_trade.service.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +24,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,18 +43,11 @@ public class GateServiceImpl implements GateService {
         String resultUrl = imageService.saveImageToFileSystem(image);
 
         gate.setPhotoUrl(resultUrl);
-        gate.setCreatedBy(authService.findAdminByUsername(adminDetails.getUsername())
-                .orElseThrow(UserNotFoundException::new));
+        gate.setCreatedBy(authService.findAdminByUsername(adminDetails.getUsername()));
         gate.setName(name);
         gate.setGateType(
                 gateTypesService.getGateTypeById(gateTypeId)
         );
-
-        //gatetype entity
-//        GateType gateType = gateTypesService.getGateTypeById(gateTypeId);
-//        gateType.getGateList().add(gate);
-//        gateTypesService.save(gateType);
-
         return gateMapper.toDto(gateRepository.save(gate));
     }
 
@@ -73,8 +63,7 @@ public class GateServiceImpl implements GateService {
 
         //adding admin to the updatedby list
         List<Admin> adminList = updatingGate.getUpdatedBy();
-        adminList.add(authService.findAdminByUsername(adminDetails.getUsername())
-                .orElseThrow(UserNotFoundException::new));
+        adminList.add(authService.findAdminByUsername(adminDetails.getUsername()));
 
         //saving new photo to file system
         String resultUrl = imageService.saveImageToFileSystem(image);

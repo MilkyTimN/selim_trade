@@ -42,7 +42,6 @@ public class OrderInProgressImpl implements OrderInProgressService {
 
         orderInProgress.setCreatedBy(
                 authService.findAdminByUsername(adminDetails.getUsername())
-                .orElseThrow(UserNotFoundException::new)
         );
 
         orderInProgress.setStatus(EStatus.IN_PROGRESS);
@@ -93,7 +92,6 @@ public class OrderInProgressImpl implements OrderInProgressService {
 
         updatingOrderInProgress.getUpdatedBy().add(
                 authService.findAdminByUsername(adminDetails.getUsername())
-                        .orElseThrow(UserNotFoundException::new)
         );
 
         updatingOrderInProgress.setUpdated_date(new Date());

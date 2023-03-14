@@ -47,7 +47,6 @@ public class ReviewServiceImpl implements ReviewService {
 
         review.setCreatedBy(
                 authService.findAdminByUsername(adminDetails.getUsername())
-                        .orElseThrow(UserNotFoundException::new)
         );
 
         return reviewMapper.toDto(reviewRepository.save(review));
@@ -84,7 +83,6 @@ public class ReviewServiceImpl implements ReviewService {
 
         updatingReview.getUpdatedBy().add(
                 authService.findAdminByUsername(adminDetails.getUsername())
-                        .orElseThrow(UserNotFoundException::new)
         );
 
         return reviewMapper.toDto(reviewRepository.save(updatingReview));

@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.GateTypesResponse;
 import kg.megalab.selim_trade.service.GateTypesService;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,6 @@ import java.io.IOException;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class GateTypesController {
     private final GateTypesService gateTypesService;
-    private static Logger logger = LoggerFactory.getLogger(GateTypesController.class);
 
     @PostMapping
     public GateTypesResponse createGateType(
@@ -36,6 +37,7 @@ public class GateTypesController {
         );
     }
 
+    @SecurityRequirements
     @GetMapping
     public Page<GateTypesResponse> getAllGateTypes(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -44,6 +46,7 @@ public class GateTypesController {
         return gateTypesService.getAll(pageNo, pageSize, sortBy);
     }
 
+    @SecurityRequirements
     @GetMapping("/{id}")
     public GateTypesResponse getGateTypeById(@PathVariable("id") int id) {
         return gateTypesService.getGateTypeResponseById(id);

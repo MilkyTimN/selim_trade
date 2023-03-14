@@ -7,9 +7,5 @@ public record LoginResponse(
         String refreshToken,
         AdminInfo admin
 ) {
-    public record AdminInfo(
-            String username,
-            Set<String> roles
-    ) {
-    }
+
 }

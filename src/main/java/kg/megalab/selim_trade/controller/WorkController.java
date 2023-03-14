@@ -1,10 +1,12 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.WorkResponse;
 import kg.megalab.selim_trade.service.WorkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +24,7 @@ public class WorkController {
         return workService.createWork(image);
     }
 
+    @SecurityRequirements
     @GetMapping
     public Page<WorkResponse> getAllWorks(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -31,6 +34,7 @@ public class WorkController {
         return workService.getAllWorks(pageNo,pageSize,sortBy);
     }
 
+    @SecurityRequirements
     @GetMapping("/{id}")
     public WorkResponse getWorkById(@PathVariable("id") int id) {
         return workService.getWorkById(id);

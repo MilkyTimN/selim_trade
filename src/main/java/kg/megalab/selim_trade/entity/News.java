@@ -7,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "news")
 @Data
@@ -28,7 +29,13 @@ public class News {
     @UpdateTimestamp
     private Date updatedDate;
     @ManyToOne
-    @JoinColumn(name = "admin_id", referencedColumnName = "id")
-    private Admin admin;
+    @JoinColumn(name = "creator_id")
+    private Admin createdBy;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "news_admin_updates",
+            joinColumns = @JoinColumn(name = "news_id"),
+            inverseJoinColumns = @JoinColumn(name = "admin_id"))
+    private List<Admin> updatedBy;
 
 }

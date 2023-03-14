@@ -17,7 +17,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public String saveImageToFileSystem(MultipartFile image) throws IOException {
         String resultFileName = UUID.randomUUID() + "." + image.getOriginalFilename();
-        String resultUrl = image_folder + "/" + resultFileName;
+        String resultUrl = image_folder + resultFileName;
         image.transferTo(new File(resultUrl));
         return resultUrl;
     }
