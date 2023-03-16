@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -42,7 +43,7 @@ public class MySecurityConfig {
                 .cors().and()
                 .authorizeHttpRequests(authCustomizer -> authCustomizer
                         .requestMatchers("/api/v1/admin/**").hasAuthority("SUPER_ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/**", "/home/team4/uploads/*").permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest()
                         .authenticated())
@@ -55,6 +56,11 @@ public class MySecurityConfig {
 
 
         return http.build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/static/**");
     }
 
 

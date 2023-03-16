@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
 
         Admin newAdmin = adminMapper.toModel(registerRequest);
         newAdmin.setPassword(passwordEncoder.encode(registerRequest.password()));
-        newAdmin.setRoles(Set.of(ERole.ADMIN, ERole.SUPER_ADMIN));
+        newAdmin.setRoles(Set.of(ERole.ADMIN));
         newAdmin.setActive(true);
         adminRepository.save(newAdmin);
         return new RegisterResponse(newAdmin.getUsername() + " is registered successfully!");
