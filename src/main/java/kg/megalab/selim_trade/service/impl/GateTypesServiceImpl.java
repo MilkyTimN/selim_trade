@@ -11,6 +11,7 @@ import kg.megalab.selim_trade.service.GateService;
 import kg.megalab.selim_trade.service.GateTypesService;
 import kg.megalab.selim_trade.service.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +32,9 @@ public class GateTypesServiceImpl implements GateTypesService {
     private final ImageService imageService;
     private final AuthService authService;
     private final GateTypesMapper gateTypesMapper;
+
+    @Value("${home.dir}")
+    private String home_dir;
 
 
     @Override
@@ -88,7 +92,7 @@ public class GateTypesServiceImpl implements GateTypesService {
                 .orElseThrow(() -> new ResourceNotFoundException("Gate type not found!"));
 
         // deleting previous photo from filesystem
-        Files.deleteIfExists(Path.of(updatingGateType.getBackgroundUrl()));
+        Files.deleteIfExists(Path.of(home_dir + updatingGateType.getBackgroundUrl()));
 
         //adding admin to updatedby list
         updatingGateType.getUpdatedBy().add(
@@ -111,11 +115,11 @@ public class GateTypesServiceImpl implements GateTypesService {
                 .orElseThrow(() -> new ResourceNotFoundException("Gate type not found!"));
 
         //delete previous photo from the filesystem
-        Files.deleteIfExists(Path.of(gateType.getBackgroundUrl()));
+        Files.delete(Path.of(home_dir + gateType.getBackgroundUrl()));
         gateType.getGateList().forEach(
                 gate -> {
                     try {
-                        Files.deleteIfExists(Path.of(gate.getPhotoUrl()));
+                        Files.delete(Path.of( home_dir + gate.getPhotoUrl()));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
