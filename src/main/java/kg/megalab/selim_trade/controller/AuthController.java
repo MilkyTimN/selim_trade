@@ -4,15 +4,13 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.*;
 import kg.megalab.selim_trade.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 @SecurityRequirements
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AuthController {
     private final AuthService authService;
 

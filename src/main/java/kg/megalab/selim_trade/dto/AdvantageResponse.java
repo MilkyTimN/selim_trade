@@ -1,6 +1,8 @@
 package kg.megalab.selim_trade.dto;
 
 
+import kg.megalab.selim_trade.entity.UpdatedBy;
+
 import java.util.List;
 
 public record AdvantageResponse(
@@ -8,8 +10,7 @@ public record AdvantageResponse(
         String title,
         String description,
         String created_date,
-        String updated_date,
         AdminInfo createdBy,
-        List<AdminInfo> updatedBy
+        List<UpdatedByResponse> updatedByList
 ) {
 }

@@ -15,21 +15,22 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/advantage")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AdvantageController {
     private final AdvantageService advantageService;
 
-    @PostMapping("/{id}")
+    @PostMapping("/{gateTypeId}")
     @ResponseStatus(HttpStatus.CREATED)
     public AdvantageResponse createAdvantage(
-            @PathVariable("id") int gateTypeId,
+            @PathVariable("gateTypeId") int gateTypeId,
             @RequestBody AdvantageRequest advantageRequest,
             @AuthenticationPrincipal UserDetails adminDetails) {
         return advantageService.createAdvantage(gateTypeId, advantageRequest, adminDetails);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{advantageId}")
     public AdvantageResponse updateAdvantageById(
-            @PathVariable("id") int id,
+            @PathVariable("advantageId") int id,
             @RequestBody AdvantageRequest request,
             @AuthenticationPrincipal UserDetails adminDetails) {
         return advantageService.updateAdvantageById(id, request, adminDetails);
@@ -45,15 +46,15 @@ public class AdvantageController {
         return advantageService.getAllAdvantages(pageNo, pageSize, sortBy);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{advantageId}")
     @SecurityRequirements
-    public AdvantageResponse getAdvantageById(@PathVariable("id") int id) {
+    public AdvantageResponse getAdvantageById(@PathVariable("advantageId") int id) {
         return advantageService.getAdvantageById(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{advantageId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAdvantageById(@PathVariable("id") int id) {
+    public void deleteAdvantageById(@PathVariable("advantageId") int id) {
         advantageService.deleteAdvantageById(id);
     }
 }

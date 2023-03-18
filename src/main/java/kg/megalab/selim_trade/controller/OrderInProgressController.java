@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/order-in-progress")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class OrderInProgressController {
     private final OrderInProgressService orderInProgressService;
 
-    @PostMapping("/{id}")
+    @PostMapping("/{newOrderId}")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderInProgressResponse createOrderInProgress(
-            @PathVariable("id") int id,
+            @PathVariable("newOrderId") int id,
             @RequestBody NewOrderInProgressRequest orderRequest,
             @AuthenticationPrincipal UserDetails adminDetails
             ) {
@@ -40,23 +41,23 @@ public class OrderInProgressController {
     }
 
     @SecurityRequirements
-    @GetMapping("/{id}")
-    public OrderInProgressResponse getOrderInProgressById(@PathVariable("id") int id) {
+    @GetMapping("/{orderInProgressId}")
+    public OrderInProgressResponse getOrderInProgressById(@PathVariable("orderInProgressId") int id) {
         return orderInProgressService.getOrderInProgressById(id);
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/{orderInProgressId}")
     public OrderInProgressResponse updateOrderInProgressById(
-            @PathVariable("id") int id,
+            @PathVariable("orderInProgressId") int id,
             @RequestBody UpdateOrderInProgressRequest updateOrderInProgressRequest,
             @AuthenticationPrincipal UserDetails adminDetails) {
         return orderInProgressService.updateOrderInProgressById(id, updateOrderInProgressRequest, adminDetails);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{orderInProgressId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOrderInProgressById(@PathVariable("id") int id) {
+    public void deleteOrderInProgressById(@PathVariable("orderInProgressId") int id) {
         orderInProgressService.deleteById(id);
     }
 }

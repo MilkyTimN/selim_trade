@@ -31,8 +31,8 @@ public class NewsServiceImpl implements NewsService {
     private final AuthService authService;
     private final ImageService imageService;
 
-    @Value("${file.upload-dir}")
-    private String image_folder;
+    @Value("${home.dir}")
+    private String home_dir;
 
     @Override
     public NewsResponse getNewsById(int id) {
@@ -74,7 +74,7 @@ public class NewsServiceImpl implements NewsService {
                 () -> new ResourceNotFoundException("News not found!")
         );
 
-        Files.deleteIfExists(Path.of(news.getPhotoUrl()));
+        Files.deleteIfExists(Path.of(home_dir + news.getPhotoUrl()));
         String resultUrl = imageService.saveImageToFileSystem(image);
 
         news.setPhotoUrl(resultUrl);
@@ -94,7 +94,7 @@ public class NewsServiceImpl implements NewsService {
                 .orElseThrow(() -> new ResourceNotFoundException("News is not found!"));
 
         //deleting previous photo from file system
-        Files.delete(Path.of(news.getPhotoUrl()));
+        Files.deleteIfExists(Path.of(home_dir + news.getPhotoUrl()));
 
         newsRepository.deleteById(id);
     }
