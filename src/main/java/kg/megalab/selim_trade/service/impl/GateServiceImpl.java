@@ -12,6 +12,7 @@ import kg.megalab.selim_trade.service.GateService;
 import kg.megalab.selim_trade.service.GateTypesService;
 import kg.megalab.selim_trade.service.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,8 @@ public class GateServiceImpl implements GateService {
     private final ImageService imageService;
 
     private final GateTypesService gateTypesService;
+    @Value("${home.dir}")
+    private String home_dir;
 
 
     @Override
@@ -59,7 +62,7 @@ public class GateServiceImpl implements GateService {
                 .orElseThrow(() -> new ResourceNotFoundException("Gate not found"));
 
         //deleting previous photo from file system
-        Files.deleteIfExists(Path.of(updatingGate.getPhotoUrl()));
+        Files.deleteIfExists(Path.of(home_dir + updatingGate.getPhotoUrl()));
 
         //adding admin to the updatedby list
         List<Admin> adminList = updatingGate.getUpdatedBy();
@@ -91,7 +94,7 @@ public class GateServiceImpl implements GateService {
                 .orElseThrow(() -> new ResourceNotFoundException("Gate not found!"));
 
         //deleting previous photo from file system
-        Files.deleteIfExists(Path.of(gate.getPhotoUrl()));
+        Files.deleteIfExists(Path.of(home_dir + gate.getPhotoUrl()));
 
         gateRepository.deleteById(id);
     }

@@ -2,17 +2,16 @@ package kg.megalab.selim_trade.service.impl;
 
 import kg.megalab.selim_trade.dto.GateTypesResponse;
 import kg.megalab.selim_trade.entity.GateType;
+import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
-import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.GateTypesMapper;
 import kg.megalab.selim_trade.repository.GateTypesRepository;
 import kg.megalab.selim_trade.service.AuthService;
-import kg.megalab.selim_trade.service.GateService;
 import kg.megalab.selim_trade.service.GateTypesService;
 import kg.megalab.selim_trade.service.ImageService;
+import kg.megalab.selim_trade.service.UpdatedByService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +32,7 @@ public class GateTypesServiceImpl implements GateTypesService {
     private final ImageService imageService;
     private final AuthService authService;
     private final GateTypesMapper gateTypesMapper;
+    private final UpdatedByService updatedByService;
 
     @Value("${home.dir}")
     private String home_dir;
@@ -95,9 +96,13 @@ public class GateTypesServiceImpl implements GateTypesService {
         Files.deleteIfExists(Path.of(home_dir + updatingGateType.getBackgroundUrl()));
 
         //adding admin to updatedby list
-        updatingGateType.getUpdatedBy().add(
-                authService.findAdminByUsername(adminDetails.getUsername())
-        );
+//        updatingGateType.getUpdatedBy().add(
+//                authService.findAdminByUsername(adminDetails.getUsername())
+//        );
+        UpdatedBy updatedBy = new UpdatedBy();
+        updatedBy.setUsername(adminDetails.getUsername());
+        updatedBy.setDate(new Date());
+        updatingGateType.getUpdatedByList().add(updatedByService.save(updatedBy));
 
         //saving new photo to the filesystem
         String resultUrl = imageService.saveImageToFileSystem(image);
@@ -115,11 +120,11 @@ public class GateTypesServiceImpl implements GateTypesService {
                 .orElseThrow(() -> new ResourceNotFoundException("Gate type not found!"));
 
         //delete previous photo from the filesystem
-        Files.delete(Path.of(home_dir + gateType.getBackgroundUrl()));
+        Files.deleteIfExists(Path.of(home_dir + gateType.getBackgroundUrl()));
         gateType.getGateList().forEach(
                 gate -> {
                     try {
-                        Files.delete(Path.of( home_dir + gate.getPhotoUrl()));
+                        Files.deleteIfExists(Path.of( home_dir + gate.getPhotoUrl()));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

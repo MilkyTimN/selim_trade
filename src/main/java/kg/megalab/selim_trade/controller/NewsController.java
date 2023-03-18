@@ -6,6 +6,7 @@ import kg.megalab.selim_trade.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,8 +24,8 @@ public class NewsController {
     private final NewsService newsService;
 
     @SecurityRequirements
-    @GetMapping("/{id}")
-    public NewsResponse getNewsById(@PathVariable("id") int id) {
+    @GetMapping("/{newsId}")
+    public NewsResponse getNewsById(@PathVariable("newsId") int id) {
         return newsService.getNewsById(id);
     }
 
@@ -40,7 +41,7 @@ public class NewsController {
     }
 
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public NewsResponse createNews(@RequestParam(value = "image") MultipartFile image,
                                    @RequestParam("title") String title,
@@ -50,9 +51,9 @@ public class NewsController {
 
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{newsId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public NewsResponse updateNews(@PathVariable("id") int id,
+    public NewsResponse updateNews(@PathVariable("newsId") int id,
                                    @RequestParam("image") MultipartFile image,
                                    @RequestParam("title") String title,
                                    @RequestParam("description") String description,
@@ -61,7 +62,7 @@ public class NewsController {
         return newsService.updateNews(id, image, title, description, adminDetails);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{newsId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteNews(@PathVariable("id") int id) throws IOException {
         newsService.deleteNews(id);

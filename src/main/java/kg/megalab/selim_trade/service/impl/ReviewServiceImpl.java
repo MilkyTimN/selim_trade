@@ -10,6 +10,7 @@ import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.ImageService;
 import kg.megalab.selim_trade.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +32,8 @@ public class ReviewServiceImpl implements ReviewService {
     private final ImageService imageService;
     private final AuthService authService;
     private final ReviewMapper reviewMapper;
+    @Value("${home.dir}")
+    private String home_dir;
 
 
     @Override
@@ -70,8 +73,8 @@ public class ReviewServiceImpl implements ReviewService {
         Review updatingReview = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
 
-        //Delete previous photo from file system
-        Files.deleteIfExists(Path.of(updatingReview.getPhotoUrl()));
+        // previous photo from file system
+        Files.deleteIfExists(Path.of(home_dir + updatingReview.getPhotoUrl()));
 
         String photoUrl = imageService.saveImageToFileSystem(image);
 
@@ -94,7 +97,7 @@ public class ReviewServiceImpl implements ReviewService {
                         .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
 
         //deleting photo from file system
-        Files.deleteIfExists(Path.of(deletingReview.getPhotoUrl()));
+        Files.deleteIfExists(Path.of(home_dir + deletingReview.getPhotoUrl()));
 
         reviewRepository.delete(deletingReview);
     }

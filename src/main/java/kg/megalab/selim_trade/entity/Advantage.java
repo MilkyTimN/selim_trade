@@ -6,8 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "advantages")
@@ -22,8 +21,6 @@ public class Advantage {
     private String description;
     @CreationTimestamp
     private Date created_date;
-    @UpdateTimestamp
-    private Date updated_date;
 
     @ManyToOne
     GateType gateType;
@@ -32,10 +29,19 @@ public class Advantage {
     @JoinColumn(name = "creator_id")
     private Admin createdBy;
 
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "advantage_admin_updates",
+//            joinColumns = @JoinColumn(name = "advantage_id"),
+//            inverseJoinColumns = @JoinColumn(name = "admin_id"))
+//    private List<Admin> updatedBy;
+
+
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "advantage_admin_updates",
-            joinColumns = @JoinColumn(name = "advantage_id"),
-            inverseJoinColumns = @JoinColumn(name = "admin_id"))
-    private List<Admin> updatedBy;
+    joinColumns = @JoinColumn(name = "advantage_id"),
+    inverseJoinColumns = @JoinColumn(name = "updated_by_id"))
+    private List<UpdatedBy> updatedByList = new ArrayList<>();
+
 
 }

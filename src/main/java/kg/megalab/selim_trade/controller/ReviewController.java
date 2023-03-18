@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.ReviewResponse;
 import kg.megalab.selim_trade.service.ReviewService;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,10 +23,12 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v1/review")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Create new review")
     @ResponseStatus(HttpStatus.CREATED)
     public ReviewResponse createReview(
             @RequestParam MultipartFile image,
@@ -47,14 +51,14 @@ public class ReviewController {
     }
 
     @SecurityRequirements
-    @GetMapping("/{id}")
-    public ReviewResponse getReviewById(@PathVariable("id") int id) {
+    @GetMapping("/{reviewId}")
+    public ReviewResponse getReviewById(@PathVariable("reviewId") int id) {
         return reviewService.getReviewById(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{reviewId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ReviewResponse updateReview(
-            @PathVariable("id") int id,
+            @PathVariable("reviewId") int id,
             @RequestParam MultipartFile image,
             @RequestParam String name,
             @RequestParam String text,
@@ -63,9 +67,9 @@ public class ReviewController {
         return reviewService.updateReview(id, image, name, text, gate, adminDetails);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{reviewId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteReviewById(@PathVariable("id") int id) throws IOException {
+    public void deleteReviewById(@PathVariable("reviewId") int id) throws IOException {
         reviewService.deleteReviewById(id);
     }
 

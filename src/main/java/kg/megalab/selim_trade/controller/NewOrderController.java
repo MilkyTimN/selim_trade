@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/new-order")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class NewOrderController {
 
     private final NewOrderService newOrderService;
@@ -23,9 +24,9 @@ public class NewOrderController {
         return newOrderService.saveOrder(dto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{newOrderId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteNewOrder(@PathVariable("id") int id) {
+    public void deleteNewOrder(@PathVariable("newOrderId") int id) {
         newOrderService.deleteNewOrder(id);
     }
 
@@ -40,8 +41,8 @@ public class NewOrderController {
     }
 
     @SecurityRequirements
-    @GetMapping("/{id}")
-    public NewOrderResponse getNewOrderById(@PathVariable("id") int id) {
+    @GetMapping("/{newOrderId}")
+    public NewOrderResponse getNewOrderById(@PathVariable("newOrderId") int id) {
         return newOrderService.getNewOrderById(id);
     }
 }

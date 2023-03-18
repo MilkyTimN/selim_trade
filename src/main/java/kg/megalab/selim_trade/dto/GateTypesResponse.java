@@ -9,9 +9,8 @@ public record GateTypesResponse(
         List<AdvantageResponse> advantageList,
         List<GateResponse> gateList,
         String created_date,
-        String updated_date,
         AdminInfo createdBy,
-        List<AdminInfo> updatedBy
+        List<UpdatedByResponse> updatedByList
 
 ) {
 }

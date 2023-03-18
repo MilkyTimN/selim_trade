@@ -8,6 +8,7 @@ import kg.megalab.selim_trade.repository.WorkRepository;
 import kg.megalab.selim_trade.service.ImageService;
 import kg.megalab.selim_trade.service.WorkService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,8 @@ public class WorkServiceImpl implements WorkService {
     private final ImageService imageService;
     private final WorkMapper workMapper;
     private final WorkRepository workRepository;
+    @Value("${home.dir}")
+    private String home_dir;
 
     @Override
     public WorkResponse createWork(MultipartFile image) throws IOException {
@@ -60,7 +63,7 @@ public class WorkServiceImpl implements WorkService {
                 .orElseThrow(() -> new ResourceNotFoundException("Work not found!"));
 
         //deleting previous photo from file system
-        Files.deleteIfExists(Path.of(deletingWork.getPhotoUrl()));
+        Files.deleteIfExists(Path.of(home_dir + deletingWork.getPhotoUrl()));
 
         workRepository.delete(deletingWork);
     }

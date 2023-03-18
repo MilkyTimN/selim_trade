@@ -24,10 +24,6 @@ import org.springframework.context.annotation.Configuration;
                         name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0"
                 ),
                 description = "backend api for selim"
-        ),
-        servers = @Server(
-                url = "http:161.35.29.179:8080",
-                description = "Production"
         )
 )
 public class SwaggerConfig {
@@ -41,7 +37,7 @@ public class SwaggerConfig {
                         .addSecuritySchemes(securitySchemeName, new SecurityScheme()
                                 .name(securitySchemeName)
                                 .type(SecurityScheme.Type.HTTP)
-                                .description("Write like this, without square brackets: [Bearer {put here your jwt}]")
+                                .description("Просто скопируй сюда тот access токен. Никакого bearer приписывать не надо. Только сам токен")
                                 .scheme("bearer")
                                 .bearerFormat("JWT")));
     }

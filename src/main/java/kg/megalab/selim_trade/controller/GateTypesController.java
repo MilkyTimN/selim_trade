@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +24,7 @@ import java.io.IOException;
 public class GateTypesController {
     private final GateTypesService gateTypesService;
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public GateTypesResponse createGateType(
             @RequestParam("image") MultipartFile image,
             @RequestParam("name") String name,
@@ -47,23 +48,23 @@ public class GateTypesController {
     }
 
     @SecurityRequirements
-    @GetMapping("/{id}")
-    public GateTypesResponse getGateTypeById(@PathVariable("id") int id) {
+    @GetMapping("/{gateTypeId}")
+    public GateTypesResponse getGateTypeById(@PathVariable("gateTypeId") int id) {
         return gateTypesService.getGateTypeResponseById(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value="/{gateTypeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public GateTypesResponse updateGateTypeById(
-            @PathVariable("id") int id,
+            @PathVariable("gateTypeId") int id,
             @RequestParam("image") MultipartFile image,
             @RequestParam("name") String name,
             @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
         return gateTypesService.updateGateTypeById(id,image,name,adminDetails);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{gateTypeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteGateTypeById(@PathVariable("id") int id) throws IOException {
+    public void deleteGateTypeById(@PathVariable("gateTypeId") int id) throws IOException {
         gateTypesService.deleteGateTypeById(id);
     }
 }

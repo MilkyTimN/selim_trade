@@ -15,6 +15,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/work")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class WorkController {
     private final WorkService workService;
 
@@ -35,14 +36,14 @@ public class WorkController {
     }
 
     @SecurityRequirements
-    @GetMapping("/{id}")
-    public WorkResponse getWorkById(@PathVariable("id") int id) {
+    @GetMapping("/{workId}")
+    public WorkResponse getWorkById(@PathVariable("workId") int id) {
         return workService.getWorkById(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{workId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteWorkById(@PathVariable("id") int id) throws IOException {
+    public void deleteWorkById(@PathVariable("workId") int id) throws IOException {
         workService.deleteWorkById(id);
     }
 }
