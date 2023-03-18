@@ -30,7 +30,6 @@ public class GateTypesServiceImpl implements GateTypesService {
     private final AuthService authService;
     private final GateTypesMapper gateTypesMapper;
     private final UpdatedByService updatedByService;
-    private final GateService gateService;
 
     @Value("${home.dir}")
     private String home_dir;

@@ -33,8 +33,8 @@ public class GateServiceImpl implements GateService {
     private final AuthService authService;
     private final GateMapper gateMapper;
     private final ImageService imageService;
+    private final GateTypesService gateTypesService;
 
-    private final GateTypesRepository gateTypesRepository;
     private final UpdatedByService updatedByService;
     @Value("${home.dir}")
     private String home_dir;
@@ -50,9 +50,7 @@ public class GateServiceImpl implements GateService {
         gate.setCreatedBy(authService.findAdminByUsername(adminDetails.getUsername()));
         gate.setName(name);
         gate.setGateType(
-                gateTypesRepository.findById(gateTypeId).orElseThrow(
-                        () -> new ResourceNotFoundException("Gate type not found!")
-                )
+                gateTypesService.getGateTypeById(gateTypeId)
         );
         return gateMapper.toDto(gateRepository.save(gate));
     }
