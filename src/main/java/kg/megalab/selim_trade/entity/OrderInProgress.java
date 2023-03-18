@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,16 +31,14 @@ public class OrderInProgress {
 
     @CreationTimestamp
     private Date created_date;
-    @UpdateTimestamp
-    private Date updated_date;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private Admin createdBy;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinTable(name = "order_in_progress_admin_updates",
             joinColumns = @JoinColumn(name = "order_in_progress_id"),
-            inverseJoinColumns = @JoinColumn(name = "admin_id"))
-    private List<Admin> updatedBy;
+            inverseJoinColumns = @JoinColumn(name = "updated_by_id"))
+    private List<UpdatedBy> updatedByList = new ArrayList<>();
 }

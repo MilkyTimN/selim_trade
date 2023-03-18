@@ -3,10 +3,7 @@ package kg.megalab.selim_trade.service.impl;
 import kg.megalab.selim_trade.dto.NewOrderInProgressRequest;
 import kg.megalab.selim_trade.dto.OrderInProgressResponse;
 import kg.megalab.selim_trade.dto.UpdateOrderInProgressRequest;
-import kg.megalab.selim_trade.entity.EStatus;
-import kg.megalab.selim_trade.entity.Gate;
-import kg.megalab.selim_trade.entity.GateType;
-import kg.megalab.selim_trade.entity.OrderInProgress;
+import kg.megalab.selim_trade.entity.*;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.OrderInProgressMapper;
@@ -32,6 +29,7 @@ public class OrderInProgressImpl implements OrderInProgressService {
     private final GateTypesService gateTypesService;
     private final GateService gateService;
     private final NewOrderService newOrderService;
+    private final UpdatedByService updatedByService;
 
     @Override
     public OrderInProgressResponse createOrderInProgress(
@@ -90,11 +88,11 @@ public class OrderInProgressImpl implements OrderInProgressService {
         updatingOrderInProgress.setGateType(gateType);
         updatingOrderInProgress.setGate(gate);
 
-        updatingOrderInProgress.getUpdatedBy().add(
-                authService.findAdminByUsername(adminDetails.getUsername())
+        updatingOrderInProgress.getUpdatedByList().add(
+                updatedByService.save(
+                        new UpdatedBy(adminDetails.getUsername(), new Date())
+                )
         );
-
-        updatingOrderInProgress.setUpdated_date(new Date());
 
         return orderInProgressMapper.toDto(orderInProgressRepository.save(updatingOrderInProgress));
     }
