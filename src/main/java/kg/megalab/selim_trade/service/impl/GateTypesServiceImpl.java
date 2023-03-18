@@ -6,10 +6,7 @@ import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.mapper.GateTypesMapper;
 import kg.megalab.selim_trade.repository.GateTypesRepository;
-import kg.megalab.selim_trade.service.AuthService;
-import kg.megalab.selim_trade.service.GateTypesService;
-import kg.megalab.selim_trade.service.ImageService;
-import kg.megalab.selim_trade.service.UpdatedByService;
+import kg.megalab.selim_trade.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -33,6 +30,7 @@ public class GateTypesServiceImpl implements GateTypesService {
     private final AuthService authService;
     private final GateTypesMapper gateTypesMapper;
     private final UpdatedByService updatedByService;
+    private final GateService gateService;
 
     @Value("${home.dir}")
     private String home_dir;
@@ -125,6 +123,7 @@ public class GateTypesServiceImpl implements GateTypesService {
                 gate -> {
                     try {
                         Files.deleteIfExists(Path.of( home_dir + gate.getPhotoUrl()));
+//                        gateService.deleteGate(gate.getId(), gate.getPhotoUrl());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

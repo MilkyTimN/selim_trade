@@ -3,14 +3,13 @@ package kg.megalab.selim_trade.service.impl;
 import kg.megalab.selim_trade.dto.GateResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.Gate;
+import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.GateMapper;
 import kg.megalab.selim_trade.repository.GateRepository;
-import kg.megalab.selim_trade.service.AuthService;
-import kg.megalab.selim_trade.service.GateService;
-import kg.megalab.selim_trade.service.GateTypesService;
-import kg.megalab.selim_trade.service.ImageService;
+import kg.megalab.selim_trade.repository.GateTypesRepository;
+import kg.megalab.selim_trade.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -24,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -34,7 +34,8 @@ public class GateServiceImpl implements GateService {
     private final GateMapper gateMapper;
     private final ImageService imageService;
 
-    private final GateTypesService gateTypesService;
+    private final GateTypesRepository gateTypesRepository;
+    private final UpdatedByService updatedByService;
     @Value("${home.dir}")
     private String home_dir;
 
@@ -49,7 +50,9 @@ public class GateServiceImpl implements GateService {
         gate.setCreatedBy(authService.findAdminByUsername(adminDetails.getUsername()));
         gate.setName(name);
         gate.setGateType(
-                gateTypesService.getGateTypeById(gateTypeId)
+                gateTypesRepository.findById(gateTypeId).orElseThrow(
+                        () -> new ResourceNotFoundException("Gate type not found!")
+                )
         );
         return gateMapper.toDto(gateRepository.save(gate));
     }
@@ -64,9 +67,12 @@ public class GateServiceImpl implements GateService {
         //deleting previous photo from file system
         Files.deleteIfExists(Path.of(home_dir + updatingGate.getPhotoUrl()));
 
-        //adding admin to the updatedby list
-        List<Admin> adminList = updatingGate.getUpdatedBy();
-        adminList.add(authService.findAdminByUsername(adminDetails.getUsername()));
+
+        updatingGate.getUpdatedByList().add(
+                updatedByService.save(
+                        new UpdatedBy(adminDetails.getUsername(), new Date())
+                )
+        );
 
         //saving new photo to file system
         String resultUrl = imageService.saveImageToFileSystem(image);
@@ -102,5 +108,11 @@ public class GateServiceImpl implements GateService {
     @Override
     public Gate findGateById(int id) {
         return gateRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Gate not found!"));
+    }
+
+    @Override
+    public void deleteGate(int id, String photoUrl) throws IOException {
+        Files.deleteIfExists(Path.of( home_dir + photoUrl));
+        gateRepository.deleteById(id);
     }
 }

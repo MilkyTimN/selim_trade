@@ -8,9 +8,8 @@ public record GateResponse(
         String name,
         String photoUrl,
         String created_date,
-        String updated_date,
         AdminInfo createdBy,
-        List<AdminInfo> updatedBy
+        List<UpdatedByResponse> updatedByList
 
 ) {
 }

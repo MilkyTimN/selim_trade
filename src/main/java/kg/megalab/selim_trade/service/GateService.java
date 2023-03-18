@@ -21,4 +21,6 @@ public interface GateService {
     void deleteGateById(int id) throws IOException;
 
     Gate findGateById(int id);
+
+    void deleteGate(int id, String photoUrl) throws IOException;
 }
