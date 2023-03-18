@@ -33,7 +33,7 @@ public class Gate {
     @ManyToOne
     GateType gateType;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinTable(name = "gate_admin_updates",
             joinColumns = @JoinColumn(name = "gate_id"),
             inverseJoinColumns = @JoinColumn(name = "updated_by_id"))

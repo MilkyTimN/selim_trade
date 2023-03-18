@@ -6,7 +6,10 @@ import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.mapper.GateTypesMapper;
 import kg.megalab.selim_trade.repository.GateTypesRepository;
-import kg.megalab.selim_trade.service.*;
+import kg.megalab.selim_trade.service.AuthService;
+import kg.megalab.selim_trade.service.GateTypesService;
+import kg.megalab.selim_trade.service.ImageService;
+import kg.megalab.selim_trade.service.UpdatedByService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -96,10 +99,11 @@ public class GateTypesServiceImpl implements GateTypesService {
 //        updatingGateType.getUpdatedBy().add(
 //                authService.findAdminByUsername(adminDetails.getUsername())
 //        );
-        UpdatedBy updatedBy = new UpdatedBy();
-        updatedBy.setUsername(adminDetails.getUsername());
-        updatedBy.setDate(new Date());
-        updatingGateType.getUpdatedByList().add(updatedByService.save(updatedBy));
+
+        updatingGateType.getUpdatedByList().add(
+                updatedByService.save(
+                        new UpdatedBy(adminDetails.getUsername(), new Date())
+                ));
 
         //saving new photo to the filesystem
         String resultUrl = imageService.saveImageToFileSystem(image);
@@ -121,7 +125,7 @@ public class GateTypesServiceImpl implements GateTypesService {
         gateType.getGateList().forEach(
                 gate -> {
                     try {
-                        Files.deleteIfExists(Path.of( home_dir + gate.getPhotoUrl()));
+                        Files.deleteIfExists(Path.of(home_dir + gate.getPhotoUrl()));
 //                        gateService.deleteGate(gate.getId(), gate.getPhotoUrl());
                     } catch (IOException e) {
                         throw new RuntimeException(e);

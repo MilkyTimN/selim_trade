@@ -12,9 +12,8 @@ public record NewsResponse(
         String title,
         String description,
         LocalDate createdDate,
-        LocalDate updatedDate,
         AdminInfo createdBy,
-        List<AdminInfo> updatedBy
+        List<UpdatedByResponse> updatedByList
 ) {
 
 }

@@ -2,12 +2,14 @@ package kg.megalab.selim_trade.service.impl;
 
 import kg.megalab.selim_trade.dto.NewsResponse;
 import kg.megalab.selim_trade.entity.News;
+import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.mapper.NewsMapper;
 import kg.megalab.selim_trade.repository.NewsRepository;
 import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.ImageService;
 import kg.megalab.selim_trade.service.NewsService;
+import kg.megalab.selim_trade.service.UpdatedByService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class NewsServiceImpl implements NewsService {
     private final NewsMapper newsMapper;
     private final AuthService authService;
     private final ImageService imageService;
+    private final UpdatedByService updatedByService;
 
     @Value("${home.dir}")
     private String home_dir;
@@ -80,8 +84,15 @@ public class NewsServiceImpl implements NewsService {
         news.setPhotoUrl(resultUrl);
         news.setTitle(title);
         news.setDescription(description);
-        news.getUpdatedBy().add(
-                authService.findAdminByUsername(adminDetails.getUsername())
+//        news.getUpdatedBy().add(
+//                authService.findAdminByUsername(adminDetails.getUsername())
+//        );
+
+
+        news.getUpdatedByList().add(
+                updatedByService.save(
+                        new UpdatedBy(adminDetails.getUsername(), new Date())
+                )
         );
 
 

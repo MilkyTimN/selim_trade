@@ -34,7 +34,7 @@ public class GateType {
     @JoinColumn(name = "creator_id")
     private Admin createdBy;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinTable(name = "gate_type_admin_updates",
             joinColumns = @JoinColumn(name = "gate_type_id"),
             inverseJoinColumns = @JoinColumn(name = "updated_by_id"))
