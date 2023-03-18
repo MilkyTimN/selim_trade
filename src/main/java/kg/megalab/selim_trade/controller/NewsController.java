@@ -64,7 +64,7 @@ public class NewsController {
 
     @DeleteMapping("/{newsId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteNews(@PathVariable("id") int id) throws IOException {
+    public void deleteNews(@PathVariable("newsId") int id) throws IOException {
         newsService.deleteNews(id);
     }
 }

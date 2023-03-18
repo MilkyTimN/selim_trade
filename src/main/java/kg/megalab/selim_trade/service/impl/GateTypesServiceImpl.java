@@ -99,10 +99,11 @@ public class GateTypesServiceImpl implements GateTypesService {
 //        updatingGateType.getUpdatedBy().add(
 //                authService.findAdminByUsername(adminDetails.getUsername())
 //        );
-        UpdatedBy updatedBy = new UpdatedBy();
-        updatedBy.setUsername(adminDetails.getUsername());
-        updatedBy.setDate(new Date());
-        updatingGateType.getUpdatedByList().add(updatedByService.save(updatedBy));
+
+        updatingGateType.getUpdatedByList().add(
+                updatedByService.save(
+                        new UpdatedBy(adminDetails.getUsername(), new Date())
+                ));
 
         //saving new photo to the filesystem
         String resultUrl = imageService.saveImageToFileSystem(image);
@@ -124,7 +125,8 @@ public class GateTypesServiceImpl implements GateTypesService {
         gateType.getGateList().forEach(
                 gate -> {
                     try {
-                        Files.deleteIfExists(Path.of( home_dir + gate.getPhotoUrl()));
+                        Files.deleteIfExists(Path.of(home_dir + gate.getPhotoUrl()));
+//                        gateService.deleteGate(gate.getId(), gate.getPhotoUrl());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

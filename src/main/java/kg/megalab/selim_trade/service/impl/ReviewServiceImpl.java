@@ -2,6 +2,7 @@ package kg.megalab.selim_trade.service.impl;
 
 import kg.megalab.selim_trade.dto.ReviewResponse;
 import kg.megalab.selim_trade.entity.Review;
+import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.ReviewMapper;
@@ -9,6 +10,7 @@ import kg.megalab.selim_trade.repository.ReviewRepository;
 import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.ImageService;
 import kg.megalab.selim_trade.service.ReviewService;
+import kg.megalab.selim_trade.service.UpdatedByService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -32,6 +34,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ImageService imageService;
     private final AuthService authService;
     private final ReviewMapper reviewMapper;
+    private final UpdatedByService updatedByService;
     @Value("${home.dir}")
     private String home_dir;
 
@@ -82,10 +85,10 @@ public class ReviewServiceImpl implements ReviewService {
         updatingReview.setName(name);
         updatingReview.setText(text);
         updatingReview.setGate(gate);
-        updatingReview.setUpdated_date(new Date());
-
-        updatingReview.getUpdatedBy().add(
-                authService.findAdminByUsername(adminDetails.getUsername())
+        updatingReview.getUpdatedByList().add(
+                updatedByService.save(
+                        new UpdatedBy(adminDetails.getUsername(), new Date())
+                )
         );
 
         return reviewMapper.toDto(reviewRepository.save(updatingReview));

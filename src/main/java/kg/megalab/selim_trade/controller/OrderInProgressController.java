@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.NewOrderInProgressRequest;
 import kg.megalab.selim_trade.dto.OrderInProgressResponse;
@@ -20,14 +21,19 @@ import org.springframework.web.bind.annotation.*;
 public class OrderInProgressController {
     private final OrderInProgressService orderInProgressService;
 
+    @Operation(description = """
+            Чтобы создать новый заказ перешедший на стадию обработки(OrderInProgress),
+            нужно задать id заказа(NewOrder) в url, т.к. тот заказ будет удален и создан
+            заказ в стадии обработки.
+            """)
     @PostMapping("/{newOrderId}")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderInProgressResponse createOrderInProgress(
-            @PathVariable("newOrderId") int id,
+            @PathVariable("newOrderId") int newOrderId,
             @RequestBody NewOrderInProgressRequest orderRequest,
             @AuthenticationPrincipal UserDetails adminDetails
             ) {
-        return orderInProgressService.createOrderInProgress(id,orderRequest, adminDetails);
+        return orderInProgressService.createOrderInProgress(newOrderId,orderRequest, adminDetails);
     }
 
     @SecurityRequirements
@@ -42,8 +48,8 @@ public class OrderInProgressController {
 
     @SecurityRequirements
     @GetMapping("/{orderInProgressId}")
-    public OrderInProgressResponse getOrderInProgressById(@PathVariable("orderInProgressId") int id) {
-        return orderInProgressService.getOrderInProgressById(id);
+    public OrderInProgressResponse getOrderInProgressById(@PathVariable("orderInProgressId") int orderInProgressId) {
+        return orderInProgressService.getOrderInProgressById(orderInProgressId);
     }
 
 
@@ -57,7 +63,7 @@ public class OrderInProgressController {
 
     @DeleteMapping("/{orderInProgressId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOrderInProgressById(@PathVariable("orderInProgressId") int id) {
-        orderInProgressService.deleteById(id);
+    public void deleteOrderInProgressById(@PathVariable("orderInProgressId") int orderInProgressId) {
+        orderInProgressService.deleteById(orderInProgressId);
     }
 }

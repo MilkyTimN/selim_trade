@@ -10,8 +10,7 @@ public record OrderInProgressResponse(
         String name,
         String phoneNumber,
         String created_date,
-        String updated_date,
         AdminInfo createdBy,
-        List<AdminInfo> updatedBy
+        List<UpdatedByResponse> updatedByList
 ) {
 }

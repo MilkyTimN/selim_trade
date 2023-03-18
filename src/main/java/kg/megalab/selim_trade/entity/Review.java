@@ -31,16 +31,14 @@ public class Review {
     private String gate;
     @CreationTimestamp
     private Date created_date;
-    @UpdateTimestamp
-    private Date updated_date;
 
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private Admin createdBy;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "review_admin_update",
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @JoinTable(name = "review_admin_updates",
             joinColumns = @JoinColumn(name = "review_id"),
-            inverseJoinColumns = @JoinColumn(name = "admin_id"))
-    private List<Admin> updatedBy = new ArrayList<>();
+            inverseJoinColumns = @JoinColumn(name = "updated_by_id"))
+    private List<UpdatedBy> updatedByList = new ArrayList<>();
 }
