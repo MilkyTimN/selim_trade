@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +34,8 @@ public class GateController {
     @ResponseStatus(HttpStatus.CREATED)
     public GateResponse createGate(
             @PathVariable("gateTypeId") int gateTypeId,
-           @NotBlank @NotNull @RequestParam("name") String name,
-           @NotNull @RequestParam(value = "image") MultipartFile image,
+            @NotBlank @NotNull @RequestParam("name") String name,
+            @NotNull @RequestParam(value = "image") MultipartFile image,
             @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
         return gateService.createGate(gateTypeId, name, image, adminDetails);
     }
@@ -45,8 +44,8 @@ public class GateController {
     @PutMapping(value = "/{gateId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public GateResponse updateGate(
             @PathVariable("gateId") int id,
-           @NotBlank @NotNull @RequestParam("name") String name,
-           @NotNull @RequestParam(value = "image") MultipartFile image,
+            @NotBlank @NotNull @RequestParam("name") String name,
+            @NotNull @RequestParam(value = "image") MultipartFile image,
             @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
         return gateService.updateGate(id, name, image, adminDetails);
     }
