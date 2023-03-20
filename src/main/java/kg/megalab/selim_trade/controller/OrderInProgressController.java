@@ -2,6 +2,7 @@ package kg.megalab.selim_trade.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.Valid;
 import kg.megalab.selim_trade.dto.NewOrderInProgressRequest;
 import kg.megalab.selim_trade.dto.OrderInProgressResponse;
 import kg.megalab.selim_trade.dto.UpdateOrderInProgressRequest;
@@ -30,7 +31,7 @@ public class OrderInProgressController {
     @ResponseStatus(HttpStatus.CREATED)
     public OrderInProgressResponse createOrderInProgress(
             @PathVariable("newOrderId") int newOrderId,
-            @RequestBody NewOrderInProgressRequest orderRequest,
+            @Valid @RequestBody NewOrderInProgressRequest orderRequest,
             @AuthenticationPrincipal UserDetails adminDetails
             ) {
         return orderInProgressService.createOrderInProgress(newOrderId,orderRequest, adminDetails);
