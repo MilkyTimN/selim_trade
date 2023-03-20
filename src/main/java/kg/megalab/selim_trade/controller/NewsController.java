@@ -1,13 +1,14 @@
 package kg.megalab.selim_trade.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import kg.megalab.selim_trade.dto.NewsResponse;
 import kg.megalab.selim_trade.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +45,8 @@ public class NewsController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public NewsResponse createNews(@RequestParam(value = "image") MultipartFile image,
-                                   @RequestParam("title") String title,
-                                   @RequestParam("description") String description,
+                                   @NotNull @NotBlank @RequestParam("title") String title,
+                                   @NotNull @NotBlank @RequestParam("description") String description,
                                    @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
         return newsService.createNews(image, title, description, adminDetails);
 
@@ -54,9 +55,9 @@ public class NewsController {
     @PutMapping(value = "/{newsId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
     public NewsResponse updateNews(@PathVariable("newsId") int id,
-                                   @RequestParam("image") MultipartFile image,
-                                   @RequestParam("title") String title,
-                                   @RequestParam("description") String description,
+                                   @NotNull @RequestParam("image") MultipartFile image,
+                                   @NotNull @NotBlank @RequestParam("title") String title,
+                                   @NotNull @NotBlank @RequestParam("description") String description,
                                    @AuthenticationPrincipal UserDetails adminDetails)
             throws IOException {
         return newsService.updateNews(id, image, title, description, adminDetails);
