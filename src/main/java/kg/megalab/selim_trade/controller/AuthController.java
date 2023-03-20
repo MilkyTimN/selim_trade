@@ -1,6 +1,7 @@
 package kg.megalab.selim_trade.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.Valid;
 import kg.megalab.selim_trade.dto.*;
 import kg.megalab.selim_trade.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    public LoginResponse refreshAccessToken(@RequestBody RefreshAccessTokenRequest refreshToken) {
+    public LoginResponse refreshAccessToken(@Valid @RequestBody RefreshAccessTokenRequest refreshToken) {
         return authService.refreshAccessToken(refreshToken);
     }
 }
