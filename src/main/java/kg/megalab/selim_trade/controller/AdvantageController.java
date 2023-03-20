@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.AdvantageRequest;
 import kg.megalab.selim_trade.dto.AdvantageResponse;
@@ -19,6 +20,13 @@ import org.springframework.web.bind.annotation.*;
 public class AdvantageController {
     private final AdvantageService advantageService;
 
+    @Operation(
+            description = """
+                    Надо задать id типа ворот(gate type) в url, т.к. преимущество должно
+                    принадлежать типу ворот. По этому id находиться тип ворот в бд и
+                    добавляться преимущество в массив преимуществ.
+                    """
+    )
     @PostMapping("/{gateTypeId}")
     @ResponseStatus(HttpStatus.CREATED)
     public AdvantageResponse createAdvantage(

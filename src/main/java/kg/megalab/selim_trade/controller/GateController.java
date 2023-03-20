@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.GateResponse;
 import kg.megalab.selim_trade.service.GateService;
@@ -22,6 +23,12 @@ import java.io.IOException;
 public class GateController {
     private final GateService gateService;
 
+    @Operation(
+            description = """
+                    Надо задать id типа ворот(gate type) в url, т.к. каждые ворота принадлежат только одному
+                    типу ворот. По этому id ворота будут добавляться в массив типа ворот.
+                    """
+    )
     @PostMapping(value = "/{gateTypeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public GateResponse createGate(

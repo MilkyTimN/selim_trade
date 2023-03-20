@@ -88,7 +88,9 @@ public class AuthServiceImpl implements AuthService {
         Admin admin = adminRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
 
+        admin.getRoles().remove(ERole.ADMIN);
         admin.getRoles().add(ERole.SUPER_ADMIN);
+
         return adminMapper.toDto(adminRepository.save(admin));
     }
 

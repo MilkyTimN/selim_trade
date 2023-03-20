@@ -38,8 +38,7 @@ public class MySecurityConfig {
             "/swagger-ui.html",
             "/v3/api-docs/**",
             "/webjars/**",
-            "/api/v1/auth/**",
-            "/api/v1/admin/**"
+            "/api/v1/auth/**"
     };
 
     private final AuthenticationProvider authenticationProvider;
@@ -52,8 +51,8 @@ public class MySecurityConfig {
                 .cors()
                 .and()
                 .authorizeHttpRequests(authCustomizer -> authCustomizer
-//                        .requestMatchers("/api/v1/admin/**").hasAuthority("SUPER_ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/**", "/home/team4/uploads/*").permitAll()
+                       .requestMatchers("/api/v1/admin/**").hasAuthority("SUPER_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest()
                         .authenticated())
