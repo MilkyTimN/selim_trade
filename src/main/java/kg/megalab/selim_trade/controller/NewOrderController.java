@@ -1,6 +1,7 @@
 package kg.megalab.selim_trade.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.Valid;
 import kg.megalab.selim_trade.dto.NewOrderRequest;
 import kg.megalab.selim_trade.dto.NewOrderResponse;
 import kg.megalab.selim_trade.service.NewOrderService;
@@ -20,7 +21,7 @@ public class NewOrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public NewOrderResponse saveNewOrder(@RequestBody NewOrderRequest dto) {
+    public NewOrderResponse saveNewOrder(@Valid @RequestBody NewOrderRequest dto) {
         return newOrderService.saveOrder(dto);
     }
 
