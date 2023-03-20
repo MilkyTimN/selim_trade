@@ -1,6 +1,7 @@
 package kg.megalab.selim_trade.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.Valid;
 import kg.megalab.selim_trade.dto.*;
 import kg.megalab.selim_trade.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +16,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest loginRequest) {
+    public LoginResponse login(@Valid @RequestBody LoginRequest loginRequest) {
         return authService.login(loginRequest);
     }
 
     @PostMapping("/refresh-token")
-    public LoginResponse refreshAccessToken(@RequestBody RefreshAccessTokenRequest refreshToken) {
+    public LoginResponse refreshAccessToken(@Valid @RequestBody RefreshAccessTokenRequest refreshToken) {
         return authService.refreshAccessToken(refreshToken);
     }
 }

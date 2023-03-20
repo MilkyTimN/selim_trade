@@ -1,15 +1,14 @@
 package kg.megalab.selim_trade.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import kg.megalab.selim_trade.dto.GateTypesResponse;
 import kg.megalab.selim_trade.service.GateTypesService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +25,8 @@ public class GateTypesController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public GateTypesResponse createGateType(
-            @RequestParam("image") MultipartFile image,
-            @RequestParam("name") String name,
+            @NotNull @RequestParam("image") MultipartFile image,
+            @NotBlank @NotNull @RequestParam("name") String name,
             @AuthenticationPrincipal UserDetails adminDetails
     ) throws IOException {
 
@@ -53,13 +52,13 @@ public class GateTypesController {
         return gateTypesService.getGateTypeResponseById(id);
     }
 
-    @PutMapping(value="/{gateTypeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/{gateTypeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public GateTypesResponse updateGateTypeById(
             @PathVariable("gateTypeId") int id,
-            @RequestParam("image") MultipartFile image,
-            @RequestParam("name") String name,
+            @NotBlank @NotNull @RequestParam("image") MultipartFile image,
+            @NotBlank @NotNull @RequestParam("name") String name,
             @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
-        return gateTypesService.updateGateTypeById(id,image,name,adminDetails);
+        return gateTypesService.updateGateTypeById(id, image, name, adminDetails);
     }
 
     @DeleteMapping("/{gateTypeId}")

@@ -2,6 +2,7 @@ package kg.megalab.selim_trade.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.Valid;
 import kg.megalab.selim_trade.dto.AdvantageRequest;
 import kg.megalab.selim_trade.dto.AdvantageResponse;
 import kg.megalab.selim_trade.service.AdvantageService;
@@ -31,7 +32,7 @@ public class AdvantageController {
     @ResponseStatus(HttpStatus.CREATED)
     public AdvantageResponse createAdvantage(
             @PathVariable("gateTypeId") int gateTypeId,
-            @RequestBody AdvantageRequest advantageRequest,
+            @Valid @RequestBody AdvantageRequest advantageRequest,
             @AuthenticationPrincipal UserDetails adminDetails) {
         return advantageService.createAdvantage(gateTypeId, advantageRequest, adminDetails);
     }
@@ -39,7 +40,7 @@ public class AdvantageController {
     @PutMapping("/{advantageId}")
     public AdvantageResponse updateAdvantageById(
             @PathVariable("advantageId") int id,
-            @RequestBody AdvantageRequest request,
+            @Valid @RequestBody AdvantageRequest request,
             @AuthenticationPrincipal UserDetails adminDetails) {
         return advantageService.updateAdvantageById(id, request, adminDetails);
     }

@@ -2,14 +2,14 @@ package kg.megalab.selim_trade.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.Valid;
 import kg.megalab.selim_trade.dto.NewOrderInProgressRequest;
 import kg.megalab.selim_trade.dto.OrderInProgressResponse;
 import kg.megalab.selim_trade.dto.UpdateOrderInProgressRequest;
 import kg.megalab.selim_trade.service.OrderInProgressService;
-import org.springframework.data.domain.Page;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +30,10 @@ public class OrderInProgressController {
     @ResponseStatus(HttpStatus.CREATED)
     public OrderInProgressResponse createOrderInProgress(
             @PathVariable("newOrderId") int newOrderId,
-            @RequestBody NewOrderInProgressRequest orderRequest,
+            @Valid @RequestBody NewOrderInProgressRequest orderRequest,
             @AuthenticationPrincipal UserDetails adminDetails
-            ) {
-        return orderInProgressService.createOrderInProgress(newOrderId,orderRequest, adminDetails);
+    ) {
+        return orderInProgressService.createOrderInProgress(newOrderId, orderRequest, adminDetails);
     }
 
     @SecurityRequirements
@@ -56,7 +56,7 @@ public class OrderInProgressController {
     @PutMapping("/{orderInProgressId}")
     public OrderInProgressResponse updateOrderInProgressById(
             @PathVariable("orderInProgressId") int id,
-            @RequestBody UpdateOrderInProgressRequest updateOrderInProgressRequest,
+            @Valid @RequestBody UpdateOrderInProgressRequest updateOrderInProgressRequest,
             @AuthenticationPrincipal UserDetails adminDetails) {
         return orderInProgressService.updateOrderInProgressById(id, updateOrderInProgressRequest, adminDetails);
     }

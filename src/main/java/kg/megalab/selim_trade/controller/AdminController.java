@@ -26,7 +26,7 @@ public class AdminController {
     }
 
     @PutMapping("/{adminId}")
-    public AdminInfo updateAdminsUsernameAndPassword(@RequestBody LoginRequest usernameAndPassword, @PathVariable("adminId") int id) {
+    public AdminInfo updateAdminsUsernameAndPassword(@Valid @RequestBody LoginRequest usernameAndPassword, @PathVariable("adminId") int id) {
         return authService.updateAdminsUsernameAndPassword(usernameAndPassword, id);
     }
 
