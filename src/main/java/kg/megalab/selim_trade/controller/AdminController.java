@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.controller;
 
+import jakarta.validation.Valid;
 import kg.megalab.selim_trade.dto.AdminInfo;
 import kg.megalab.selim_trade.dto.LoginRequest;
 import kg.megalab.selim_trade.dto.RegisterRequest;
@@ -20,7 +21,7 @@ public class AdminController {
 
 
     @PostMapping("/register")
-    public RegisterResponse register(@RequestBody RegisterRequest registerRequest) {
+    public RegisterResponse register(@Valid @RequestBody RegisterRequest registerRequest) {
         return authService.register(registerRequest);
     }
 
