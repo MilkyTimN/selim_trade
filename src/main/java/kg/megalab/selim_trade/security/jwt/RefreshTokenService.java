@@ -4,6 +4,7 @@ import kg.megalab.selim_trade.dto.LoginResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.RefreshToken;
 import kg.megalab.selim_trade.exceptions.BadRequestException;
+import kg.megalab.selim_trade.exceptions.ForbiddenException;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.mapper.AdminMapper;
 import kg.megalab.selim_trade.repository.RefreshTokenRepository;
@@ -30,10 +31,6 @@ public class RefreshTokenService {
         if (refreshTokenRepository.existsByAdmin(admin)) {
             refreshToken = refreshTokenRepository.findByAdmin(admin).get();
             refreshTokenRepository.delete(refreshToken);
-            if (isRefreshTokenExpired(refreshToken)) {
-                throw new BadRequestException("Refresh token is expired. Please sign in again.");
-            }
-            return refreshToken.getToken();
         }
         refreshToken = generateCompleteNewRefreshToken(admin);
         return refreshToken.getToken();
@@ -53,7 +50,8 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new ResourceNotFoundException("Refresh token not found!"));
         Admin admin = refreshToken.getAdmin();
         if (isRefreshTokenExpired(refreshToken)) {
-            throw new BadRequestException("Refresh token is expired. Please sign in again.");
+            refreshTokenRepository.delete(refreshToken);
+            throw new ForbiddenException("Refresh token is expired. Please sign in again.");
         }
         refreshTokenRepository.delete(refreshToken);
         return new LoginResponse(
