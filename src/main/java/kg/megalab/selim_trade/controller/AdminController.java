@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import kg.megalab.selim_trade.dto.AdminInfo;
 import kg.megalab.selim_trade.dto.LoginRequest;
@@ -21,11 +22,21 @@ public class AdminController {
 
 
     @PostMapping("/register")
+    @Operation(description = """
+            Поля username и password не могут ни пустыми, ни null.
+            Также длина username должна быть от 6 до 32 символов.
+            Длина password должна быть от 5 до до 32 символов.
+            """)
     public RegisterResponse register(@Valid @RequestBody RegisterRequest registerRequest) {
         return authService.register(registerRequest);
     }
 
     @PutMapping("/{adminId}")
+    @Operation(description = """
+            Поля username и password не могут ни пустыми, ни null.
+            Также длина username должна быть от 6 до 32 символов.
+            Длина password должна быть от 5 до до 32 символов.
+            """)
     public AdminInfo updateAdminsUsernameAndPassword(@Valid @RequestBody LoginRequest usernameAndPassword, @PathVariable("adminId") int id) {
         return authService.updateAdminsUsernameAndPassword(usernameAndPassword, id);
     }

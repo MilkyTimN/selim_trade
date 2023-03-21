@@ -5,10 +5,10 @@ import jakarta.validation.constraints.NotNull;
 
 public record AdvantageRequest(
         @NotNull
-                @NotBlank
+        @NotBlank
         String title,
         @NotBlank
-                @NotNull
+        @NotNull
         String description
 ) {
 }
