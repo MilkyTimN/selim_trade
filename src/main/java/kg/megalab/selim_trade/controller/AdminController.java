@@ -2,10 +2,7 @@ package kg.megalab.selim_trade.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import kg.megalab.selim_trade.dto.AdminInfo;
-import kg.megalab.selim_trade.dto.LoginRequest;
-import kg.megalab.selim_trade.dto.RegisterRequest;
-import kg.megalab.selim_trade.dto.RegisterResponse;
+import kg.megalab.selim_trade.dto.*;
 import kg.megalab.selim_trade.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -33,12 +30,14 @@ public class AdminController {
 
     @PutMapping("/{adminId}")
     @Operation(description = """
+            Метод, чтобы изменить админа.
             Поля username и password не могут ни пустыми, ни null.
             Также длина username должна быть от 6 до 32 символов.
             Длина password должна быть от 5 до до 32 символов.
+            Поле 'active' является булевым значением.
             """)
-    public AdminInfo updateAdminsUsernameAndPassword(@Valid @RequestBody LoginRequest usernameAndPassword, @PathVariable("adminId") int id) {
-        return authService.updateAdminsUsernameAndPassword(usernameAndPassword, id);
+    public AdminInfo updateAdmin(@Valid @RequestBody UpdateAdminRequest request, @PathVariable("adminId") int id) {
+        return authService.updateAdmin(request, id);
     }
 
     @GetMapping
@@ -55,13 +54,13 @@ public class AdminController {
         return authService.makeSuperAdmin(id);
     }
 
-    @GetMapping("/disable/{adminId}")
-    public AdminInfo disableAdmin(@PathVariable("adminId") int id) {
-        return authService.disableAdmin(id);
-    }
-
-    @GetMapping("/enable/{adminId}")
-    public AdminInfo enableAdmin(@PathVariable("adminId") int id) {
-        return authService.enableAdmin(id);
-    }
+//    @GetMapping("/disable/{adminId}")
+//    public AdminInfo disableAdmin(@PathVariable("adminId") int id) {
+//        return authService.disableAdmin(id);
+//    }
+//
+//    @GetMapping("/enable/{adminId}")
+//    public AdminInfo enableAdmin(@PathVariable("adminId") int id) {
+//        return authService.enableAdmin(id);
+//    }
 }

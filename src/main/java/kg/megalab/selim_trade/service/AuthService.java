@@ -15,15 +15,13 @@ public interface AuthService {
 
     Admin findAdminByUsername(String username);
 
-    AdminInfo updateAdminsUsernameAndPassword(LoginRequest usernameAndPassword, int id);
 
     AdminInfo makeSuperAdmin(int id);
 
-    AdminInfo disableAdmin(int id);
-
-    AdminInfo enableAdmin(int id);
 
     Page<AdminInfo> getAllAdminsList(int pageNo, int pageSize, String sortBy);
 
     void logout( UserDetails adminDetails);
+
+    AdminInfo updateAdmin(UpdateAdminRequest request, int id);
 }

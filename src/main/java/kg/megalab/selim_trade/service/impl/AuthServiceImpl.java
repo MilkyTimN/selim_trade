@@ -24,6 +24,7 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
 
+import java.util.Date;
 import java.util.Set;
 
 @Service
@@ -77,16 +78,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(UserNotFoundException::new);
     }
 
-    @Override
-    public AdminInfo updateAdminsUsernameAndPassword(LoginRequest usernameAndPassword, int id) {
-        Admin updatedAdmin = adminRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
 
-        updatedAdmin.setUsername(usernameAndPassword.username());
-        updatedAdmin.setPassword(usernameAndPassword.password());
-
-        return adminMapper.toDto(adminRepository.save(updatedAdmin));
-    }
 
     @Override
     public AdminInfo makeSuperAdmin(int id) {
@@ -99,21 +91,9 @@ public class AuthServiceImpl implements AuthService {
         return adminMapper.toDto(adminRepository.save(admin));
     }
 
-    @Override
-    public AdminInfo disableAdmin(int id) {
-        Admin admin = adminRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
-        admin.setActive(false);
-        return adminMapper.toDto(adminRepository.save(admin));
-    }
 
-    @Override
-    public AdminInfo enableAdmin(int id) {
-        Admin admin = adminRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
-        admin.setActive(true);
-        return adminMapper.toDto(adminRepository.save(admin));
-    }
+
+
 
     @Override
     public Page<AdminInfo> getAllAdminsList(int pageNo, int pageSize, String sortBy) {
@@ -126,6 +106,17 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.clearContext();
         Admin admin = (Admin) adminDetails;
         refreshTokenService.deleteRefreshTokenByAdmin(admin);
+    }
+
+    @Override
+    public AdminInfo updateAdmin(UpdateAdminRequest request, int id) {
+        Admin updatedAdmin = adminRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+        updatedAdmin.setUsername(request.username());
+        updatedAdmin.setPassword(passwordEncoder.encode(request.password()));
+        updatedAdmin.setActive(request.active());
+        updatedAdmin.setUpdated_date(new Date());
+        return adminMapper.toDto(adminRepository.save(updatedAdmin));
     }
 
 
