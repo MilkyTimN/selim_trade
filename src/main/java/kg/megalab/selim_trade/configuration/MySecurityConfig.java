@@ -7,25 +7,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.resource.PathResourceResolver;
-
-import java.util.Arrays;
-import java.util.List;
 
 @EnableWebSecurity
 @Configuration
@@ -38,7 +26,6 @@ public class MySecurityConfig {
             "/swagger-ui.html",
             "/v3/api-docs/**",
             "/webjars/**",
-            "/api/v1/auth/**"
     };
 
     private final AuthenticationProvider authenticationProvider;
@@ -47,12 +34,14 @@ public class MySecurityConfig {
 
     @Bean
     public SecurityFilterChain mySecurityFilterChain(HttpSecurity http) throws Exception {
-        http    .csrf().disable()
+        http.csrf().disable()
                 .cors()
                 .and()
                 .authorizeHttpRequests(authCustomizer -> authCustomizer
-                       .requestMatchers("/api/v1/admin/**").hasAuthority("SUPER_ADMIN")
+                        .requestMatchers("/api/v1/admin/**").hasAuthority("SUPER_ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/auth/**").authenticated()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest()
                         .authenticated())
@@ -96,13 +85,6 @@ public class MySecurityConfig {
 //    }
 
 
-
-
-
-
-
-
-
 //    @Bean
 //    public CorsFilter corsFilter() {
 //        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -128,11 +110,6 @@ public class MySecurityConfig {
 //
 //        return source;
 //    }
-
-
-
-
-
 
 
 }

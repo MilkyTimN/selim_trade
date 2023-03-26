@@ -17,8 +17,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ServerWebExchange;
 
 import java.util.Set;
 
@@ -29,8 +33,8 @@ public class AuthServiceImpl implements AuthService {
     private final AdminMapper adminMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
+    private final JwtService jwtService;
 
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) {
@@ -54,6 +58,7 @@ public class AuthServiceImpl implements AuthService {
                         loginRequest.password()
                 )
         );
+
         Admin admin = findAdminByUsername(loginRequest.username());
         String jwt = jwtService.generateToken(admin);
         String refreshToken = refreshTokenService.generateRefreshToken(admin);
@@ -114,6 +119,13 @@ public class AuthServiceImpl implements AuthService {
     public Page<AdminInfo> getAllAdminsList(int pageNo, int pageSize, String sortBy) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         return adminRepository.findAll(paging).map(adminMapper::toDto);
+    }
+
+    @Override
+    public void logout(UserDetails adminDetails) {
+        SecurityContextHolder.clearContext();
+        Admin admin = (Admin) adminDetails;
+        refreshTokenService.deleteRefreshTokenByAdmin(admin);
     }
 
 
