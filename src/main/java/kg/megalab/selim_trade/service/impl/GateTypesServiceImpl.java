@@ -92,8 +92,14 @@ public class GateTypesServiceImpl implements GateTypesService {
         GateType updatingGateType = gateTypesRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Gate type not found!"));
 
+        if(!(image == null || image.isEmpty())) {
+            Files.deleteIfExists(Path.of(home_dir + updatingGateType.getBackgroundUrl()));
+            String resultUrl = imageService.saveImageToFileSystem(image);
+
+            updatingGateType.setBackgroundUrl(resultUrl);
+        }
         // deleting previous photo from filesystem
-        Files.deleteIfExists(Path.of(home_dir + updatingGateType.getBackgroundUrl()));
+
 
         //adding admin to updatedby list
 //        updatingGateType.getUpdatedBy().add(
@@ -105,10 +111,6 @@ public class GateTypesServiceImpl implements GateTypesService {
                         new UpdatedBy(adminDetails.getUsername(), new Date())
                 ));
 
-        //saving new photo to the filesystem
-        String resultUrl = imageService.saveImageToFileSystem(image);
-
-        updatingGateType.setBackgroundUrl(resultUrl);
         updatingGateType.setName(name);
 
         return gateTypesMapper.toDto(gateTypesRepository.save(updatingGateType));

@@ -78,10 +78,11 @@ public class NewsServiceImpl implements NewsService {
                 () -> new ResourceNotFoundException("News not found!")
         );
 
-        Files.deleteIfExists(Path.of(home_dir + news.getPhotoUrl()));
-        String resultUrl = imageService.saveImageToFileSystem(image);
-
-        news.setPhotoUrl(resultUrl);
+        if (!(image == null || image.isEmpty())) {
+            Files.deleteIfExists(Path.of(home_dir + news.getPhotoUrl()));
+            String resultUrl = imageService.saveImageToFileSystem(image);
+            news.setPhotoUrl(resultUrl);
+        }
         news.setTitle(title);
         news.setDescription(description);
 //        news.getUpdatedBy().add(

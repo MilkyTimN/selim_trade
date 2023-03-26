@@ -63,19 +63,17 @@ public class GateServiceImpl implements GateService {
                 .orElseThrow(() -> new ResourceNotFoundException("Gate not found"));
 
         //deleting previous photo from file system
-        Files.deleteIfExists(Path.of(home_dir + updatingGate.getPhotoUrl()));
-
-
+        if(!(image == null || image.isEmpty())) {
+            Files.deleteIfExists(Path.of(home_dir + updatingGate.getPhotoUrl()));
+            String resultUrl = imageService.saveImageToFileSystem(image);
+            updatingGate.setPhotoUrl(resultUrl);
+        }
         updatingGate.getUpdatedByList().add(
                 updatedByService.save(
                         new UpdatedBy(adminDetails.getUsername(), new Date())
                 )
         );
 
-        //saving new photo to file system
-        String resultUrl = imageService.saveImageToFileSystem(image);
-
-        updatingGate.setPhotoUrl(resultUrl);
         updatingGate.setName(name);
         return gateMapper.toDto(gateRepository.save(updatingGate));
     }
