@@ -45,7 +45,7 @@ public class GateController {
     public GateResponse updateGate(
             @PathVariable("gateId") int id,
             @NotBlank @NotNull @RequestParam("name") String name,
-            @NotNull @RequestParam(value = "image") MultipartFile image,
+            @RequestParam(value = "image", required = false) MultipartFile image,
             @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
         return gateService.updateGate(id, name, image, adminDetails);
     }

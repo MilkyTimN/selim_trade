@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.UUID;
@@ -62,6 +63,11 @@ public class RefreshTokenService {
 
     public boolean isRefreshTokenExpired(RefreshToken refreshToken) {
         return refreshToken.getExpiryDate().before(new Date());
+    }
+
+    @Transactional
+    public void deleteRefreshTokenByAdmin(Admin admin) {
+        refreshTokenRepository.deleteByAdmin(admin);
     }
 
 }

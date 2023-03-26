@@ -55,7 +55,7 @@ public class NewsController {
     @PutMapping(value = "/{newsId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.ACCEPTED)
     public NewsResponse updateNews(@PathVariable("newsId") int id,
-                                   @NotNull @RequestParam("image") MultipartFile image,
+                                   @RequestParam(value = "image", required = false) MultipartFile image,
                                    @NotNull @NotBlank @RequestParam("title") String title,
                                    @NotNull @NotBlank @RequestParam("description") String description,
                                    @AuthenticationPrincipal UserDetails adminDetails)

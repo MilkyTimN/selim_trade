@@ -77,11 +77,13 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
 
         // previous photo from file system
-        Files.deleteIfExists(Path.of(home_dir + updatingReview.getPhotoUrl()));
+        if(!(image == null || image.isEmpty())) {
+            Files.deleteIfExists(Path.of(home_dir + updatingReview.getPhotoUrl()));
+            String photoUrl = imageService.saveImageToFileSystem(image);
 
-        String photoUrl = imageService.saveImageToFileSystem(image);
+            updatingReview.setPhotoUrl(photoUrl);
+        }
 
-        updatingReview.setPhotoUrl(photoUrl);
         updatingReview.setName(name);
         updatingReview.setText(text);
         updatingReview.setGate(gate);

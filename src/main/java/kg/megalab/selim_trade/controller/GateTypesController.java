@@ -55,7 +55,7 @@ public class GateTypesController {
     @PutMapping(value = "/{gateTypeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public GateTypesResponse updateGateTypeById(
             @PathVariable("gateTypeId") int id,
-            @NotBlank @NotNull @RequestParam("image") MultipartFile image,
+            @RequestParam(value = "image", required = false) MultipartFile image,
             @NotBlank @NotNull @RequestParam("name") String name,
             @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
         return gateTypesService.updateGateTypeById(id, image, name, adminDetails);

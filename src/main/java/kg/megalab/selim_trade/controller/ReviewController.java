@@ -59,7 +59,7 @@ public class ReviewController {
     @PutMapping(value = "/{reviewId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ReviewResponse updateReview(
             @PathVariable("reviewId") int id,
-            @RequestParam MultipartFile image,
+            @RequestParam(value = "image", required = false) MultipartFile image,
             @RequestParam String name,
             @RequestParam String text,
             @RequestParam String gate,
