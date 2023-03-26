@@ -13,7 +13,7 @@ echo 'Restart Server...'
 ssh -i ~/.ssh/id_rsa team4@161.35.29.179 << EOF
 
 pgrep java | xargs kill -9
-nohup java -jar selim_trade-0.0.1-SNAPSHOT.jar >  log.txt &
+nohup java -jar selim_trade-0.0.1-SNAPSHOT.jar &
 
 EOF
 
