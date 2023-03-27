@@ -12,6 +12,6 @@ public interface AdminMapper {
     @Mapping(target = "password", ignore = true)
     Admin toModel(RegisterRequest dto);
 
-    AdminInfo toDto (Admin admin);
+    AdminInfo toDto(Admin admin);
 
 }
