@@ -2,7 +2,7 @@ package kg.megalab.selim_trade.service.impl;
 
 import kg.megalab.selim_trade.dto.*;
 import kg.megalab.selim_trade.entity.Admin;
-import kg.megalab.selim_trade.entity.ERole;
+import kg.megalab.selim_trade.entity.enums.ERole;
 import kg.megalab.selim_trade.exceptions.BadRequestException;
 import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.AdminMapper;
@@ -20,11 +20,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ServerWebExchange;
 
-import java.util.Date;
 import java.util.Set;
 
 @Service
@@ -79,7 +76,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-
     @Override
     public AdminInfo makeSuperAdmin(int id) {
         Admin admin = adminRepository.findById(id)
@@ -90,9 +86,6 @@ public class AuthServiceImpl implements AuthService {
 
         return adminMapper.toDto(adminRepository.save(admin));
     }
-
-
-
 
 
     @Override
@@ -113,10 +106,17 @@ public class AuthServiceImpl implements AuthService {
         Admin updatedAdmin = adminRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
         updatedAdmin.setUsername(request.username());
-        updatedAdmin.setPassword(passwordEncoder.encode(request.password()));
+        if(!(request.password() == null || request.password().isBlank() || request.password().isEmpty())) {
+            updatedAdmin.setPassword(passwordEncoder.encode(request.password()));
+        }
         updatedAdmin.setActive(request.active());
-        updatedAdmin.setUpdated_date(new Date());
         return adminMapper.toDto(adminRepository.save(updatedAdmin));
+    }
+
+    @Override
+    public AdminInfo getAdminById(int adminId) {
+        return adminMapper.toDto(adminRepository.findById(adminId)
+                .orElseThrow(UserNotFoundException::new));
     }
 
 
