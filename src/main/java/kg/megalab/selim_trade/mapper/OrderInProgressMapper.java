@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface OrderInProgressMapper {
-    @Mapping(target = "gateType", source="gateType.name")
+    @Mapping(target = "gateType", source = "gateType.name")
     @Mapping(target = "gate", source = "gate.name")
     OrderInProgressResponse toDto(OrderInProgress orderInProgress);
 }
