@@ -10,9 +10,6 @@ public record UpdateAdminRequest(
         @Size(min = 6, max = 32, message = "Username must be between 6 and 32 characters")
         String username,
 
-        @NotNull(message = "Password cannot be null!")
-        @NotBlank(message = "Password cannot be empty!")
-        @Size(min = 5, max = 32, message = "Password must be between 5 and 32 characters")
         String password,
         boolean active
 ) {

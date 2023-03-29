@@ -14,17 +14,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/new-order")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://161.35.29.179"}, allowCredentials = "true")
 public class NewOrderController {
 
     private final NewOrderService newOrderService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @SecurityRequirements
     public NewOrderResponse saveNewOrder(@Valid @RequestBody NewOrderRequest dto) {
         return newOrderService.saveOrder(dto);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     @DeleteMapping("/{newOrderId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteNewOrder(@PathVariable("newOrderId") int id) {

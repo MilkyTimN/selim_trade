@@ -10,12 +10,14 @@ import java.io.IOException;
 
 public interface GateTypesService {
 
-    GateTypesResponse createGateType(MultipartFile image, String name,  UserDetails adminDetails) throws IOException;
+    GateTypesResponse createGateType(MultipartFile image, String name, UserDetails adminDetails) throws IOException;
 
     Page<GateTypesResponse> getAll(int pageNo, int pageSize, String sortBy);
 
     GateTypesResponse getGateTypeResponseById(int id);
+
     GateType getGateTypeById(int id);
+
     GateType saveAndFlush(GateType gateType);
 
     GateType save(GateType gateType);

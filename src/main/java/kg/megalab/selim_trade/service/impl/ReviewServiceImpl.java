@@ -4,7 +4,6 @@ import kg.megalab.selim_trade.dto.ReviewResponse;
 import kg.megalab.selim_trade.entity.Review;
 import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
-import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.ReviewMapper;
 import kg.megalab.selim_trade.repository.ReviewRepository;
 import kg.megalab.selim_trade.service.AuthService;
@@ -77,7 +76,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
 
         // previous photo from file system
-        if(!(image == null || image.isEmpty())) {
+        if (!(image == null || image.isEmpty())) {
             Files.deleteIfExists(Path.of(home_dir + updatingReview.getPhotoUrl()));
             String photoUrl = imageService.saveImageToFileSystem(image);
 
@@ -99,7 +98,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteReviewById(int id) throws IOException {
         Review deletingReview = reviewRepository.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
 
         //deleting photo from file system
         Files.deleteIfExists(Path.of(home_dir + deletingReview.getPhotoUrl()));

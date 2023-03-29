@@ -5,14 +5,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import kg.megalab.selim_trade.dto.ReviewResponse;
 import kg.megalab.selim_trade.service.ReviewService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +18,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v1/review")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://161.35.29.179"}, allowCredentials = "true")
 public class ReviewController {
     private final ReviewService reviewService;
 
@@ -36,8 +31,8 @@ public class ReviewController {
             @RequestParam String text,
             @RequestParam String gate,
             @AuthenticationPrincipal UserDetails adminDetails
-            ) throws IOException {
-        return reviewService.createReview(image,name,text,gate,adminDetails);
+    ) throws IOException {
+        return reviewService.createReview(image, name, text, gate, adminDetails);
     }
 
     @SecurityRequirements

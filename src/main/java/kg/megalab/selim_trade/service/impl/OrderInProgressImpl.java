@@ -4,8 +4,8 @@ import kg.megalab.selim_trade.dto.NewOrderInProgressRequest;
 import kg.megalab.selim_trade.dto.OrderInProgressResponse;
 import kg.megalab.selim_trade.dto.UpdateOrderInProgressRequest;
 import kg.megalab.selim_trade.entity.*;
+import kg.megalab.selim_trade.entity.enums.EStatus;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
-import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.OrderInProgressMapper;
 import kg.megalab.selim_trade.repository.OrderInProgressRepository;
 import kg.megalab.selim_trade.service.*;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 

@@ -3,7 +3,6 @@ package kg.megalab.selim_trade.security.jwt;
 import kg.megalab.selim_trade.dto.LoginResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.RefreshToken;
-import kg.megalab.selim_trade.exceptions.BadRequestException;
 import kg.megalab.selim_trade.exceptions.ForbiddenException;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.mapper.AdminMapper;

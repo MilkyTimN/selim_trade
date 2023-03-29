@@ -26,6 +26,7 @@ public class MySecurityConfig {
             "/swagger-ui.html",
             "/v3/api-docs/**",
             "/webjars/**",
+            "/api/v1/new-order/**"
     };
 
     private final AuthenticationProvider authenticationProvider;

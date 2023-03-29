@@ -3,8 +3,6 @@ package kg.megalab.selim_trade.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import kg.megalab.selim_trade.dto.LoginRequest;
 import kg.megalab.selim_trade.dto.LoginResponse;
@@ -13,18 +11,15 @@ import kg.megalab.selim_trade.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ServerWebExchange;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 @SecurityRequirements
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://161.35.29.179"}, allowCredentials = "true")
 public class AuthController {
     private final AuthService authService;
 
@@ -44,7 +39,7 @@ public class AuthController {
             Если refresh токен тоже истек то он также стирается с бд и 
             пользователю придется уже логиниться.
             """)
-    public LoginResponse login(@Valid @RequestBody LoginRequest loginRequest ) {
+    public LoginResponse login(@Valid @RequestBody LoginRequest loginRequest) {
 
         return authService.login(loginRequest);
     }

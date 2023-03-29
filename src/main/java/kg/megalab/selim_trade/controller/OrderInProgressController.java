@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/order-in-progress")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://161.35.29.179"}, allowCredentials = "true")
 public class OrderInProgressController {
     private final OrderInProgressService orderInProgressService;
 
@@ -52,8 +52,13 @@ public class OrderInProgressController {
         return orderInProgressService.getOrderInProgressById(orderInProgressId);
     }
 
-
+    // TODO:statuses - "IN_PROGRESS", "FINISHED"
+    //TODO:from https to http
     @PutMapping("/{orderInProgressId}")
+    @Operation(description = """
+            поле 'status' может быть либо \"IN_PROGRESS\" либо 
+            \"FINISHED\"
+            """)
     public OrderInProgressResponse updateOrderInProgressById(
             @PathVariable("orderInProgressId") int id,
             @Valid @RequestBody UpdateOrderInProgressRequest updateOrderInProgressRequest,

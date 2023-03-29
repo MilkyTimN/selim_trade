@@ -2,15 +2,18 @@ package kg.megalab.selim_trade.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import kg.megalab.selim_trade.entity.enums.ERole;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -26,7 +29,7 @@ public class Admin implements UserDetails {
     private String password;
     @CreationTimestamp
     private Date created_date;
-    @UpdateTimestamp
+    @LastModifiedDate
     private Date updated_date;
 
     @ElementCollection(targetClass = ERole.class, fetch = FetchType.EAGER)
