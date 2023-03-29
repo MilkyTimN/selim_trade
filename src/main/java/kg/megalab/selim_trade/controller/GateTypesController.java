@@ -19,7 +19,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v1/gate-types")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://161.35.29.179"}, allowCredentials = "true")
 public class GateTypesController {
     private final GateTypesService gateTypesService;
 

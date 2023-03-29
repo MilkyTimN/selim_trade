@@ -2,18 +2,19 @@ package kg.megalab.selim_trade.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import kg.megalab.selim_trade.dto.*;
+import kg.megalab.selim_trade.dto.AdminInfo;
+import kg.megalab.selim_trade.dto.RegisterRequest;
+import kg.megalab.selim_trade.dto.RegisterResponse;
+import kg.megalab.selim_trade.dto.UpdateAdminRequest;
 import kg.megalab.selim_trade.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://161.35.29.179"}, allowCredentials = "true")
 public class AdminController {
     private final AuthService authService;
 
@@ -48,6 +49,12 @@ public class AdminController {
     ) {
         return authService.getAllAdminsList(pageNo, pageSize, sortBy);
     }
+
+    @GetMapping("/{adminId}")
+    public AdminInfo getAdminById(@PathVariable("adminId") int adminId) {
+        return authService.getAdminById(adminId);
+    }
+
 
     @GetMapping("/make-super-admin/{adminId}")
     public AdminInfo makeSuperAdmin(@PathVariable("adminId") int id) {
