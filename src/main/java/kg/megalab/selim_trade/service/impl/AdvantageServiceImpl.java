@@ -7,7 +7,6 @@ import kg.megalab.selim_trade.entity.Advantage;
 import kg.megalab.selim_trade.entity.GateType;
 import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
-import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.AdvantageMapper;
 import kg.megalab.selim_trade.repository.AdvantageRepository;
 import kg.megalab.selim_trade.service.AdvantageService;
@@ -65,11 +64,6 @@ public class AdvantageServiceImpl implements AdvantageService {
 
         updatedAdvantage.setTitle(request.title());
         updatedAdvantage.setDescription(request.description());
-
-//        updatedAdvantage.getUpdatedBy().add(
-//                authService.findAdminByUsername(adminDetails.getUsername())
-//        );
-
         UpdatedBy updatedBy = new UpdatedBy();
         updatedBy.setDate(new Date());
         updatedBy.setUsername(adminDetails.getUsername());
