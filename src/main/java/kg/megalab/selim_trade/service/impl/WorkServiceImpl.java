@@ -53,7 +53,7 @@ public class WorkServiceImpl implements WorkService {
     public WorkResponse getWorkById(int id) {
         return workMapper.toDto(
                 workRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Work not found!"))
+                        .orElseThrow(() -> new ResourceNotFoundException("Work not found!"))
         );
     }
 
