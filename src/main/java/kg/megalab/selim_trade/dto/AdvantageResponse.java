@@ -1,8 +1,6 @@
 package kg.megalab.selim_trade.dto;
 
 
-import kg.megalab.selim_trade.entity.UpdatedBy;
-
 import java.util.List;
 
 public record AdvantageResponse(
