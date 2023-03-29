@@ -1,14 +1,11 @@
 package kg.megalab.selim_trade.service.impl;
 
 import kg.megalab.selim_trade.dto.GateResponse;
-import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.Gate;
 import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
-import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.GateMapper;
 import kg.megalab.selim_trade.repository.GateRepository;
-import kg.megalab.selim_trade.repository.GateTypesRepository;
 import kg.megalab.selim_trade.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +21,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +59,7 @@ public class GateServiceImpl implements GateService {
                 .orElseThrow(() -> new ResourceNotFoundException("Gate not found"));
 
         //deleting previous photo from file system
-        if(!(image == null || image.isEmpty())) {
+        if (!(image == null || image.isEmpty())) {
             Files.deleteIfExists(Path.of(home_dir + updatingGate.getPhotoUrl()));
             String resultUrl = imageService.saveImageToFileSystem(image);
             updatingGate.setPhotoUrl(resultUrl);
@@ -108,7 +104,7 @@ public class GateServiceImpl implements GateService {
 
     @Override
     public void deleteGate(int id, String photoUrl) throws IOException {
-        Files.deleteIfExists(Path.of( home_dir + photoUrl));
+        Files.deleteIfExists(Path.of(home_dir + photoUrl));
         gateRepository.deleteById(id);
     }
 }

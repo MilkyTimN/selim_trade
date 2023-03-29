@@ -92,7 +92,7 @@ public class GateTypesServiceImpl implements GateTypesService {
         GateType updatingGateType = gateTypesRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Gate type not found!"));
 
-        if(!(image == null || image.isEmpty())) {
+        if (!(image == null || image.isEmpty())) {
             Files.deleteIfExists(Path.of(home_dir + updatingGateType.getBackgroundUrl()));
             String resultUrl = imageService.saveImageToFileSystem(image);
 
