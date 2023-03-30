@@ -1,34 +1,31 @@
 package kg.megalab.selim_trade.service.impl;
 
-
-import kg.megalab.selim_trade.dto.LoginRequest;
-import kg.megalab.selim_trade.dto.RegisterRequest;
-import kg.megalab.selim_trade.dto.RegisterResponse;
+import kg.megalab.selim_trade.dto.*;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.enums.ERole;
+import kg.megalab.selim_trade.exceptions.BadRequestException;
+import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.AdminMapper;
 import kg.megalab.selim_trade.repository.AdminRepository;
 import kg.megalab.selim_trade.security.jwt.JwtService;
 import kg.megalab.selim_trade.security.jwt.RefreshTokenService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@DisplayName("Auth Service Test")
 class AuthServiceImplTest {
-
     @Mock
     private AdminRepository adminRepository;
 
@@ -49,56 +46,77 @@ class AuthServiceImplTest {
 
     @InjectMocks
     private AuthServiceImpl authService;
-
-    private Admin admin;
-    private RegisterRequest registerRequest;
-    private LoginRequest loginRequest;
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
-        admin = new Admin();
-        admin.setId(1);
-        admin.setUsername("admin");
-        admin.setPassword("password");
-        admin.setRoles(Set.of(ERole.ADMIN));
-        admin.setActive(true);
 
-        registerRequest = new RegisterRequest(
-                "admin",
-                "password"
-        );
+        closeable = MockitoAnnotations.openMocks(this);
+    }
 
-        loginRequest = new LoginRequest(
-                "admin",
-                "password"
-        );
-
+    @AfterEach
+    void tearDown() throws Exception {
+        closeable.close();
     }
 
     @Test
-    void registering_shouldRegisterNewAdmin() {
-        when(adminRepository.existsByUsername(anyString())).thenReturn(false);
-        when(adminMapper.toModel(any())).thenReturn(admin);
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
-        when(adminRepository.save(any())).thenReturn(admin);
+    @DisplayName("Register User with Valid Input")
+    void registerWithValidInput() {
+        RegisterRequest registerRequest = new RegisterRequest("testuser", "password");
+        Admin admin = new Admin();
+        admin.setUsername(registerRequest.username());
+        admin.setPassword(registerRequest.password());
+        admin.setActive(true);
+        admin.setRoles(Set.of(ERole.ADMIN));
 
-        RegisterResponse response = authService.register(registerRequest);
+        when(adminRepository.existsByUsername(registerRequest.username())).thenReturn(false);
+        when(adminMapper.toModel(registerRequest)).thenReturn(admin);
+        when(passwordEncoder.encode(registerRequest.password())).thenReturn("encoded_password");
+        when(adminRepository.save(any(Admin.class))).thenReturn(admin);
+        when(adminMapper.toDto(admin)).thenReturn(new AdminInfo(admin.getId(), admin.getUsername(), admin.isEnabled(),
+                admin.getRoles().stream().map(Enum::name).collect(Collectors.toSet())));
 
-        assertThat(response.message()).isEqualTo("admin is registered successfully!");
-        verify(adminRepository).save(admin);
+        RegisterResponse registerResponse = authService.register(registerRequest);
+        Assertions.assertEquals(registerResponse.message(), admin.getUsername() + " is registered successfully!");
     }
-   /* @Test
-    void login_shouldReturnJwtAndRefreshToken_whenCredentialsAreValid() {
+
+    @Test
+    @DisplayName("Register User with Duplicate Username")
+    void registerWithDuplicateUsername() {
+        RegisterRequest registerRequest = new RegisterRequest("testuser", "password");
+        when(adminRepository.existsByUsername(registerRequest.username())).thenReturn(true);
+
+        BadRequestException exception = Assertions.assertThrows(BadRequestException.class, () -> authService.register(registerRequest));
+        Assertions.assertEquals(exception.getMessage(), "Username is already taken!");
+    }
+
+    @Test
+    @DisplayName("Login User with Valid Credentials")
+    void loginWithValidCredentials() {
+        LoginRequest loginRequest = new LoginRequest("testuser", "password");
+        Admin admin = new Admin();
+        admin.setUsername(loginRequest.username());
+        admin.setPassword(loginRequest.password());
+        admin.setActive(true);
+        admin.setRoles(Set.of(ERole.ADMIN));
+
         when(authenticationManager.authenticate(any())).thenReturn(null);
-        when(adminMapper.toDto(any())).thenReturn(new AdminInfo());
-        when(jwtService.generateToken(any())).thenReturn("jwt");
-        when(refreshTokenService.generateRefreshToken(any())).thenReturn("refreshToken");
+        when(adminRepository.findByUsername(loginRequest.username())).thenReturn(Optional.of(admin));
+        when(jwtService.generateToken(admin)).thenReturn("jwt_token");
+        when(refreshTokenService.generateRefreshToken(admin)).thenReturn("refreshToken");
+        LoginResponse loginResponse = authService.login(loginRequest);
+        Assertions.assertEquals(loginResponse.accessToken(), "jwt_token");
+        Assertions.assertEquals(loginResponse.refreshToken(), "refreshToken");
+    }
 
-        LoginResponse response = authService.login(loginRequest);
+    @Test
+    @DisplayName("Login User with Invalid Credentials")
+    void loginWithInvalidCredentials() {
+        LoginRequest loginRequest = new LoginRequest("testuser", "password");
+        when(authenticationManager.authenticate(any())).thenThrow(new UserNotFoundException());
 
-        assertThat(response.getJwt()).isEqualTo("jwt");
-        assertThat(response.getRefreshToken()).isEqualTo("refreshToken");
-        verify(refreshTokenService*/
-
+        UserNotFoundException exception = Assertions.assertThrows(UserNotFoundException.class, () -> authService.login(loginRequest));
+        Assertions.assertEquals(exception.getMessage(), "User not found!");
+    }
 
 }

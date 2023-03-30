@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import kg.megalab.selim_trade.entity.enums.ERole;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +20,8 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "admins")
-@Data
+@Getter
+@Setter
 public class Admin implements UserDetails {
     @Id
     @GeneratedValue(generator = "admin_id_generator", strategy = GenerationType.SEQUENCE)
