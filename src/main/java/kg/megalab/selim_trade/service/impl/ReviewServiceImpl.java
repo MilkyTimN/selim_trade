@@ -1,6 +1,7 @@
 package kg.megalab.selim_trade.service.impl;
 
 import kg.megalab.selim_trade.dto.ReviewResponse;
+import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.Review;
 import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
@@ -48,7 +49,6 @@ public class ReviewServiceImpl implements ReviewService {
         review.setName(name);
         review.setText(text);
         review.setGate(gate);
-        review.setCreated_date(new Date());
 
         review.setCreatedBy(
                 authService.findAdminByUsername(adminDetails.getUsername())
@@ -88,7 +88,7 @@ public class ReviewServiceImpl implements ReviewService {
         updatingReview.setGate(gate);
         updatingReview.getUpdatedByList().add(
                 updatedByService.save(
-                        new UpdatedBy(adminDetails.getUsername(), new Date())
+                        new UpdatedBy((Admin) adminDetails, new Date())
                 )
         );
 

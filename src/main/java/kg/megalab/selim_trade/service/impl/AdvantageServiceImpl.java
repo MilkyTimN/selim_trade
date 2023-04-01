@@ -47,7 +47,7 @@ public class AdvantageServiceImpl implements AdvantageService {
         advantage.setCreatedBy(admin);
 
         gateType.getUpdatedByList().add(updatedByService.save(
-                new UpdatedBy(adminDetails.getUsername(), new Date())
+                new UpdatedBy(admin, new Date())
         ));
 
         gateTypesService.save(gateType);
@@ -64,11 +64,11 @@ public class AdvantageServiceImpl implements AdvantageService {
 
         updatedAdvantage.setTitle(request.title());
         updatedAdvantage.setDescription(request.description());
-        UpdatedBy updatedBy = new UpdatedBy();
-        updatedBy.setDate(new Date());
-        updatedBy.setUsername(adminDetails.getUsername());
 
-        updatedAdvantage.getUpdatedByList().add(updatedByService.save(updatedBy));
+
+        updatedAdvantage.getUpdatedByList().add(updatedByService.save(
+                new UpdatedBy((Admin) adminDetails, new Date())
+        ));
 
         return advantageMapper.toDto(advantageRepository.save(updatedAdvantage));
     }
