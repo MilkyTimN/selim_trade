@@ -1,6 +1,7 @@
 package kg.megalab.selim_trade.service.impl;
 
 import kg.megalab.selim_trade.dto.GateResponse;
+import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.Gate;
 import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
@@ -66,7 +67,7 @@ public class GateServiceImpl implements GateService {
         }
         updatingGate.getUpdatedByList().add(
                 updatedByService.save(
-                        new UpdatedBy(adminDetails.getUsername(), new Date())
+                        new UpdatedBy((Admin) adminDetails, new Date())
                 )
         );
 

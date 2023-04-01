@@ -6,13 +6,13 @@ import jakarta.validation.constraints.NotNull;
 
 public record NewOrderInProgressRequest(
 
-        @NotEmpty
+        @NotEmpty(message = "'name' cannot empty!")
         String name,
 
         String phoneNumber,
-        @NotNull
+        @NotNull(message = "'gateTypeId' cannot be empty!")
         int gateTypeId,
-        @NotNull
+        @NotNull(message = "'gateId' cannot be empty!")
         int gateId
 ) {
 }

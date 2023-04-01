@@ -1,6 +1,7 @@
 package kg.megalab.selim_trade.service.impl;
 
 import kg.megalab.selim_trade.dto.NewsResponse;
+import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.News;
 import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
@@ -92,7 +93,7 @@ public class NewsServiceImpl implements NewsService {
 
         news.getUpdatedByList().add(
                 updatedByService.save(
-                        new UpdatedBy(adminDetails.getUsername(), new Date())
+                        new UpdatedBy((Admin) adminDetails, new Date())
                 )
         );
 

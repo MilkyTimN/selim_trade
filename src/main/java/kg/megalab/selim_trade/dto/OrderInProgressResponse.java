@@ -5,8 +5,8 @@ import java.util.List;
 public record OrderInProgressResponse(
         int id,
         String status,
-        String gateType,
-        String gate,
+        ShortGateAndGateTypeInfo gateType,
+        ShortGateAndGateTypeInfo gate,
         String name,
         String phoneNumber,
         String created_date,

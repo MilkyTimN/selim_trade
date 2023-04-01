@@ -89,7 +89,7 @@ public class OrderInProgressImpl implements OrderInProgressService {
 
         updatingOrderInProgress.getUpdatedByList().add(
                 updatedByService.save(
-                        new UpdatedBy(adminDetails.getUsername(), new Date())
+                        new UpdatedBy((Admin) adminDetails, new Date())
                 )
         );
 
