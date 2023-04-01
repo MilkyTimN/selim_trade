@@ -18,12 +18,14 @@ public class UpdatedBy {
     @SequenceGenerator(name = "updated_by_id_generator", sequenceName = "updated_by_seq", allocationSize = 1)
     private long id;
 
-    private String username;
+    @ManyToOne
+    private Admin admin;
+
     @CreationTimestamp
     private Date date;
 
-    public UpdatedBy(String username, Date date) {
-        this.username = username;
+    public UpdatedBy(Admin admin, Date date) {
+        this.admin = admin;
         this.date = date;
     }
 }
