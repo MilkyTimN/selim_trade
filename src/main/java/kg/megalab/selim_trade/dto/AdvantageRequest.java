@@ -4,11 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record AdvantageRequest(
-        @NotNull
-        @NotBlank
+        @NotBlank(message = "'title' cannot be empty!")
         String title,
-        @NotBlank
-        @NotNull
+        @NotBlank(message = "'description' cannot be empty!")
         String description
 ) {
 }
