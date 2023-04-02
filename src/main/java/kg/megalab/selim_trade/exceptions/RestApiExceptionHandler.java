@@ -1,6 +1,7 @@
 package kg.megalab.selim_trade.exceptions;
 
 import kg.megalab.selim_trade.dto.ErrorMessage;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,10 +31,16 @@ public class RestApiExceptionHandler {
     }
 
 
-//    @ExceptionHandler({ForbiddenException.class})
-//    @ResponseStatus(HttpStatus.FORBIDDEN)
-//    void forbidden() {
-//    }
+    @ExceptionHandler(SizeLimitExceededException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage fileSizeExceedHandling(Exception exception, WebRequest request) {
+        return new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                new Date(),
+                "File size is bigger than 4mb!",
+                request.getDescription(false)
+        );
+    }
 
 
     @ExceptionHandler({BadRequestException.class})
