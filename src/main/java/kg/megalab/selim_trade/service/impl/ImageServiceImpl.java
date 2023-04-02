@@ -27,7 +27,12 @@ public class ImageServiceImpl implements ImageService {
         String resultUrl = image_folder + resultFileName;
 
         // Read the uploaded image into a BufferedImage
-        BufferedImage originalImage = ImageIO.read(image.getInputStream());
+        BufferedImage originalImage = null;
+        try {
+            originalImage = ImageIO.read(image.getInputStream());
+        } catch (IOException e) {
+            throw new IOException("Error reading uploaded image", e);
+        }
 
         // Compress the image
         BufferedImage compressedImage = new BufferedImage(
@@ -42,14 +47,19 @@ public class ImageServiceImpl implements ImageService {
 
         // Compress the image and write it to the file system
         ImageWriter writer = ImageIO.getImageWritersByFormatName(formatName).next();
-        writer.setOutput(ImageIO.createImageOutputStream(compressedFile));
         ImageWriteParam params = writer.getDefaultWriteParam();
         params.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
         params.setCompressionQuality(COMPRESSION_QUALITY);
-        writer.write(null, new IIOImage(compressedImage, null, null), params);
+
+        try {
+            writer.setOutput(ImageIO.createImageOutputStream(compressedFile));
+            writer.write(null, new IIOImage(compressedImage, null, null), params);
+        } catch (IOException e) {
+            throw new IOException("Error compressing and writing image", e);
+        } finally {
+            writer.dispose();
+        }
 
         return "/static/images/" + resultFileName;
     }
 }
-
-
