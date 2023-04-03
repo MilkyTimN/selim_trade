@@ -1,11 +1,14 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.Valid;
 import kg.megalab.selim_trade.dto.NewOrderInProgressRequest;
 import kg.megalab.selim_trade.dto.OrderInProgressResponse;
 import kg.megalab.selim_trade.dto.UpdateOrderInProgressRequest;
 import kg.megalab.selim_trade.service.OrderInProgressService;
-import org.springframework.data.domain.Page;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,19 +17,26 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/order-in-progress")
+@CrossOrigin(origins = {"http://localhost:3000", "http://161.35.29.179"}, allowCredentials = "true")
 public class OrderInProgressController {
     private final OrderInProgressService orderInProgressService;
 
-    @PostMapping("/{id}")
+    @Operation(description = """
+            Чтобы создать новый заказ перешедший на стадию обработки(OrderInProgress),
+            нужно задать id заказа(NewOrder) в url, т.к. тот заказ будет удален и создан
+            заказ в стадии обработки.
+            """)
+    @PostMapping("/{newOrderId}")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderInProgressResponse createOrderInProgress(
-            @PathVariable("id") int id,
-            @RequestBody NewOrderInProgressRequest orderRequest,
+            @PathVariable("newOrderId") int newOrderId,
+            @Valid @RequestBody NewOrderInProgressRequest orderRequest,
             @AuthenticationPrincipal UserDetails adminDetails
-            ) {
-        return orderInProgressService.createOrderInProgress(id,orderRequest, adminDetails);
+    ) {
+        return orderInProgressService.createOrderInProgress(newOrderId, orderRequest, adminDetails);
     }
 
+    @SecurityRequirements
     @GetMapping
     public Page<OrderInProgressResponse> getAllOrdersInProgress(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -36,22 +46,29 @@ public class OrderInProgressController {
         return orderInProgressService.getAllOrdersInProgress(pageNo, pageSize, sortBy);
     }
 
-    @GetMapping("/{id}")
-    public OrderInProgressResponse getOrderInProgressById(@PathVariable("id") int id) {
-        return orderInProgressService.getOrderInProgressById(id);
+    @SecurityRequirements
+    @GetMapping("/{orderInProgressId}")
+    public OrderInProgressResponse getOrderInProgressById(@PathVariable("orderInProgressId") int orderInProgressId) {
+        return orderInProgressService.getOrderInProgressById(orderInProgressId);
     }
 
-    @PutMapping("/{id}")
+    // TODO:statuses - "IN_PROGRESS", "FINISHED"
+    //TODO:from https to http
+    @PutMapping("/{orderInProgressId}")
+    @Operation(description = """
+            поле 'status' может быть либо \"IN_PROGRESS\" либо 
+            \"FINISHED\"
+            """)
     public OrderInProgressResponse updateOrderInProgressById(
-            @PathVariable("id") int id,
-            @RequestBody UpdateOrderInProgressRequest updateOrderInProgressRequest,
+            @PathVariable("orderInProgressId") int id,
+            @Valid @RequestBody UpdateOrderInProgressRequest updateOrderInProgressRequest,
             @AuthenticationPrincipal UserDetails adminDetails) {
         return orderInProgressService.updateOrderInProgressById(id, updateOrderInProgressRequest, adminDetails);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{orderInProgressId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOrderInProgressById(@PathVariable("id") int id) {
-        orderInProgressService.deleteById(id);
+    public void deleteOrderInProgressById(@PathVariable("orderInProgressId") int orderInProgressId) {
+        orderInProgressService.deleteById(orderInProgressId);
     }
 }

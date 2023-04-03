@@ -3,12 +3,9 @@ package kg.megalab.selim_trade.service.impl;
 import kg.megalab.selim_trade.dto.NewOrderInProgressRequest;
 import kg.megalab.selim_trade.dto.OrderInProgressResponse;
 import kg.megalab.selim_trade.dto.UpdateOrderInProgressRequest;
-import kg.megalab.selim_trade.entity.EStatus;
-import kg.megalab.selim_trade.entity.Gate;
-import kg.megalab.selim_trade.entity.GateType;
-import kg.megalab.selim_trade.entity.OrderInProgress;
+import kg.megalab.selim_trade.entity.*;
+import kg.megalab.selim_trade.entity.enums.EStatus;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
-import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.OrderInProgressMapper;
 import kg.megalab.selim_trade.repository.OrderInProgressRepository;
 import kg.megalab.selim_trade.service.*;
@@ -17,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +28,7 @@ public class OrderInProgressImpl implements OrderInProgressService {
     private final GateTypesService gateTypesService;
     private final GateService gateService;
     private final NewOrderService newOrderService;
+    private final UpdatedByService updatedByService;
 
     @Override
     public OrderInProgressResponse createOrderInProgress(
@@ -42,7 +39,6 @@ public class OrderInProgressImpl implements OrderInProgressService {
 
         orderInProgress.setCreatedBy(
                 authService.findAdminByUsername(adminDetails.getUsername())
-                .orElseThrow(UserNotFoundException::new)
         );
 
         orderInProgress.setStatus(EStatus.IN_PROGRESS);
@@ -91,12 +87,11 @@ public class OrderInProgressImpl implements OrderInProgressService {
         updatingOrderInProgress.setGateType(gateType);
         updatingOrderInProgress.setGate(gate);
 
-        updatingOrderInProgress.getUpdatedBy().add(
-                authService.findAdminByUsername(adminDetails.getUsername())
-                        .orElseThrow(UserNotFoundException::new)
+        updatingOrderInProgress.getUpdatedByList().add(
+                updatedByService.save(
+                        new UpdatedBy((Admin) adminDetails, new Date())
+                )
         );
-
-        updatingOrderInProgress.setUpdated_date(new Date());
 
         return orderInProgressMapper.toDto(orderInProgressRepository.save(updatingOrderInProgress));
     }

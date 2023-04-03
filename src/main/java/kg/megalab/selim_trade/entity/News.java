@@ -2,15 +2,18 @@ package kg.megalab.selim_trade.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "news")
-@Data
-public class News {
+@Setter
+@Getter
+public class News extends CommonEntity {
     @Id
     @GeneratedValue(generator = "news_id_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "news_id_generator", sequenceName = "news_se", allocationSize = 1)
@@ -23,12 +26,12 @@ public class News {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String description;
-    @CreationTimestamp
-    private Date createdDate;
-    @UpdateTimestamp
-    private Date updatedDate;
-    @ManyToOne
-    @JoinColumn(name = "admin_id", referencedColumnName = "id")
-    private Admin admin;
+
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @JoinTable(name = "news_admin_updates",
+            joinColumns = @JoinColumn(name = "news_id"),
+            inverseJoinColumns = @JoinColumn(name = "updated_by_id"))
+    private List<UpdatedBy> updatedByList = new ArrayList<>();
 
 }

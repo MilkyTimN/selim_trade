@@ -1,15 +1,18 @@
 package kg.megalab.selim_trade.service.impl;
 
 import kg.megalab.selim_trade.dto.ReviewResponse;
+import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.Review;
+import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
-import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.ReviewMapper;
 import kg.megalab.selim_trade.repository.ReviewRepository;
 import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.ImageService;
 import kg.megalab.selim_trade.service.ReviewService;
+import kg.megalab.selim_trade.service.UpdatedByService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +34,9 @@ public class ReviewServiceImpl implements ReviewService {
     private final ImageService imageService;
     private final AuthService authService;
     private final ReviewMapper reviewMapper;
+    private final UpdatedByService updatedByService;
+    @Value("${home.dir}")
+    private String home_dir;
 
 
     @Override
@@ -43,11 +49,9 @@ public class ReviewServiceImpl implements ReviewService {
         review.setName(name);
         review.setText(text);
         review.setGate(gate);
-        review.setCreated_date(new Date());
 
         review.setCreatedBy(
                 authService.findAdminByUsername(adminDetails.getUsername())
-                        .orElseThrow(UserNotFoundException::new)
         );
 
         return reviewMapper.toDto(reviewRepository.save(review));
@@ -71,20 +75,21 @@ public class ReviewServiceImpl implements ReviewService {
         Review updatingReview = reviewRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
 
-        //Delete previous photo from file system
-        Files.deleteIfExists(Path.of(updatingReview.getPhotoUrl()));
+        // previous photo from file system
+        if (!(image == null || image.isEmpty())) {
+            Files.deleteIfExists(Path.of(home_dir + updatingReview.getPhotoUrl()));
+            String photoUrl = imageService.saveImageToFileSystem(image);
 
-        String photoUrl = imageService.saveImageToFileSystem(image);
+            updatingReview.setPhotoUrl(photoUrl);
+        }
 
-        updatingReview.setPhotoUrl(photoUrl);
         updatingReview.setName(name);
         updatingReview.setText(text);
         updatingReview.setGate(gate);
-        updatingReview.setUpdated_date(new Date());
-
-        updatingReview.getUpdatedBy().add(
-                authService.findAdminByUsername(adminDetails.getUsername())
-                        .orElseThrow(UserNotFoundException::new)
+        updatingReview.getUpdatedByList().add(
+                updatedByService.save(
+                        new UpdatedBy((Admin) adminDetails, new Date())
+                )
         );
 
         return reviewMapper.toDto(reviewRepository.save(updatingReview));
@@ -93,10 +98,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteReviewById(int id) throws IOException {
         Review deletingReview = reviewRepository.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found!"));
 
         //deleting photo from file system
-        Files.deleteIfExists(Path.of(deletingReview.getPhotoUrl()));
+        Files.deleteIfExists(Path.of(home_dir + deletingReview.getPhotoUrl()));
 
         reviewRepository.delete(deletingReview);
     }

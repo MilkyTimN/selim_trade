@@ -9,8 +9,7 @@ public record ReviewResponse(
         String text,
         String gate,
         String created_date,
-        String updated_date,
-        LoginResponse.AdminInfo createdBy,
-        List<LoginResponse.AdminInfo> updatedBy
+        AdminInfo createdBy,
+        List<UpdatedByResponse> updatedByList
 ) {
 }

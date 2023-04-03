@@ -1,32 +1,39 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.Valid;
 import kg.megalab.selim_trade.dto.NewOrderRequest;
 import kg.megalab.selim_trade.dto.NewOrderResponse;
 import kg.megalab.selim_trade.service.NewOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/new-order")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:3000", "http://161.35.29.179"}, allowCredentials = "true")
 public class NewOrderController {
 
     private final NewOrderService newOrderService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public NewOrderResponse saveNewOrder(@RequestBody NewOrderRequest dto) {
+    @SecurityRequirements
+    public NewOrderResponse saveNewOrder(@Valid @RequestBody NewOrderRequest dto) {
         return newOrderService.saveOrder(dto);
     }
 
-    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
+    @DeleteMapping("/{newOrderId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteNewOrder(@PathVariable("id") int id) {
+    public void deleteNewOrder(@PathVariable("newOrderId") int id) {
         newOrderService.deleteNewOrder(id);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
     @GetMapping
     public Page<NewOrderResponse> getAllNewOrders(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -36,8 +43,9 @@ public class NewOrderController {
         return newOrderService.getAllNewOrders(pageNo, pageSize, sortBy);
     }
 
-    @GetMapping("/{id}")
-    public NewOrderResponse getNewOrderById(@PathVariable("id") int id) {
+    @SecurityRequirements
+    @GetMapping("/{newOrderId}")
+    public NewOrderResponse getNewOrderById(@PathVariable("newOrderId") int id) {
         return newOrderService.getNewOrderById(id);
     }
 }

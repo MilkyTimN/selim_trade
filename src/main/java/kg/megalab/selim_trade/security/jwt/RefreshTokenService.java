@@ -3,7 +3,7 @@ package kg.megalab.selim_trade.security.jwt;
 import kg.megalab.selim_trade.dto.LoginResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.RefreshToken;
-import kg.megalab.selim_trade.exceptions.BadRequestException;
+import kg.megalab.selim_trade.exceptions.ForbiddenException;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.mapper.AdminMapper;
 import kg.megalab.selim_trade.repository.RefreshTokenRepository;
@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.UUID;
@@ -30,10 +31,6 @@ public class RefreshTokenService {
         if (refreshTokenRepository.existsByAdmin(admin)) {
             refreshToken = refreshTokenRepository.findByAdmin(admin).get();
             refreshTokenRepository.delete(refreshToken);
-            if (isRefreshTokenExpired(refreshToken)) {
-                throw new BadRequestException("Refresh token is expired. Please sign in again.");
-            }
-            return refreshToken.getToken();
         }
         refreshToken = generateCompleteNewRefreshToken(admin);
         return refreshToken.getToken();
@@ -53,17 +50,23 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new ResourceNotFoundException("Refresh token not found!"));
         Admin admin = refreshToken.getAdmin();
         if (isRefreshTokenExpired(refreshToken)) {
-            throw new BadRequestException("Refresh token is expired. Please sign in again.");
+            refreshTokenRepository.delete(refreshToken);
+            throw new ForbiddenException("Refresh token is expired. Please sign in again.");
         }
         refreshTokenRepository.delete(refreshToken);
         return new LoginResponse(
                 jwtService.generateToken(admin),
                 generateCompleteNewRefreshToken(admin).getToken(),
-                adminMapper.toLoginResponseAdminDto(admin));
+                adminMapper.toDto(admin));
     }
 
     public boolean isRefreshTokenExpired(RefreshToken refreshToken) {
         return refreshToken.getExpiryDate().before(new Date());
+    }
+
+    @Transactional
+    public void deleteRefreshTokenByAdmin(Admin admin) {
+        refreshTokenRepository.deleteByAdmin(admin);
     }
 
 }

@@ -1,5 +1,8 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.Valid;
 import kg.megalab.selim_trade.dto.AdvantageRequest;
 import kg.megalab.selim_trade.dto.AdvantageResponse;
 import kg.megalab.selim_trade.service.AdvantageService;
@@ -13,27 +16,36 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/advantage")
+@CrossOrigin(origins = {"http://localhost:3000", "http://161.35.29.179"}, allowCredentials = "true")
 public class AdvantageController {
     private final AdvantageService advantageService;
 
-    @PostMapping("/{id}")
+    @Operation(
+            description = """
+                    Надо задать id типа ворот(gate type) в url, т.к. преимущество должно
+                    принадлежать типу ворот. По этому id находиться тип ворот в бд и
+                    добавляться преимущество в массив преимуществ.
+                    """
+    )
+    @PostMapping("/{gateTypeId}")
     @ResponseStatus(HttpStatus.CREATED)
     public AdvantageResponse createAdvantage(
-            @PathVariable("id") int gateTypeId,
-            @RequestBody AdvantageRequest advantageRequest,
+            @PathVariable("gateTypeId") int gateTypeId,
+            @Valid @RequestBody AdvantageRequest advantageRequest,
             @AuthenticationPrincipal UserDetails adminDetails) {
         return advantageService.createAdvantage(gateTypeId, advantageRequest, adminDetails);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{advantageId}")
     public AdvantageResponse updateAdvantageById(
-            @PathVariable("id") int id,
-            @RequestBody AdvantageRequest request,
+            @PathVariable("advantageId") int id,
+            @Valid @RequestBody AdvantageRequest request,
             @AuthenticationPrincipal UserDetails adminDetails) {
         return advantageService.updateAdvantageById(id, request, adminDetails);
     }
 
     @GetMapping
+    @SecurityRequirements
     public Page<AdvantageResponse> getAllAdvantages(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize,
@@ -42,14 +54,15 @@ public class AdvantageController {
         return advantageService.getAllAdvantages(pageNo, pageSize, sortBy);
     }
 
-    @GetMapping("/{id}")
-    public AdvantageResponse getAdvantageById(@PathVariable("id") int id) {
+    @GetMapping("/{advantageId}")
+    @SecurityRequirements
+    public AdvantageResponse getAdvantageById(@PathVariable("advantageId") int id) {
         return advantageService.getAdvantageById(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{advantageId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAdvantageById(@PathVariable("id") int id) {
+    public void deleteAdvantageById(@PathVariable("advantageId") int id) {
         advantageService.deleteAdvantageById(id);
     }
 }

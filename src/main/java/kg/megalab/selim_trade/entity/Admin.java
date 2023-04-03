@@ -2,23 +2,26 @@ package kg.megalab.selim_trade.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import kg.megalab.selim_trade.entity.enums.ERole;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "admins")
-@Data
+@Getter
+@Setter
 public class Admin implements UserDetails {
     @Id
     @GeneratedValue(generator = "admin_id_generator", strategy = GenerationType.SEQUENCE)
@@ -29,18 +32,20 @@ public class Admin implements UserDetails {
     private String password;
     @CreationTimestamp
     private Date created_date;
-    @UpdateTimestamp
+    @LastModifiedDate
     private Date updated_date;
 
     @ElementCollection(targetClass = ERole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "admin_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    private Set<ERole> roles;
+    private Set<ERole> roles = new HashSet<>();
+
+    private boolean active;
 
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
 //    private List<Advantage> advantageList;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
     private Set<News> newsSet;
 
     @Override
@@ -68,6 +73,6 @@ public class Admin implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return active;
     }
 }

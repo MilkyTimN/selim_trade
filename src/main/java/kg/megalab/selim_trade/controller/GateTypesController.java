@@ -1,12 +1,14 @@
 package kg.megalab.selim_trade.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import kg.megalab.selim_trade.dto.GateTypesResponse;
 import kg.megalab.selim_trade.service.GateTypesService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +19,14 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/v1/gate-types")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://161.35.29.179"}, allowCredentials = "true")
 public class GateTypesController {
     private final GateTypesService gateTypesService;
-    private static Logger logger = LoggerFactory.getLogger(GateTypesController.class);
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public GateTypesResponse createGateType(
-            @RequestParam("image") MultipartFile image,
-            @RequestParam("name") String name,
+            @NotNull @RequestParam("image") MultipartFile image,
+            @NotBlank @NotNull @RequestParam("name") String name,
             @AuthenticationPrincipal UserDetails adminDetails
     ) throws IOException {
 
@@ -36,6 +37,7 @@ public class GateTypesController {
         );
     }
 
+    @SecurityRequirements
     @GetMapping
     public Page<GateTypesResponse> getAllGateTypes(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -44,23 +46,24 @@ public class GateTypesController {
         return gateTypesService.getAll(pageNo, pageSize, sortBy);
     }
 
-    @GetMapping("/{id}")
-    public GateTypesResponse getGateTypeById(@PathVariable("id") int id) {
+    @SecurityRequirements
+    @GetMapping("/{gateTypeId}")
+    public GateTypesResponse getGateTypeById(@PathVariable("gateTypeId") int id) {
         return gateTypesService.getGateTypeResponseById(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{gateTypeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public GateTypesResponse updateGateTypeById(
-            @PathVariable("id") int id,
-            @RequestParam("image") MultipartFile image,
-            @RequestParam("name") String name,
+            @PathVariable("gateTypeId") int id,
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            @NotBlank @NotNull @RequestParam("name") String name,
             @AuthenticationPrincipal UserDetails adminDetails) throws IOException {
-        return gateTypesService.updateGateTypeById(id,image,name,adminDetails);
+        return gateTypesService.updateGateTypeById(id, image, name, adminDetails);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{gateTypeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteGateTypeById(@PathVariable("id") int id) throws IOException {
+    public void deleteGateTypeById(@PathVariable("gateTypeId") int id) throws IOException {
         gateTypesService.deleteGateTypeById(id);
     }
 }

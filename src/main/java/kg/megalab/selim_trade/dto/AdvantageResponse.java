@@ -8,8 +8,7 @@ public record AdvantageResponse(
         String title,
         String description,
         String created_date,
-        String updated_date,
-        LoginResponse.AdminInfo createdBy,
-        List<LoginResponse.AdminInfo> updatedBy
+        AdminInfo createdBy,
+        List<UpdatedByResponse> updatedByList
 ) {
 }

@@ -5,13 +5,12 @@ import java.util.List;
 public record OrderInProgressResponse(
         int id,
         String status,
-        String gateType,
-        String gate,
+        ShortGateAndGateTypeInfo gateType,
+        ShortGateAndGateTypeInfo gate,
         String name,
         String phoneNumber,
         String created_date,
-        String updated_date,
-        LoginResponse.AdminInfo createdBy,
-        List<LoginResponse.AdminInfo> updatedBy
+        AdminInfo createdBy,
+        List<UpdatedByResponse> updatedByList
 ) {
 }

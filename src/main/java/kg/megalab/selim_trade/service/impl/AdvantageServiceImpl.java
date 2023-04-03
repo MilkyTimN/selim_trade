@@ -5,13 +5,14 @@ import kg.megalab.selim_trade.dto.AdvantageResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.Advantage;
 import kg.megalab.selim_trade.entity.GateType;
+import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
-import kg.megalab.selim_trade.exceptions.UserNotFoundException;
 import kg.megalab.selim_trade.mapper.AdvantageMapper;
 import kg.megalab.selim_trade.repository.AdvantageRepository;
 import kg.megalab.selim_trade.service.AdvantageService;
 import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.GateTypesService;
+import kg.megalab.selim_trade.service.UpdatedByService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,7 @@ public class AdvantageServiceImpl implements AdvantageService {
     private final GateTypesService gateTypesService;
     private final AuthService authService;
     private final AdvantageMapper advantageMapper;
+    private final UpdatedByService updatedByService;
 
     @Override
     public AdvantageResponse createAdvantage(int gateTypeId, AdvantageRequest request, UserDetails adminDetails) {
@@ -40,14 +42,14 @@ public class AdvantageServiceImpl implements AdvantageService {
         advantage.setTitle(request.title());
         advantage.setDescription(request.description());
 
-        Admin admin = authService.findAdminByUsername(adminDetails.getUsername())
-                .orElseThrow(UserNotFoundException::new);
+        Admin admin = authService.findAdminByUsername(adminDetails.getUsername());
 
         advantage.setCreatedBy(admin);
 
-        //updating gatetype updatedBy list and updated date
-        gateType.getUpdatedBy().add(admin);
-        gateType.setUpdated_date(new Date());
+        gateType.getUpdatedByList().add(updatedByService.save(
+                new UpdatedBy(admin, new Date())
+        ));
+
         gateTypesService.save(gateType);
 
         return advantageMapper.toDto(advantageRepository.save(advantage));
@@ -63,12 +65,10 @@ public class AdvantageServiceImpl implements AdvantageService {
         updatedAdvantage.setTitle(request.title());
         updatedAdvantage.setDescription(request.description());
 
-        updatedAdvantage.getUpdatedBy().add(
-                authService.findAdminByUsername(adminDetails.getUsername())
-                        .orElseThrow(UserNotFoundException::new)
-        );
 
-        updatedAdvantage.setUpdated_date(new Date());
+        updatedAdvantage.getUpdatedByList().add(updatedByService.save(
+                new UpdatedBy((Admin) adminDetails, new Date())
+        ));
 
         return advantageMapper.toDto(advantageRepository.save(updatedAdvantage));
     }

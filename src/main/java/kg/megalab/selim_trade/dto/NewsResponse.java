@@ -3,6 +3,7 @@ package kg.megalab.selim_trade.dto;
 import lombok.Builder;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder
 public record NewsResponse(
@@ -11,8 +12,8 @@ public record NewsResponse(
         String title,
         String description,
         LocalDate createdDate,
-        LocalDate updatedDate,
-        LoginResponse.AdminInfo admin
+        AdminInfo createdBy,
+        List<UpdatedByResponse> updatedByList
 ) {
 
 }
