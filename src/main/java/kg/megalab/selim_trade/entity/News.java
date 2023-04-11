@@ -1,13 +1,10 @@
 package kg.megalab.selim_trade.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity(name = "news")
@@ -19,13 +16,17 @@ public class News extends CommonEntity {
     @SequenceGenerator(name = "news_id_generator", sequenceName = "news_se", allocationSize = 1)
     private int id;
 
-    //    @OneToOne(cascade = CascadeType.MERGE)
-//    @JoinColumn(name = "tb_pictures_id", referencedColumnName = "id")
-//    private Picture picture;
     private String photoUrl;
     private String title;
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @OneToMany(
+            cascade = {CascadeType.REMOVE, CascadeType.PERSIST},
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn(name = "news_id", referencedColumnName = "id")
+    private List<NewsPhoto> photos = new ArrayList<>();
 
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
