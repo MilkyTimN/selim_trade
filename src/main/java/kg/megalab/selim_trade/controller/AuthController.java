@@ -9,7 +9,6 @@ import kg.megalab.selim_trade.dto.LoginResponse;
 import kg.megalab.selim_trade.dto.RefreshAccessTokenRequest;
 import kg.megalab.selim_trade.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -64,13 +63,14 @@ public class AuthController {
         return authService.refreshAccessToken(refreshToken);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('SUPER_ADMIN')")
+    //TODO: logout frontend
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPER_ADMIN')")
     @GetMapping("/logout")
     @SecurityRequirement(name = "Bearer_Token_Authorization")
     @Operation(description = """
             Нужен access токен, чтобы удалить с бд рефреш токен при выходе
             """)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void logout(@AuthenticationPrincipal UserDetails adminDetails) {
         authService.logout(adminDetails);
     }
