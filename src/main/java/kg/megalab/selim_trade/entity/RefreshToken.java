@@ -1,12 +1,14 @@
 package kg.megalab.selim_trade.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "r_token_generator")
