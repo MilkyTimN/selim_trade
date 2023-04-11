@@ -12,13 +12,8 @@ public record NewsResponse(
         String description,
         String created_date,
         AdminInfoShort createdBy,
-        List<PhotoItem> photos,
+        List<NewsPhotoResponse> photos,
         List<UpdatedByResponse> updatedByList
 ) {
-    public record PhotoItem(
-           int id,
-           String photoUrl
-    ) {
 
-    }
 }
