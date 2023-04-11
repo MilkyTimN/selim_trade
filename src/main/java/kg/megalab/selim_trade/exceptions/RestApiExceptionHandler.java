@@ -30,18 +30,16 @@ public class RestApiExceptionHandler {
         );
     }
 
-
     @ExceptionHandler(SizeLimitExceededException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessage fileSizeExceedHandling(Exception exception, WebRequest request) {
         return new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
                 new Date(),
-                "File size is bigger than 4mb!",
+                "File size is bigger than 3mb!",
                 request.getDescription(false)
         );
     }
-
 
     @ExceptionHandler({BadRequestException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -78,13 +76,6 @@ public class RestApiExceptionHandler {
                 request.getDescription(false)
         );
     }
-
-
-//    @ExceptionHandler({RequestTimeoutException.class})
-//    @ResponseStatus(HttpStatus.REQUEST_TIMEOUT)
-//    void requestTimeout() {
-//    }
-
 
 }
 
