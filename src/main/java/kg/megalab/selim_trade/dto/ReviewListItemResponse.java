@@ -1,6 +1,6 @@
 package kg.megalab.selim_trade.dto;
 
-public record ReviewResponseShort(
+public record ReviewListItemResponse(
         int id,
         String photoUrl,
         String name,
