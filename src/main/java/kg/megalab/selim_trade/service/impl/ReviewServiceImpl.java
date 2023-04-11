@@ -59,7 +59,7 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewMapper.toShortDto(reviewRepository.save(review));
     }
 
-   
+
     @Override
     public ReviewResponse getReviewById(int id) {
         return reviewMapper.toDto(
