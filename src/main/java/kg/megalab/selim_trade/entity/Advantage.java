@@ -1,13 +1,10 @@
 package kg.megalab.selim_trade.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,13 +22,6 @@ public class Advantage extends CommonEntity {
 
     @ManyToOne
     GateType gateType;
-
-
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "advantage_admin_updates",
-//            joinColumns = @JoinColumn(name = "advantage_id"),
-//            inverseJoinColumns = @JoinColumn(name = "admin_id"))
-//    private List<Admin> updatedBy;
 
 
     @ManyToMany(fetch = FetchType.LAZY)

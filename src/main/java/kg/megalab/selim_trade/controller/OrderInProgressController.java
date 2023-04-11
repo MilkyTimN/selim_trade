@@ -56,8 +56,8 @@ public class OrderInProgressController {
     //TODO:from https to http
     @PutMapping("/{orderInProgressId}")
     @Operation(description = """
-            поле 'status' может быть либо \"IN_PROGRESS\" либо 
-            \"FINISHED\"
+            поле 'status' может быть либо "IN_PROGRESS" либо 
+            "FINISHED"
             """)
     public OrderInProgressResponse updateOrderInProgressById(
             @PathVariable("orderInProgressId") int id,

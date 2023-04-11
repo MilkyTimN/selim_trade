@@ -1,9 +1,7 @@
 package kg.megalab.selim_trade.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import kg.megalab.selim_trade.entity.enums.ERole;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,7 +26,6 @@ public class Admin implements UserDetails {
     @SequenceGenerator(name = "admin_id_generator", sequenceName = "admin_seq", allocationSize = 1)
     private int id;
     private String username;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @CreationTimestamp
     private Date created_date;
@@ -42,11 +39,6 @@ public class Admin implements UserDetails {
 
     private boolean active;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
-//    private List<Advantage> advantageList;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "createdBy")
-    private Set<News> newsSet;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

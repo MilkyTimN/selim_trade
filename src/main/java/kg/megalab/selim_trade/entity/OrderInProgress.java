@@ -28,7 +28,6 @@ public class OrderInProgress extends CommonEntity {
     private String phoneNumber;
 
 
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinTable(name = "order_in_progress_admin_updates",
             joinColumns = @JoinColumn(name = "order_in_progress_id"),

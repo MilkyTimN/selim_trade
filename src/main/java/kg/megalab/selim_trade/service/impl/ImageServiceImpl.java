@@ -19,7 +19,7 @@ public class ImageServiceImpl implements ImageService {
     @Value("${file.upload-dir}")
     private String image_folder;
 
-    private static final float COMPRESSION_QUALITY = 0.6f; // Set compression quality to 60%
+    private static final float COMPRESSION_QUALITY = 0.4f; // Set compression quality to 40%
 
     @Override
     public String saveImageToFileSystem(MultipartFile image) throws IOException {

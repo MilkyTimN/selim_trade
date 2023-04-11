@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.service.impl;
 
+import kg.megalab.selim_trade.dto.GateCreateResponse;
 import kg.megalab.selim_trade.dto.GateResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.Gate;
@@ -10,10 +11,6 @@ import kg.megalab.selim_trade.repository.GateRepository;
 import kg.megalab.selim_trade.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +35,7 @@ public class GateServiceImpl implements GateService {
 
 
     @Override
-    public GateResponse createGate(int gateTypeId, String name, MultipartFile image, UserDetails adminDetails) throws IOException {
+    public GateCreateResponse createGate(int gateTypeId, String name, MultipartFile image, UserDetails adminDetails) throws IOException {
         Gate gate = new Gate();
 
         String resultUrl = imageService.saveImageToFileSystem(image);
@@ -49,7 +46,7 @@ public class GateServiceImpl implements GateService {
         gate.setGateType(
                 gateTypesService.getGateTypeById(gateTypeId)
         );
-        return gateMapper.toDto(gateRepository.save(gate));
+        return gateMapper.toShortDto(gateRepository.save(gate));
     }
 
 
@@ -75,11 +72,7 @@ public class GateServiceImpl implements GateService {
         return gateMapper.toDto(gateRepository.save(updatingGate));
     }
 
-    @Override
-    public Page<GateResponse> getAllGates(int pageNo, int pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        return gateRepository.findAll(paging).map(gateMapper::toDto);
-    }
+
 
     @Override
     public GateResponse getGateById(int id) {
@@ -103,9 +96,5 @@ public class GateServiceImpl implements GateService {
         return gateRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Gate not found!"));
     }
 
-    @Override
-    public void deleteGate(int id, String photoUrl) throws IOException {
-        Files.deleteIfExists(Path.of(home_dir + photoUrl));
-        gateRepository.deleteById(id);
-    }
+
 }

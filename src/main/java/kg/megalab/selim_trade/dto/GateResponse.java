@@ -8,7 +8,7 @@ public record GateResponse(
         String name,
         String photoUrl,
         String created_date,
-        AdminInfo createdBy,
+        AdminInfoShort createdBy,
         List<UpdatedByResponse> updatedByList
 
 ) {

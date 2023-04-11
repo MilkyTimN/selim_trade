@@ -1,13 +1,10 @@
 package kg.megalab.selim_trade.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,6 +17,8 @@ public class GateType extends CommonEntity {
     private int id;
     private String backgroundUrl;
     private String name;
+    @Column(columnDefinition = "TEXT")
+    private String description;
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinColumn(name = "gate_type_id", referencedColumnName = "id")
     private List<Advantage> advantageList = new ArrayList<>();

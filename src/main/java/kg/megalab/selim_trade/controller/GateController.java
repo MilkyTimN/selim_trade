@@ -4,10 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import kg.megalab.selim_trade.dto.GateCreateResponse;
 import kg.megalab.selim_trade.dto.GateResponse;
 import kg.megalab.selim_trade.service.GateService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,7 +32,7 @@ public class GateController {
     )
     @PostMapping(value = "/{gateTypeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public GateResponse createGate(
+    public GateCreateResponse createGate(
             @PathVariable("gateTypeId") int gateTypeId,
             @NotBlank @NotNull @RequestParam("name") String name,
             @NotNull @RequestParam(value = "image") MultipartFile image,
@@ -50,16 +50,6 @@ public class GateController {
         return gateService.updateGate(id, name, image, adminDetails);
     }
 
-
-    @SecurityRequirements
-    @GetMapping
-    public Page<GateResponse> getAllGates(
-            @RequestParam(defaultValue = "0") int pageNo,
-            @RequestParam(defaultValue = "3") int pageSize,
-            @RequestParam(defaultValue = "id") String sortBy
-    ) {
-        return gateService.getAllGates(pageNo, pageSize, sortBy);
-    }
 
     @SecurityRequirements
     @GetMapping("/{gateId}")

@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.service.impl;
 
+import kg.megalab.selim_trade.dto.NewsListItemResponse;
 import kg.megalab.selim_trade.dto.NewsResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.News;
@@ -7,6 +8,8 @@ import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.mapper.NewsMapper;
 import kg.megalab.selim_trade.repository.NewsRepository;
+import kg.megalab.selim_trade.repository.projections.NewsItemView;
+import kg.megalab.selim_trade.repository.projections.NewsListView;
 import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.ImageService;
 import kg.megalab.selim_trade.service.NewsService;
@@ -45,20 +48,9 @@ public class NewsServiceImpl implements NewsService {
                 .orElseThrow(() -> new ResourceNotFoundException("The news not found!"));
     }
 
-    @Override
-    public String getFileOriginalName(String url) {
-        return url != null ? url.substring(url.indexOf(".") + 1) : null;
-    }
 
     @Override
-    public Page<NewsResponse> getAllNews(int pageNo, int pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        return newsRepository.findAll(paging).map(newsMapper::toNewOrUpdatedResponse);
-    }
-
-
-    @Override
-    public NewsResponse createNews(MultipartFile image, String title, String description, UserDetails adminDetails) throws IOException {
+    public NewsListItemResponse createNews(MultipartFile image, String title, String description, UserDetails adminDetails) throws IOException {
         News news = new News();
 
         String resultUrl = imageService.saveImageToFileSystem(image);
@@ -69,11 +61,11 @@ public class NewsServiceImpl implements NewsService {
         news.setCreatedBy(authService.findAdminByUsername(adminDetails.getUsername()));
 
 
-        return newsMapper.toNewOrUpdatedResponse(newsRepository.save(news));
+        return newsMapper.toShortNewsDto(newsRepository.save(news));
     }
 
     @Override
-    public NewsResponse updateNews(int id, MultipartFile image, String title, String description, UserDetails adminDetails) throws IOException {
+    public NewsListItemResponse updateNews(int id, MultipartFile image, String title, String description, UserDetails adminDetails) throws IOException {
 
         News news = newsRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("News not found!")
@@ -86,10 +78,6 @@ public class NewsServiceImpl implements NewsService {
         }
         news.setTitle(title);
         news.setDescription(description);
-//        news.getUpdatedBy().add(
-//                authService.findAdminByUsername(adminDetails.getUsername())
-//        );
-
 
         news.getUpdatedByList().add(
                 updatedByService.save(
@@ -97,8 +85,7 @@ public class NewsServiceImpl implements NewsService {
                 )
         );
 
-
-        return newsMapper.toNewOrUpdatedResponse(newsRepository.save(news));
+        return newsMapper.toShortNewsDto(newsRepository.save(news));
     }
 
     @Override
@@ -109,6 +96,36 @@ public class NewsServiceImpl implements NewsService {
         //deleting previous photo from file system
         Files.deleteIfExists(Path.of(home_dir + news.getPhotoUrl()));
 
+        news.getPhotos().forEach(
+                newsPhoto -> {
+                    try {
+                        Files.deleteIfExists(Path.of(home_dir + newsPhoto.getPhotoUrl()));
+                    } catch (IOException e) {
+                        throw new ResourceNotFoundException("No such photo");
+                    }
+                }
+        );
+
         newsRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<NewsListView> getAllNewsForCustomer(int pageNo, int pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return newsRepository.findAllProjectedBy(pageable);
+    }
+
+
+    @Override
+    public Page<NewsListItemResponse> getAllNewsShort(int pageNo, int pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return newsRepository.findAll(pageable).map(newsMapper::toShortNewsDto);
+    }
+
+    @Override
+    public NewsItemView getNewsByIdForCustomer(int newsId) {
+        return newsRepository.findProjectedById(newsId).orElseThrow(
+                () -> new ResourceNotFoundException("News not found!")
+        );
     }
 }

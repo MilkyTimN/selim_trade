@@ -1,6 +1,8 @@
 package kg.megalab.selim_trade.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public record UpdateAdminRequest(
         @NotBlank(message = "Username cannot be empty!")

@@ -106,7 +106,7 @@ public class AuthServiceImpl implements AuthService {
         Admin updatedAdmin = adminRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
         updatedAdmin.setUsername(request.username());
-        if(!(request.password() == null || request.password().isBlank() || request.password().isEmpty())) {
+        if (!(request.password() == null || request.password().isBlank() || request.password().isEmpty())) {
             updatedAdmin.setPassword(passwordEncoder.encode(request.password()));
         }
         updatedAdmin.setActive(request.active());

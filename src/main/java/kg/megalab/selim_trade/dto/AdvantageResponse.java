@@ -8,7 +8,7 @@ public record AdvantageResponse(
         String title,
         String description,
         String created_date,
-        AdminInfo createdBy,
+        AdminInfoShort createdBy,
         List<UpdatedByResponse> updatedByList
 ) {
 }
