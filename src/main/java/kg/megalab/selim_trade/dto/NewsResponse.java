@@ -2,7 +2,6 @@ package kg.megalab.selim_trade.dto;
 
 import lombok.Builder;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Builder
@@ -11,9 +10,15 @@ public record NewsResponse(
         String photoUrl,
         String title,
         String description,
-        LocalDate createdDate,
-        AdminInfo createdBy,
+        String created_date,
+        AdminInfoShort createdBy,
+        List<PhotoItem> photos,
         List<UpdatedByResponse> updatedByList
 ) {
+    public record PhotoItem(
+           int id,
+           String photoUrl
+    ) {
 
+    }
 }
