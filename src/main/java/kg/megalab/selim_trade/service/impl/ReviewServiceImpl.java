@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.service.impl;
 
+import kg.megalab.selim_trade.dto.ReviewListItemResponse;
 import kg.megalab.selim_trade.dto.ReviewResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.Review;
@@ -7,6 +8,7 @@ import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.mapper.ReviewMapper;
 import kg.megalab.selim_trade.repository.ReviewRepository;
+import kg.megalab.selim_trade.repository.projections.ReviewView;
 import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.ImageService;
 import kg.megalab.selim_trade.service.ReviewService;
@@ -40,7 +42,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     @Override
-    public ReviewResponse createReview(MultipartFile image, String name, String text, String gate, UserDetails adminDetails) throws IOException {
+    public ReviewListItemResponse createReview(MultipartFile image, String name, String text, String gate, UserDetails adminDetails) throws IOException {
         //saving photo to file system
         String photoUrl = imageService.saveImageToFileSystem(image);
 
@@ -54,21 +56,19 @@ public class ReviewServiceImpl implements ReviewService {
                 authService.findAdminByUsername(adminDetails.getUsername())
         );
 
-        return reviewMapper.toDto(reviewRepository.save(review));
+        return reviewMapper.toShortDto(reviewRepository.save(review));
     }
 
-    @Override
-    public Page<ReviewResponse> getAllReviews(int pageNo, int pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        return reviewRepository.findAll(paging).map(reviewMapper::toDto);
-    }
-
+   
     @Override
     public ReviewResponse getReviewById(int id) {
         return reviewMapper.toDto(
                 reviewRepository.findById(id)
                         .orElseThrow(() -> new ResourceNotFoundException("Review not found!")));
     }
+
+    //TODO: return types of post methods
+    //TODO: Check if two sql for customers
 
     @Override
     public ReviewResponse updateReview(int id, MultipartFile image, String name, String text, String gate, UserDetails adminDetails) throws IOException {
@@ -95,6 +95,7 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewMapper.toDto(reviewRepository.save(updatingReview));
     }
 
+
     @Override
     public void deleteReviewById(int id) throws IOException {
         Review deletingReview = reviewRepository.findById(id)
@@ -104,5 +105,17 @@ public class ReviewServiceImpl implements ReviewService {
         Files.deleteIfExists(Path.of(home_dir + deletingReview.getPhotoUrl()));
 
         reviewRepository.delete(deletingReview);
+    }
+
+    @Override
+    public Page<ReviewView> getAllReviewsForCustomer(int pageNo, int pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return reviewRepository.findAllProjectedBy(pageable);
+    }
+
+    @Override
+    public Page<ReviewListItemResponse> getAllReviewsForAdmin(int pageNo, int pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return reviewRepository.findAll(pageable).map(reviewMapper::toShortDto);
     }
 }
