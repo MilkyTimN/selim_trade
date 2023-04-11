@@ -1,5 +1,7 @@
 package kg.megalab.selim_trade.service.impl;
 
+import kg.megalab.selim_trade.dto.GateTypesCreateResponse;
+import kg.megalab.selim_trade.dto.GateTypesListItemResponse;
 import kg.megalab.selim_trade.dto.GateTypesResponse;
 import kg.megalab.selim_trade.entity.Admin;
 import kg.megalab.selim_trade.entity.GateType;
@@ -7,6 +9,8 @@ import kg.megalab.selim_trade.entity.UpdatedBy;
 import kg.megalab.selim_trade.exceptions.ResourceNotFoundException;
 import kg.megalab.selim_trade.mapper.GateTypesMapper;
 import kg.megalab.selim_trade.repository.GateTypesRepository;
+import kg.megalab.selim_trade.repository.projections.GateTypeItemView;
+import kg.megalab.selim_trade.repository.projections.GateTypesListView;
 import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.GateTypesService;
 import kg.megalab.selim_trade.service.ImageService;
@@ -40,8 +44,8 @@ public class GateTypesServiceImpl implements GateTypesService {
 
 
     @Override
-    public GateTypesResponse createGateType(
-            MultipartFile image, String name,
+    public GateTypesCreateResponse createGateType(
+            MultipartFile image, String name, String description,
             UserDetails adminDetails) throws IOException {
         //creating new gateType object
         GateType gateType = new GateType();
@@ -53,18 +57,15 @@ public class GateTypesServiceImpl implements GateTypesService {
         //setting attributes
         gateType.setBackgroundUrl(resultUrl);
         gateType.setName(name);
+        gateType.setDescription(description);
         gateType.setCreatedBy(authService.findAdminByUsername(
                 adminDetails.getUsername()
         ));
 
-        return gateTypesMapper.toDto(gateTypesRepository.save(gateType));
+        return gateTypesMapper.toShortCreateDto(gateTypesRepository.save(gateType));
     }
 
-    @Override
-    public Page<GateTypesResponse> getAll(int pageNo, int pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        return gateTypesRepository.findAll(paging).map(gateTypesMapper::toDto);
-    }
+
 
     @Override
     public GateTypesResponse getGateTypeResponseById(int id) {
@@ -78,10 +79,6 @@ public class GateTypesServiceImpl implements GateTypesService {
                 .orElseThrow(() -> new ResourceNotFoundException("Gate type not found!"));
     }
 
-    @Override
-    public GateType saveAndFlush(GateType gateType) {
-        return gateTypesRepository.saveAndFlush(gateType);
-    }
 
     @Override
     public GateType save(GateType gateType) {
@@ -99,13 +96,6 @@ public class GateTypesServiceImpl implements GateTypesService {
 
             updatingGateType.setBackgroundUrl(resultUrl);
         }
-        // deleting previous photo from filesystem
-
-
-        //adding admin to updatedby list
-//        updatingGateType.getUpdatedBy().add(
-//                authService.findAdminByUsername(adminDetails.getUsername())
-//        );
 
         updatingGateType.getUpdatedByList().add(
                 updatedByService.save(
@@ -129,13 +119,31 @@ public class GateTypesServiceImpl implements GateTypesService {
                 gate -> {
                     try {
                         Files.deleteIfExists(Path.of(home_dir + gate.getPhotoUrl()));
-//                        gateService.deleteGate(gate.getId(), gate.getPhotoUrl());
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        throw new ResourceNotFoundException("Photo not found!");
                     }
                 }
         );
 
         gateTypesRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<GateTypesListView> getListView(int pageNo, int pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return gateTypesRepository.findAllProjectedBy(pageable);
+    }
+
+    @Override
+    public GateTypeItemView getGateTypeByIdForCustomer(int gateTypeId) {
+        return gateTypesRepository.findProjectedById(gateTypeId).orElseThrow(
+                () -> new ResourceNotFoundException("Gate Type is not found!")
+        );
+    }
+
+    @Override
+    public Page<GateTypesListItemResponse> getAllShort(int pageNo, int pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        return gateTypesRepository.findAll(pageable).map(gateTypesMapper::toShortDto);
     }
 }
