@@ -1,19 +1,17 @@
 package kg.megalab.selim_trade.service;
 
+import kg.megalab.selim_trade.dto.GateCreateResponse;
 import kg.megalab.selim_trade.dto.GateResponse;
 import kg.megalab.selim_trade.entity.Gate;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 public interface GateService {
-    GateResponse createGate(int gateTypeId, String name, MultipartFile image, UserDetails adminDetails) throws IOException;
+    GateCreateResponse createGate(int gateTypeId, String name, MultipartFile image, UserDetails adminDetails) throws IOException;
 
     GateResponse updateGate(int id, String name, MultipartFile image, UserDetails adminDetails) throws IOException;
-
-    Page<GateResponse> getAllGates(int pageNo, int pageSize, String sortBy);
 
     GateResponse getGateById(int id);
 
@@ -21,5 +19,4 @@ public interface GateService {
 
     Gate findGateById(int id);
 
-    void deleteGate(int id, String photoUrl) throws IOException;
 }
