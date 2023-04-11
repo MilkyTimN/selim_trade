@@ -1,5 +1,6 @@
 package kg.megalab.selim_trade.service.impl;
 
+import kg.megalab.selim_trade.dto.AdvantageCreateResponse;
 import kg.megalab.selim_trade.dto.AdvantageRequest;
 import kg.megalab.selim_trade.dto.AdvantageResponse;
 import kg.megalab.selim_trade.entity.Admin;
@@ -14,10 +15,6 @@ import kg.megalab.selim_trade.service.AuthService;
 import kg.megalab.selim_trade.service.GateTypesService;
 import kg.megalab.selim_trade.service.UpdatedByService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +30,7 @@ public class AdvantageServiceImpl implements AdvantageService {
     private final UpdatedByService updatedByService;
 
     @Override
-    public AdvantageResponse createAdvantage(int gateTypeId, AdvantageRequest request, UserDetails adminDetails) {
+    public AdvantageCreateResponse createAdvantage(int gateTypeId, AdvantageRequest request, UserDetails adminDetails) {
         GateType gateType = gateTypesService.getGateTypeById(gateTypeId);
 
         Advantage advantage = new Advantage();
@@ -52,7 +49,7 @@ public class AdvantageServiceImpl implements AdvantageService {
 
         gateTypesService.save(gateType);
 
-        return advantageMapper.toDto(advantageRepository.save(advantage));
+        return advantageMapper.toShortDto(advantageRepository.save(advantage));
 
     }
 
@@ -71,12 +68,6 @@ public class AdvantageServiceImpl implements AdvantageService {
         ));
 
         return advantageMapper.toDto(advantageRepository.save(updatedAdvantage));
-    }
-
-    @Override
-    public Page<AdvantageResponse> getAllAdvantages(int pageNo, int pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        return advantageRepository.findAll(paging).map(advantageMapper::toDto);
     }
 
     @Override
