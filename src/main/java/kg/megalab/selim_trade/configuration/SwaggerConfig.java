@@ -55,7 +55,6 @@ public class SwaggerConfig {
                                 .type(SecurityScheme.Type.HTTP)
                                 .description("Просто скопируй сюда тот access токен. Никакого bearer приписывать не надо. Только сам токен")
                                 .scheme("bearer")
-                                .bearerFormat("JWT")))
-                ;
+                                .bearerFormat("JWT")));
     }
 }
