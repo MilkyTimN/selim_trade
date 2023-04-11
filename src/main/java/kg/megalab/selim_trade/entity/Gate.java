@@ -3,10 +3,8 @@ package kg.megalab.selim_trade.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,7 +18,6 @@ public class Gate extends CommonEntity {
 
     private String name;
     private String photoUrl;
-
 
 
     @ManyToOne
