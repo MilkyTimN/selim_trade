@@ -5,7 +5,7 @@ mvn clean package
 echo 'Copy files...'
 
 scp -i ~/.ssh/id_rsa \
-  target/selim_trade-0.0.1-SNAPSHOT.jar \
+    target/selim_trade-0.0.1-SNAPSHOT.jar \
   team4@161.35.29.179:/home/team4
 
 echo 'Restart Server...'
