@@ -90,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Page<AdminInfo> getAllAdminsList(int pageNo, int pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         return adminRepository.findAll(paging).map(adminMapper::toDto);
     }
 

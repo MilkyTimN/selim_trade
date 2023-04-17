@@ -61,7 +61,7 @@ public class OrderInProgressImpl implements OrderInProgressService {
 
     @Override
     public Page<OrderInProgressResponse> getAllOrdersInProgress(int pageNo, int pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         return orderInProgressRepository.findAll(paging).map(orderInProgressMapper::toDto);
     }
 
@@ -99,5 +99,12 @@ public class OrderInProgressImpl implements OrderInProgressService {
     @Override
     public void deleteById(int id) {
         orderInProgressRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<OrderInProgressResponse> getAllByStatus(int pageNo, int pageSize, String sortBy, String status) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
+
+        return orderInProgressRepository.findAllByStatus(EStatus.valueOf(status)).map(orderInProgressMapper::toDto);
     }
 }

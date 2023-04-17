@@ -36,7 +36,7 @@ public class NewOrderServiceImpl implements NewOrderService {
 
     @Override
     public Page<NewOrderResponse> getAllNewOrders(int pageNo, int pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         return newOrderRepository.findAll(paging).map(newOrderMapper::toDto);
     }
 

@@ -111,14 +111,14 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public Page<NewsListView> getAllNewsForCustomer(int pageNo, int pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         return newsRepository.findAllProjectedBy(pageable);
     }
 
 
     @Override
     public Page<NewsListItemResponse> getAllNewsShort(int pageNo, int pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         return newsRepository.findAll(pageable).map(newsMapper::toShortNewsDto);
     }
 

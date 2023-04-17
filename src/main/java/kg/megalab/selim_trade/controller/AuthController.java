@@ -63,7 +63,6 @@ public class AuthController {
         return authService.refreshAccessToken(refreshToken);
     }
 
-    //TODO: logout frontend
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPER_ADMIN')")
     @GetMapping("/logout")

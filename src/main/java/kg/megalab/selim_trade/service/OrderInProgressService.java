@@ -16,4 +16,6 @@ public interface OrderInProgressService {
     OrderInProgressResponse updateOrderInProgressById(int id, UpdateOrderInProgressRequest updateOrderInProgressRequest, UserDetails adminDetails);
 
     void deleteById(int id);
+
+    Page<OrderInProgressResponse> getAllByStatus(int pageNo, int pageSize, String sortBy, String status);
 }

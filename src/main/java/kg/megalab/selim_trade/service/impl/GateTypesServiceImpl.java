@@ -130,7 +130,7 @@ public class GateTypesServiceImpl implements GateTypesService {
 
     @Override
     public Page<GateTypesListView> getListView(int pageNo, int pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         return gateTypesRepository.findAllProjectedBy(pageable);
     }
 
@@ -143,7 +143,7 @@ public class GateTypesServiceImpl implements GateTypesService {
 
     @Override
     public Page<GateTypesListItemResponse> getAllShort(int pageNo, int pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         return gateTypesRepository.findAll(pageable).map(gateTypesMapper::toShortDto);
     }
 }

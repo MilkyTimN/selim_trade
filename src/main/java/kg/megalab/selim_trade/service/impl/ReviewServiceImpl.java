@@ -67,8 +67,7 @@ public class ReviewServiceImpl implements ReviewService {
                         .orElseThrow(() -> new ResourceNotFoundException("Review not found!")));
     }
 
-    //TODO: return types of post methods
-    //TODO: Check if two sql for customers
+
 
     @Override
     public ReviewResponse updateReview(int id, MultipartFile image, String name, String text, String gate, UserDetails adminDetails) throws IOException {
@@ -109,13 +108,13 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Page<ReviewView> getAllReviewsForCustomer(int pageNo, int pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         return reviewRepository.findAllProjectedBy(pageable);
     }
 
     @Override
     public Page<ReviewListItemResponse> getAllReviewsForAdmin(int pageNo, int pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         return reviewRepository.findAll(pageable).map(reviewMapper::toShortDto);
     }
 }

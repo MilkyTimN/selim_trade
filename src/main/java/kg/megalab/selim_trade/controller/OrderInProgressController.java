@@ -10,6 +10,7 @@ import kg.megalab.selim_trade.service.OrderInProgressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -52,8 +53,24 @@ public class OrderInProgressController {
         return orderInProgressService.getOrderInProgressById(orderInProgressId);
     }
 
-    // TODO:statuses - "IN_PROGRESS", "FINISHED"
-    //TODO:from https to http
+    //TODO: fetching orders by their status
+
+    @Operation(description = """
+            Поле status может принимать одно из 2-х значений:
+            "IN_PROGRESS" или "FINISHED"
+            """)
+    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
+    @GetMapping("/get-by-status")
+    public Page<OrderInProgressResponse> getAllOrderInProgressByStatus(
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "3") int pageSize,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam("status") String status
+    ) {
+        return orderInProgressService.getAllByStatus(pageNo,pageSize,sortBy, status);
+    }
+
+
     @PutMapping("/{orderInProgressId}")
     @Operation(description = """
             поле 'status' может быть либо "IN_PROGRESS" либо 

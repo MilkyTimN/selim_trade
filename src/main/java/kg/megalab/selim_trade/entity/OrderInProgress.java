@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "order_in_progress")
 @Getter
 @Setter
 public class OrderInProgress extends CommonEntity {

@@ -45,7 +45,7 @@ public class WorkServiceImpl implements WorkService {
 
     @Override
     public Page<WorkResponse> getAllWorks(int pageNo, int pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         return workRepository.findAll(paging).map(workMapper::toDto);
     }
 
